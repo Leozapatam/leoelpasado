@@ -31,9 +31,26 @@ def silencio_cercano(a, t, radio=0.25, ventana=0.02):
     return i0 + int(np.argmin(e)) + w // 2
 
 
+DEEP_FILTER = os.path.join(os.path.expanduser("~"), "leoelpasado-deps", "deep-filter.exe")
+
+
+def limpiar_ia(wav):
+    """Supresión de ruido con IA (DeepFilterNet), el equivalente en software del ENC de un micrófono tipo Lark.
+    Si el programa no está instalado, devuelve el audio sin tocar."""
+    if not os.path.exists(DEEP_FILTER):
+        return wav
+    salida = os.path.join(tempfile.gettempdir(), "limpia_ia")
+    os.makedirs(salida, exist_ok=True)
+    # --atten-lim-db: cuánto puede bajar el ruido como máximo; 30 dB limpia sin dejar la voz "robótica"
+    subprocess.run([DEEP_FILTER, "--atten-lim-db", "30", "-o", salida, wav], check=True, capture_output=True)
+    print("  limpieza IA (DeepFilterNet) aplicada")
+    return os.path.join(salida, os.path.basename(wav))
+
+
 def cargar(archivo):
     tmp = os.path.join(tempfile.gettempdir(), "editar_crudo.wav")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", archivo, "-ac", "1", "-ar", str(SR), tmp], check=True)
+    tmp = limpiar_ia(tmp)
     with wave.open(tmp) as wf:
         return np.frombuffer(wf.readframes(wf.getnframes()), np.int16).astype(np.float32) / 32768
 
@@ -82,16 +99,70 @@ def acortar_pausas(x, max=0.8, nueva=0.5, umbral_db=-20):
     return np.concatenate(trozos)
 
 
+OCTAVAS = [125, 250, 500, 1000, 2000, 4000, 8000]
+
+
+def bandas_voz(x, w=4096):
+    """Nivel relativo (dB) de la voz en cada octava, solo con ventanas que tienen voz: la 'huella' tonal."""
+    v = x[: len(x) // w * w].reshape(-1, w)
+    rms = np.sqrt((v ** 2).mean(1))
+    v = v[rms > np.percentile(rms, 60)] * np.hanning(w)
+    S = (np.abs(np.fft.rfft(v, axis=1)) ** 2).mean(0)
+    f = np.fft.rfftfreq(w, 1 / SR)
+    tot = S[(f > 88) & (f < 11300)].sum()
+    return np.array([10 * np.log10(S[(f >= fc / 1.414) & (f < fc * 1.414)].sum() / tot) for fc in OCTAVAS])
+
+
+def _campana(fc, ganancia_db, q=1.2):
+    """Filtro de campana (ecualizador paramétrico, fórmulas RBJ)."""
+    A = 10 ** (ganancia_db / 40)
+    w0 = 2 * np.pi * fc / SR
+    al = np.sin(w0) / (2 * q)
+    b = np.array([1 + al * A, -2 * np.cos(w0), 1 - al * A])
+    a = np.array([1 + al / A, -2 * np.cos(w0), 1 - al / A])
+    return b / a[0], a / a[0]
+
+
+def igualar_timbre(x, ref_bandas, pasadas=5, max_db=8.0):
+    """Ecualizador de octavas que corrige poco a poco y vuelve a medir hasta quedar a menos de 1 dB de la referencia."""
+    from scipy.signal import lfilter
+    total = np.zeros(len(OCTAVAS))
+    for _ in range(pasadas):
+        dif = ref_bandas - bandas_voz(x)
+        if np.abs(dif).max() < 1.0:
+            break
+        paso = np.clip(dif * 0.7, -3, 3)
+        paso = np.clip(total + paso, -max_db, max_db) - total
+        total += paso
+        for fc, g in zip(OCTAVAS, paso):
+            if abs(g) > 0.2:
+                b, a = _campana(fc, g)
+                x = lfilter(b, a, x).astype(np.float32)
+    print("  ecualización aplicada (dB por octava):", " ".join(f"{fc}:{g:+.1f}" for fc, g in zip(OCTAVAS, total)))
+    print("  diferencia final con la referencia:", " ".join(f"{d:+.1f}" for d in ref_bandas - bandas_voz(x)))
+    return x
+
+
 def main():
     slug, entrada = sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None
     cortes = json.load(open(os.path.join(RAIZ, "public", "episodios", slug, "cortes.json"), encoding="utf-8"))
     tramos = cortes.get("piezas") or [{"archivo": entrada, "desde": a, "hasta": b} for a, b in cortes["conservar"]]
 
     fade = int(0.03 * SR)
-    cache, piezas, ref = {}, [], None
+    puente = int(0.12 * SR)  # fundido cruzado entre grabaciones distintas
+    cache, piezas, ref, archivos = {}, [], None, []
+    ref_ruta = None
     for t in tramos:
         ruta = os.path.join(RAIZ, t["archivo"]) if not os.path.isabs(t["archivo"]) else t["archivo"]
-        a = cache.setdefault(ruta, cargar(ruta))
+        if ruta not in cache:
+            crudo = cargar(ruta)
+            if ref_ruta is None:
+                ref_ruta, ref_bandas = ruta, bandas_voz(crudo)
+            elif cortes.get("igualar_timbre", True):
+                print(f"timbre de {os.path.basename(ruta)} → {os.path.basename(ref_ruta)}")
+                crudo = igualar_timbre(crudo, ref_bandas)
+            cache[ruta] = crudo
+        a = cache[ruta]
         ini, fin = t.get("desde", 0), t.get("hasta", 1e9)
         if t.get("exacto"):  # corte exacto (para quitar una sola palabra)
             i, j = int(ini * SR), min(len(a), int(fin * SR))
@@ -105,8 +176,22 @@ def main():
         p[:fade] *= np.linspace(0, 1, fade)
         p[-fade:] *= np.linspace(1, 0, fade)
         piezas.append(p)
+        archivos.append(ruta)
         print(f"{os.path.basename(ruta):24s} {i / SR:7.2f} → {j / SR:7.2f} s  (ganancia {20 * np.log10(ref / nv):+.1f} dB)")
-    out = np.concatenate(piezas)
+    # unir: entre grabaciones distintas, fundido cruzado (puente); dentro de la misma, corte limpio
+    out = piezas[0]
+    for k in range(1, len(piezas)):
+        p = piezas[k]
+        if archivos[k] != archivos[k - 1] and len(out) > puente and len(p) > puente:
+            c = np.linspace(0, np.pi / 2, puente)
+            cola, cabeza = out[-puente:].copy(), p[:puente].copy()
+            # deshacer los fundidos cortos para que el cruce sea de potencia constante
+            cola[-fade:] /= np.maximum(np.linspace(1, 0, fade), 0.05)
+            cabeza[:fade] /= np.maximum(np.linspace(0, 1, fade), 0.05)
+            cruce = cola * np.cos(c) + cabeza * np.sin(c)
+            out = np.concatenate([out[:-puente], cruce, p[puente:]])
+        else:
+            out = np.concatenate([out, p])
     out = acortar_pausas(out, **cortes.get("pausas", {}))
     dest = os.path.join(RAIZ, "grabaciones", f"{slug}-editada.wav")
     with wave.open(dest, "w") as wf:

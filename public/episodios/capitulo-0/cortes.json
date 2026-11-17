@@ -1,5 +1,5 @@
 {
-  "nota": "Capítulo 0 v2: definición de Walter Benjamin (PILOTO2) en lugar de la de Bloch. Del piloto 2 se quita «cual» (17.36–18.32: tal cual como → tal como) y la primera de las dos preguntas «¿Cómo trabaja un historiador…?». Silencios de más de 0,8 s se acortan a 0,5 s.",
+  "nota": "Capítulo 0 v2: definición de Walter Benjamin (PILOTO2) en lugar de la de Bloch. Del piloto 2 se quita «cual» (17.36–18.32: tal cual como → tal como) y la primera de las dos preguntas «¿Cómo trabaja un historiador…?». Silencios de más de 0,8 s se acortan a 0,5 s. Se quita también el primer «otros lo van a» repetido (41.92–43.60).",
   "piezas": [
     {
       "archivo": "grabaciones/piloto.m4a",
@@ -15,6 +15,12 @@
     {
       "archivo": "grabaciones/piloto2.m4a",
       "desde": 18.32,
+      "hasta": 41.92,
+      "exacto": true
+    },
+    {
+      "archivo": "grabaciones/piloto2.m4a",
+      "desde": 43.6,
       "hasta": 49.95,
       "exacto": true
     },
