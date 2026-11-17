@@ -9,6 +9,8 @@ Lee public/episodios/<slug>/cortes.json, de una de estas dos formas:
       {"archivo": "grabaciones/piloto.m4a", "desde": 55.0, "hasta": 999} ] }
 Con "piezas", cada tramo se iguala en volumen al primero para que no se note la costura,
 y <grabacion> se ignora.
+Silencios: "pausas": {"max": 0.8, "nueva": 0.5} acorta todo silencio más largo que "max" segundos
+a "nueva" segundos (por defecto así). Mantiene el ritmo natural pero quita los huecos muertos.
 Cada corte se ajusta al punto más silencioso cercano (±0,25 s) y se une con un fundido de 30 ms,
 así no se oyen clics ni saltos. Escribe grabaciones/<slug>-editada.wav, que luego va a preparar_voz.py.
 """
@@ -44,6 +46,42 @@ def nivel_voz(x):
     return float(np.median(rms[rms > np.percentile(rms, 60)]))
 
 
+def acortar_pausas(x, max=0.8, nueva=0.5, umbral_db=-20):
+    """Acorta silencios largos: busca tramos más bajos que la voz (umbral relativo) y deja solo `nueva` segundos."""
+    w = int(0.02 * SR)
+    v = x[: len(x) // w * w].reshape(-1, w)
+    rms = 20 * np.log10(np.sqrt((v ** 2).mean(1)) + 1e-9)
+    voz = np.median(rms[rms > np.percentile(rms, 60)])
+    calla = rms < voz + umbral_db
+    trozos, i, quitado = [], 0, 0.0
+    k = 0
+    while k < len(calla):
+        if calla[k]:
+            j = k
+            while j < len(calla) and calla[j]:
+                j += 1
+            largo = (j - k) * w / SR
+            if largo > max:
+                # se conserva la mitad de `nueva` a cada lado del silencio, con fundidos
+                a = k * w + int(nueva / 2 * SR)
+                b = j * w - int(nueva / 2 * SR)
+                trozos.append(x[i:a]); i = b
+                quitado += (b - a) / SR
+            k = j
+        else:
+            k += 1
+    trozos.append(x[i:])
+    f = int(0.015 * SR)
+    for t in trozos[1:]:
+        if len(t) > 2 * f:
+            t[:f] *= np.linspace(0, 1, f)
+    for t in trozos[:-1]:
+        if len(t) > 2 * f:
+            t[-f:] *= np.linspace(1, 0, f)
+    print(f"pausas: {quitado:.1f} s de silencio sobrante quitados")
+    return np.concatenate(trozos)
+
+
 def main():
     slug, entrada = sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None
     cortes = json.load(open(os.path.join(RAIZ, "public", "episodios", slug, "cortes.json"), encoding="utf-8"))
@@ -55,8 +93,11 @@ def main():
         ruta = os.path.join(RAIZ, t["archivo"]) if not os.path.isabs(t["archivo"]) else t["archivo"]
         a = cache.setdefault(ruta, cargar(ruta))
         ini, fin = t.get("desde", 0), t.get("hasta", 1e9)
-        i = 0 if ini <= 0 else silencio_cercano(a, ini)
-        j = len(a) if fin >= len(a) / SR else silencio_cercano(a, fin)
+        if t.get("exacto"):  # corte exacto (para quitar una sola palabra)
+            i, j = int(ini * SR), min(len(a), int(fin * SR))
+        else:
+            i = 0 if ini <= 0 else silencio_cercano(a, ini)
+            j = len(a) if fin >= len(a) / SR else silencio_cercano(a, fin)
         p = a[i:j].copy()
         nv = nivel_voz(p)
         ref = ref or nv
@@ -66,7 +107,7 @@ def main():
         piezas.append(p)
         print(f"{os.path.basename(ruta):24s} {i / SR:7.2f} → {j / SR:7.2f} s  (ganancia {20 * np.log10(ref / nv):+.1f} dB)")
     out = np.concatenate(piezas)
-    a = out  # para el resumen
+    out = acortar_pausas(out, **cortes.get("pausas", {}))
     dest = os.path.join(RAIZ, "grabaciones", f"{slug}-editada.wav")
     with wave.open(dest, "w") as wf:
         wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(SR)

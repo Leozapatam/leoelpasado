@@ -120,7 +120,8 @@ python scripts/preparar_voz.py <slug> grabaciones/<archivo> --preset s24
 
 ### Regrabar una parte
 1. Leo graba solo el tramo nuevo (por ejemplo `grabaciones/cap0-definicion.m4a`).
-2. En `cortes.json` se usa `"piezas"` para unir la grabación original y el tramo nuevo (ver `scripts/editar_voz.py`). El volumen de cada pieza se iguala solo.
+2. En `cortes.json` se usa `"piezas"` para unir la grabación original y el tramo nuevo (ver `scripts/editar_voz.py`). El volumen de cada pieza se iguala solo. Para quitar **una sola palabra** (por ejemplo «tal *cual* como»), usa `"exacto": true` y corta por energía, no por los tiempos de Whisper: en palabras cortas Whisper se equivoca por décimas de segundo. Transcribir fragmentos sueltos ayuda a confirmar qué dice cada uno.
+   Los silencios de más de 0,8 s se acortan a 0,5 s (`"pausas"`).
 3. Se repiten `preparar_voz.py`, `musica.py` y el render. Si los tiempos de `episodio.json` están **anclados a palabras** (`"@Bloch"`), no hay que recalcular nada a mano.
 
 ### Paso 3: escribir `episodio.json`

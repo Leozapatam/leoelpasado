@@ -1,7 +1,7 @@
 # Guion final · Capítulo 0 · ¿Qué es la historia? (@leoelpasado)
 
-Versión 3, final. Es lo que Leo dijo en la grabación (`Piloto.m4a`), ya editada. Para «¿Y por qué hablar de historia ahora?» quedó la pregunta de la primera toma y la respuesta de la toma final.
-Duración de la voz: 2 min 50 s.
+Versión 4, final. Es lo que Leo dijo en `Piloto.m4a` y `PILOTO2.m4a` (tramo de Walter Benjamin), ya editadas y unidas (`public/episodios/capitulo-0/cortes.json`). Silencios largos acortados.
+Duración de la voz: 3 min 08 s.
 
 ---
 
@@ -11,17 +11,23 @@ Duración de la voz: 2 min 50 s.
 **[MUCHAS RESPUESTAS]**
 Si le preguntas a diez historiadores, seguramente te van a dar diez respuestas distintas. Y eso está muy bien, porque este es un oficio que nunca se queda quieto.
 
-**[MARC BLOCH]**
-Pero hay una definición que me gusta mucho. Es la de Marc Bloch, un historiador francés. Él decía que la historia es la ciencia de los hombres en el tiempo. Es decir, no estudia solo el pasado como algo muerto. Estudia a las personas, lo que vivieron, lo que pensaron, lo que fue cambiando con los años.
+**[WALTER BENJAMIN]**
+Pero hay una de esas definiciones que me gusta mucho. Es la de Walter Benjamin, un filósofo alemán que escribió en plena Segunda Guerra Mundial, perseguido por los nazis. Él decía que hacer historia es adueñarse de un recuerdo tal como relampaguea en un instante de peligro.
+
+**[QUÉ QUIERE DECIR]**
+¿Y eso qué quiere decir? Que el pasado no es una vitrina de museo para mirar de lejos. Hay recuerdos que se encienden justo cuando el presente se pone difícil. Y ahí hay que agarrarlos, porque nos ayudan a entender lo que nos está pasando, y porque si no lo hacemos nosotros, otros lo van a usar a su favor. Por eso la historia es una herramienta, y hay que aprender a usarla bien.
+
+**[VUELTA A BLOCH]**
+Entonces, ¿cómo trabaja un historiador con esos recuerdos? Marc Bloch, un historiador francés, tenía una imagen muy bonita y un poquito aterradora para explicarlo.
 
 **[EL OGRO]**
-Y Bloch también tenía una imagen muy bonita y un poquito aterradora para explicar qué hace un historiador. Decía que el buen historiador se parecía al ogro de los cuentos. Donde huele carne humana, ahí sabe que está su presa.
+Decía que el buen historiador se parecía al ogro de los cuentos. Donde huele carne humana, ahí sabe que está su presa.
 
 **[LAS PISTAS]**
 Piénsenlo. Lo que busca el historiador es eso, el rastro de las personas. Una carta antigua, una foto guardada en un cajón, un expediente criminal, un papel olvidado en un archivo. Con esas pistas va armando la historia como quien une puntos. Sin embargo, nunca une dos puntos sin una prueba. La regla es sencilla. Ningún hilo puede ir sin fuente.
 
 **[POR QUÉ AHORA]**
-¿Y por qué hablar de historia ahora? Porque en Colombia y en Latinoamérica están surgiendo interpretaciones de la historia sin rigor, sin fuentes. Y para hacer una buena interpretación, esto es necesario.
+¿Y por qué hablar de historia ahora? Porque en Colombia y en Latinoamérica están surgiendo interpretaciones de la historia sin rigor, sin fuentes. Y para hacer una buena interpretación, eso es necesario.
 
 **[SALIR DE LA BIBLIOTECA]**
 Además, creo que los historiadores tenemos que salir de la biblioteca, salir de la universidad, salir de los archivos. Hablar y escribir no solo para otros historiadores, sino para la gente del común, para la sociedad que tanto necesita informarse en estos tiempos de desinformación. La historia debe ser para quien nunca ha leído algo de historia.
@@ -31,23 +37,6 @@ Entonces, de eso se trata este perfil, o estos canales. De que podamos leer el p
 
 **[CIERRE]**
 Un saludo del Profe Leo. Esto es Leo el pasado.
-
----
-
-## Regrabación · tramo de Walter Benjamin (elegido por Leo)
-
-Reemplaza desde «Pero hay una definición…» (0:19 de `Piloto.m4a`) hasta «…explicar qué hace un historiador» (0:54). Después sigue tu grabación original con «Decía que el buen historiador se parecía al ogro…».
-
-**[WALTER BENJAMIN]**
-Pero hay una idea que a mí me sacude mucho. Es de Walter Benjamin, un filósofo alemán que escribió en plena Segunda Guerra Mundial, perseguido por los nazis. Él decía que hacer historia es adueñarse de un recuerdo tal como relampaguea en un instante de peligro.
-
-**[QUÉ QUIERE DECIR]**
-¿Y eso qué quiere decir? Que el pasado no es una vitrina de museo para mirar de lejos. Hay recuerdos que se encienden justo cuando el presente se pone difícil. Y ahí hay que agarrarlos, porque nos ayudan a entender lo que nos está pasando. Y porque si no lo hacemos nosotros, otros lo van a usar a su favor. Por eso la historia es una herramienta, y hay que aprender a usarla bien.
-
-**[VUELTA A BLOCH]**
-Ahora, ¿cómo trabaja un historiador con esos recuerdos? Marc Bloch, un historiador francés, tenía una imagen muy bonita y un poquito aterradora para explicarlo.
-
-*Fuente:* Walter Benjamin, «Sobre el concepto de historia», tesis VI (1940), en la versión que cita Bolívar Echeverría («Benjamin, mesianismo y utopía»). En esa misma tesis Benjamin advierte que el peligro amenaza con convertir la tradición en instrumento de los poderosos. De ahí sale «otros lo van a usar a su favor».
 
 ---
 

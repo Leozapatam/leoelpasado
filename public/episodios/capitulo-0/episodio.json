@@ -20,7 +20,12 @@
     "una expediente": "un expediente",
     "Piénsenlo. lo que busca la historia de Abreceso,": "Piénsenlo. Lo que busca el historiador es eso,",
     "une punto.": "une puntos.",
-    "Leo El Pasado.": "Leo el pasado."
+    "Leo El Pasado.": "Leo el pasado.",
+    "terrorada": "aterradora",
+    "Benjamín": "Benjamin",
+    "Benyamin": "Benjamin",
+    "escribirnos solo": "escribir no solo",
+    "Y eso qué quiere decir?": "¿Y eso qué quiere decir?"
   },
   "gancho": {
     "antetitulo": "EXPEDIENTE N.º 0",
@@ -706,17 +711,21 @@
   ],
   "subtitulos": {
     "resaltar": [
-      "Marc",
+      "Benjamin",
       "Bloch",
+      "Colombia",
+      "Latinoamérica",
+      "Leo",
+      "Marc",
+      "Profe",
+      "Walter",
+      "fuente",
+      "fuentes",
+      "herramienta",
       "historia",
       "historiador",
       "ogro",
-      "fuente",
-      "fuentes",
-      "Colombia",
-      "Latinoamérica",
-      "Profe",
-      "Leo"
+      "peligro"
     ]
   },
   "cierre": {
