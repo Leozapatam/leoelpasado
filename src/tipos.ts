@@ -4,16 +4,22 @@ export type Palabra = { w: string; s: number; e: number };
 
 export type Ficha = {
   id: string;
+  // "ficha" (por defecto) · "mini" (fichita con «?») · "polaroid" (foto o silueta) · "objeto" (utilería) · "etiqueta" (tira de papel)
+  tipo?: "ficha" | "mini" | "polaroid" | "objeto" | "etiqueta";
+  revela?: number; // mini: cuándo aparece el «?»
+  imagen?: string; // polaroid: archivo en public/ (sin imagen = silueta)
+  objeto?: "carta" | "foto" | "expediente" | "papel"; // objeto: qué dibujar
+  ilustracion?: boolean; // marca ILUSTRACIÓN (no es un documento real)
   x: number; // posición en el tablero (1080 x 1920)
   y: number;
   ancho?: number;
   giro?: number; // grados
   entra: number;
-  encabezado: string;
-  cifra: string;
-  texto: string;
-  fuente: string;
-  lupa?: { desde: number; hasta: number };
+  encabezado?: string;
+  cifra?: string;
+  texto?: string;
+  fuente?: string;
+  lupa?: { desde: number; hasta: number; y?: number };
 };
 
 export type Escena =
@@ -48,7 +54,8 @@ export type Episodio = {
   escenas: Escena[];
   tablero: {
     fichas: Ficha[];
-    hilos: [string, string][];
+    hilos: ([string, string] | [string, string, number])[]; // [desde, hasta, segundo opcional en que se tiende]
+    brillo?: number; // segundo en que se iluminan todas las fuentes
     camara: [number, number, number, number][]; // [t, x, y, zoom]
   };
   sellos: { texto: string; t: number; hasta: number; x: number; y: number; giro?: number }[];

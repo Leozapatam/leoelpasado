@@ -41,11 +41,12 @@ export const Subtitulos: React.FC<{ grupos: Grupo[]; resaltar: string[]; frame: 
   return (
     <div
       style={{
-        // dentro de la zona segura (ver SEGURA en marca.ts), como "diálogo" al lado del narrador
+        // a la altura de la cabeza del narrador, como un "diálogo": bien lejos de la descripción
+        // del post que TikTok/Instagram ponen abajo, para que no se confundan con ella
         position: "absolute",
         left: 230,
         right: SEGURA.derecha,
-        bottom: SEGURA.abajo + 30,
+        bottom: SEGURA.abajo + 260,
         minHeight: 200,
         display: "flex",
         flexWrap: "wrap",

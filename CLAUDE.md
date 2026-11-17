@@ -27,7 +27,8 @@ Cambia la plantilla (src/, scripts/) **solo si Leo pide algo nuevo**. Si lo hace
 - El narrador es **Profe Leo en pixel art, cuerpo entero, expresión seria** (public/personaje/), animado con la voz de Leo. Se mueve como una sola pieza (nunca separar cabeza y cuerpo). Movimiento sutil; se irá sofisticando poco a poco.
 - Todo video empieza con la **entrada** (`intro`, 3 s: Profe Leo señala el marco y la cámara entra a la primera escena) y termina con el **eslogan** «Profe Leo» / «LEO EL PASADO», nada más.
 - Episodio en curso: `capitulo-0` (presentación del canal). Al recibir la voz: preparar_voz.py → reajustar tiempos del episodio.json a palabras.json → musica.py → render.
-- **Zona segura** TikTok/IG/FB (SEGURA en marca.ts): nada importante en los 250 px de arriba, los 480 de abajo ni los 160 de la derecha. Los subtítulos van como diálogo junto al narrador, **nunca abajo del todo**.
+- **Zona segura** TikTok/IG/FB (SEGURA en marca.ts): nada importante en los 250 px de arriba, los 480 de abajo ni los 160 de la derecha. Los subtítulos van como diálogo **a la altura de la cabeza del narrador** (SEGURA.abajo + 260), **nunca abajo del todo**: ahí se confunden con la descripción del post. El narrador se queda abajo a la izquierda.
+- **Responde siempre a Leo en español.**
 - Rigor: cada cifra coincide con su fuente; los documentos recreados llevan «RECREACIÓN · PARÁFRASIS»; no se inventan citas.
 - Leo graba con un Samsung S24 Ultra (preset `s24`).
 - La música es original (scripts/musica.py), sin derechos de autor.
@@ -35,6 +36,6 @@ Cambia la plantilla (src/, scripts/) **solo si Leo pide algo nuevo**. Si lo hace
 Manual completo: `PLANTILLA.md`.
 
 ## Notas técnicas
-- La carpeta vive en Google Drive (`G:\Mi unidad\Leo el pasado`). **`node_modules` no se guarda en Drive** (son ~600 MB y miles de archivos): instálalo fuera de Drive y enlázalo (ver PLANTILLA.md, «Instalación»).
+- La carpeta vive en Google Drive (`G:\Mi unidad\Leo el pasado`). **`node_modules` no se guarda en Drive** (son ~600 MB y miles de archivos): viven en `%USERPROFILE%\leoelpasado-deps\node_modules` (Drive no admite enlaces). Renderiza con `node scripts/render.js <slug>` y revisa con `node scripts/hoja.js <slug> <segundos> --guias`; ambos usan esa carpeta solos (ver PLANTILLA.md, «Instalación»).
 - Ruta larga de Windows: si Remotion falla con `ENOENT chrome-headless-shell`, mapea la carpeta a una unidad corta (`subst R: "<carpeta>"`) y trabaja desde `R:\`.
 - Python: `faster-whisper` necesita audio como arreglo numpy (ya resuelto en preparar_voz.py).

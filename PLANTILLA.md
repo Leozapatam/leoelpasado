@@ -61,6 +61,19 @@ Encima de todo van el **gancho** (pregunta tecleada al inicio), los **sellos** d
 - **Habla con tu voz**: la boca se abre según cada sílaba (cerrada, media o abierta), los ojos parpadean y todo el cuerpo se mueve **como una sola pieza** (respira, se balancea apenas y da un pequeño impulso en las sílabas fuertes). La cabeza no se separa del cuerpo: el cuello despegado se veía mal.
 - Los sprites están en `public/personaje/` y se amplían sin suavizar. `python scripts/personaje.py personaje/originales/5.webp` los regenera todos: recorta el busto de la imagen 5, limpia los bordes, dibuja píxel a píxel el cuerpo (torso, manos, cinturón, jean, botas), la pose que señala y las cejas, y genera las capas de boca y ojos. Para retocar el personaje se editan las coordenadas de ese script; `personaje/vista.png` muestra la rejilla con números.
 
+### Piezas del tablero (`tablero.fichas[].tipo`)
+| tipo | qué es | campos propios |
+|---|---|---|
+| `ficha` (por defecto) | ficha de archivo con cifra y pie de FUENTE | `encabezado`, `cifra`, `texto`, `fuente`, `lupa` |
+| `mini` | fichita en blanco que luego muestra un «?» rojo | `revela` |
+| `polaroid` | foto con pie; sin imagen muestra una silueta | `imagen` (ruta en public/), `texto`, `fuente` |
+| `objeto` | utilería dibujada: `carta`, `foto`, `expediente`, `papel`, con etiqueta y FUENTE | `objeto`, `texto`, `fuente`, `ilustracion` |
+| `etiqueta` | tira de papel con una palabra | `texto`, `ancho` |
+
+- `ilustracion: true` pone la marca **ILUSTRACIÓN**. Úsala siempre que la pieza no sea un documento real.
+- `hilos`: `["a", "b"]` se tiende cuando entra `b`; `["a", "b", 81.2]` se tiende en ese segundo.
+- `tablero.brillo`: segundo en que todas las fuentes se iluminan en rojo.
+
 ### Subtítulos (estilo hilo rojo)
 - Salen como **diálogo al lado del narrador**, por encima de la zona que tapa la app (no abajo del todo).
 - Cada palabra aparece **cuando la dices**, no antes.
@@ -115,6 +128,10 @@ python scripts/musica.py <slug>
 Compone música noir original (sin derechos de autor) con golpes en los momentos de `musica.golpes`. La música baja sola cuando hablas, y la mezcla final queda a -14 LUFS.
 
 ### Paso 5: revisar y renderizar
+Hoja de contactos (varios momentos en una sola pasada, con las zonas de la app en azul):
+```bash
+node scripts/hoja.js <slug> 3,25,58,97,160 --guias
+```
 ```bash
 npm run estudio
 npm run render -- <slug>
@@ -157,8 +174,12 @@ public/episodios/<slug>/     episodio.json, palabras.json, boca.json, voz.wav, m
 | `bananeras` | Primer demo (Masacre de las Bananeras). Sirve de ejemplo de mapa + documento + tablero. Pendiente: regrabar «al menos 50» → «menos de 50». |
 
 ## 7. Instalación (en un PC nuevo o tras mover la carpeta)
-La carpeta está en Google Drive, pero las dependencias (`node_modules`, unos 600 MB) **no deben sincronizarse**. Se instalan en el disco local y se enlazan:
-```bash
-npm install --prefix "%USERPROFILE%\leoelpasado-deps" --no-save
+**En un clon normal de GitHub:** `npm install` dentro del proyecto y listo.
+
+**En Google Drive:** las dependencias (`node_modules`, unos 600 MB) **no deben sincronizarse**, y Drive no admite enlaces. Se instalan en el disco local:
+```powershell
+mkdir $env:USERPROFILE\leoelpasado-deps
+copy package.json, package-lock.json $env:USERPROFILE\leoelpasado-deps\
+cd $env:USERPROFILE\leoelpasado-deps; npm ci
 ```
-Después se crea el enlace `node_modules` → `%USERPROFILE%\leoelpasado-deps\node_modules`. Claude lo hace en la próxima sesión. También hacen falta Python con `faster-whisper`, `scipy` y `Pillow`, y ffmpeg.
+`remotion.config.ts`, `scripts/render.js` y `scripts/hoja.js` encuentran solos esa carpeta. También hacen falta Python con `faster-whisper`, `scipy` y `Pillow`, y ffmpeg.

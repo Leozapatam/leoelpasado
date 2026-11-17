@@ -1,8 +1,7 @@
 {
   "titulo": "Capítulo 0 · ¿Qué es la historia?",
   "audio": "mezcla.wav",
-  "duracion": 72,
-  "nota": "TIEMPOS PROVISIONALES (estimados a 2,6 palabras/s). Se ajustan con palabras.json después de grabar.",
+  "duracion": 170.4,
   "intro": {
     "duracion": 3
   },
@@ -26,80 +25,80 @@
   "gancho": {
     "antetitulo": "EXPEDIENTE N.º 0",
     "texto": "¿Qué es la historia?",
-    "desde": 0.4,
-    "hasta": 5.5
+    "desde": 0.9,
+    "hasta": 4.6
   },
   "escenas": [
     {
       "tipo": "tablero",
       "desde": 0,
-      "hasta": 22.5
+      "hasta": 45.0
     },
     {
       "tipo": "documento",
-      "desde": 22.5,
-      "hasta": 33.5,
+      "desde": 45.0,
+      "hasta": 64.5,
       "documento": {
         "membrete": "M. BLOCH · APOLOGIE POUR L'HISTOIRE (1949)",
         "aviso": "CITA ORIGINAL",
         "lineas": [
           {
             "texto": "« Le bon historien, lui,",
-            "t": 23.0
+            "t": 46.0
           },
           {
             "texto": "ressemble à l'ogre de la légende.",
-            "t": 24.4
+            "t": 54.6
           },
           {
             "texto": "Là où il flaire la chair humaine,",
-            "t": 27.6
+            "t": 59.3
           },
           {
             "texto": "il sait que là est son gibier. »",
-            "t": 30.0
+            "t": 61.4
           }
         ],
         "resaltar": {
           "linea": 1,
           "desde": "l'ogre",
-          "t": 26.0
+          "t": 57.5
         },
         "firma": "— Marc Bloch (1886–1944)",
-        "fuente": "FUENTE: M. Bloch, Apologie pour l'histoire ou Métier d'historien, cap. I. Traducción propia en subtítulos."
+        "fuente": "FUENTE: M. Bloch, Apologie pour l'histoire ou Métier d'historien, cap. I. Versión libre en los subtítulos."
       }
     },
     {
       "tipo": "tablero",
-      "desde": 33.5,
-      "hasta": 43.5
+      "desde": 64.5,
+      "hasta": 101.1
     },
     {
       "tipo": "mapa",
-      "desde": 43.5,
-      "hasta": 61.5,
+      "desde": 101.1,
+      "hasta": 120.7,
       "mapa": {
         "camara": [
           {
-            "t": 43.5,
+            "t": 101.1,
             "lon": -74,
             "lat": 4,
-            "span": 40
+            "span": 45
           },
           {
-            "t": 46.5,
+            "t": 104.5,
             "lon": -74,
             "lat": 4,
-            "span": 34
+            "span": 38
           },
           {
-            "t": 48.5,
+            "t": 106.4,
             "lon": -70,
             "lat": -8,
             "span": 95
           },
           {
-            "t": 61.5,
+            "t": 120.7,
             "lon": -72,
             "lat": -10,
             "span": 88
@@ -108,117 +107,117 @@
         "paises": [
           {
             "nombre": "Colombia",
-            "t": 44.2,
+            "t": 104.8,
             "estilo": "rojo"
           },
           {
             "nombre": "Mexico",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Guatemala",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Belize",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Honduras",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "El Salvador",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Nicaragua",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Costa Rica",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Panama",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Venezuela",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Ecuador",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Peru",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Bolivia",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Brazil",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Paraguay",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Chile",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Argentina",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Uruguay",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Cuba",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Dominican Rep.",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Haiti",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Guyana",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           },
           {
             "nombre": "Suriname",
-            "t": 47.4,
+            "t": 106.1,
             "estilo": "tenue"
           }
         ],
@@ -227,14 +226,14 @@
             "texto": "COLOMBIA",
             "lon": -73.5,
             "lat": 3.5,
-            "t": 44.4,
-            "hasta": 48.0
+            "t": 105.0,
+            "hasta": 106.5
           },
           {
             "texto": "AMÉRICA LATINA",
             "lon": -62,
             "lat": -12,
-            "t": 48.0,
+            "t": 106.8,
             "tam": 64
           }
         ]
@@ -242,13 +241,13 @@
     },
     {
       "tipo": "tablero",
-      "desde": 61.5,
-      "hasta": 67.5
+      "desde": 120.7,
+      "hasta": 163.5
     },
     {
       "tipo": "cierre",
-      "desde": 67.5,
-      "hasta": 72
+      "desde": 163.5,
+      "hasta": 170.4
     }
   ],
   "tablero": {
@@ -256,153 +255,453 @@
       {
         "id": "hub",
         "x": 540,
-        "y": 520,
+        "y": 480,
         "ancho": 470,
         "giro": -1.5,
-        "entra": 1.0,
+        "entra": 0.5,
         "encabezado": "EXPEDIENTE N.º 0",
-        "cifra": "¿HISTORIA?",
-        "texto": "Casi tantas definiciones como historiadores.",
+        "cifra": "¿Historia?",
+        "texto": "Muchas respuestas, un mismo oficio.",
         "fuente": "CASO ABIERTO"
       },
       {
+        "id": "m0",
+        "tipo": "mini",
+        "x": 623,
+        "y": 177,
+        "giro": -5,
+        "entra": 7.4,
+        "revela": 10.9
+      },
+      {
+        "id": "m1",
+        "tipo": "mini",
+        "x": 849,
+        "y": 277,
+        "giro": -1,
+        "entra": 7.53,
+        "revela": 10.98
+      },
+      {
+        "id": "m2",
+        "tipo": "mini",
+        "x": 957,
+        "y": 462,
+        "giro": 3,
+        "entra": 7.66,
+        "revela": 11.06
+      },
+      {
+        "id": "m3",
+        "tipo": "mini",
+        "x": 906,
+        "y": 662,
+        "giro": -4,
+        "entra": 7.79,
+        "revela": 11.14
+      },
+      {
+        "id": "m4",
+        "tipo": "mini",
+        "x": 714,
+        "y": 800,
+        "giro": 0,
+        "entra": 7.92,
+        "revela": 11.22
+      },
+      {
+        "id": "m5",
+        "tipo": "mini",
+        "x": 457,
+        "y": 823,
+        "giro": 4,
+        "entra": 8.05,
+        "revela": 11.3
+      },
+      {
+        "id": "m6",
+        "tipo": "mini",
+        "x": 231,
+        "y": 723,
+        "giro": -3,
+        "entra": 8.18,
+        "revela": 11.38
+      },
+      {
+        "id": "m7",
+        "tipo": "mini",
+        "x": 123,
+        "y": 538,
+        "giro": 1,
+        "entra": 8.31,
+        "revela": 11.46
+      },
+      {
+        "id": "m8",
+        "tipo": "mini",
+        "x": 174,
+        "y": 338,
+        "giro": 5,
+        "entra": 8.44,
+        "revela": 11.54
+      },
+      {
+        "id": "m9",
+        "tipo": "mini",
+        "x": 366,
+        "y": 200,
+        "giro": -2,
+        "entra": 8.57,
+        "revela": 11.62
+      },
+      {
         "id": "bloch",
-        "x": 290,
-        "y": 930,
-        "ancho": 440,
-        "giro": 2,
-        "entra": 13.6,
-        "encabezado": "PISTA 1 · MARC BLOCH (1886–1944)",
-        "cifra": "Los hombres en el tiempo",
+        "tipo": "polaroid",
+        "x": 300,
+        "y": 1200,
+        "giro": -2.5,
+        "entra": 23.7,
+        "texto": "Marc Bloch",
+        "fuente": "1886–1944 · Foto: Wikimedia Commons, dominio público",
+        "imagen": "imagenes/marc-bloch.jpg"
+      },
+      {
+        "id": "cita",
+        "x": 760,
+        "y": 1180,
+        "ancho": 420,
+        "giro": 1.5,
+        "entra": 27.6,
+        "encabezado": "LA DEFINICIÓN",
+        "cifra": "en el tiempo",
         "texto": "«la ciencia de los hombres en el tiempo»",
-        "fuente": "FUENTE: M. Bloch, Apologie pour l'histoire, 1949"
+        "fuente": "FUENTE: M. Bloch, Apologie pour l'histoire, 1949",
+        "lupa": {
+          "desde": 29.9,
+          "hasta": 32.6
+        }
+      },
+      {
+        "id": "vivieron",
+        "tipo": "etiqueta",
+        "x": 300,
+        "y": 1520,
+        "ancho": 270,
+        "giro": -3,
+        "entra": 39.2,
+        "texto": "VIVIERON"
+      },
+      {
+        "id": "pensaron",
+        "tipo": "etiqueta",
+        "x": 560,
+        "y": 1600,
+        "ancho": 270,
+        "giro": 2,
+        "entra": 40.5,
+        "texto": "PENSARON"
+      },
+      {
+        "id": "cambiaron",
+        "tipo": "etiqueta",
+        "x": 810,
+        "y": 1520,
+        "ancho": 290,
+        "giro": -1,
+        "entra": 42.3,
+        "texto": "CAMBIARON"
+      },
+      {
+        "id": "carta",
+        "tipo": "objeto",
+        "objeto": "carta",
+        "x": 290,
+        "y": 1980,
+        "giro": -2,
+        "entra": 70.7,
+        "texto": "Una carta antigua",
+        "fuente": "FUENTE: archivo · fondo · folio",
+        "ilustracion": true
+      },
+      {
+        "id": "foto",
+        "tipo": "objeto",
+        "objeto": "foto",
+        "x": 790,
+        "y": 1980,
+        "giro": 2,
+        "entra": 72.8,
+        "texto": "Una foto en un cajón",
+        "fuente": "FUENTE: colección · autor · año",
+        "ilustracion": true
+      },
+      {
+        "id": "expediente",
+        "tipo": "objeto",
+        "objeto": "expediente",
+        "x": 290,
+        "y": 2380,
+        "giro": 1.5,
+        "entra": 75.4,
+        "texto": "Un expediente criminal",
+        "fuente": "FUENTE: juzgado · caja · folio",
+        "ilustracion": true
+      },
+      {
+        "id": "papel",
+        "tipo": "objeto",
+        "objeto": "papel",
+        "x": 790,
+        "y": 2380,
+        "giro": -1.5,
+        "entra": 77.7,
+        "texto": "Un papel de archivo",
+        "fuente": "FUENTE: archivo · fondo · legajo",
+        "ilustracion": true,
+        "lupa": {
+          "desde": 86.4,
+          "hasta": 90.4,
+          "y": 300
+        }
+      },
+      {
+        "id": "biblioteca",
+        "tipo": "etiqueta",
+        "x": 1250,
+        "y": 700,
+        "ancho": 330,
+        "giro": -2,
+        "entra": 123.8,
+        "texto": "BIBLIOTECA"
+      },
+      {
+        "id": "universidad",
+        "tipo": "etiqueta",
+        "x": 1250,
+        "y": 880,
+        "ancho": 330,
+        "giro": 1.5,
+        "entra": 125.9,
+        "texto": "UNIVERSIDAD"
       },
       {
         "id": "archivos",
-        "x": 800,
-        "y": 930,
-        "ancho": 360,
-        "giro": -2,
-        "entra": 36.6,
-        "encabezado": "RASTRO 1",
-        "cifra": "Archivos",
-        "texto": "actas, expedientes, censos",
-        "fuente": "FUENTE: la que cite cada capítulo"
-      },
-      {
-        "id": "cartas",
-        "x": 290,
-        "y": 1350,
-        "ancho": 360,
-        "giro": 1.5,
-        "entra": 37.4,
-        "encabezado": "RASTRO 2",
-        "cifra": "Cartas",
-        "texto": "lo que la gente se escribía",
-        "fuente": "FUENTE: la que cite cada capítulo"
-      },
-      {
-        "id": "fotos",
-        "x": 800,
-        "y": 1350,
-        "ancho": 360,
+        "tipo": "etiqueta",
+        "x": 1250,
+        "y": 1060,
+        "ancho": 330,
         "giro": -1,
-        "entra": 38.2,
-        "encabezado": "RASTRO 3",
-        "cifra": "Fotografías",
-        "texto": "lo que alguien decidió guardar",
-        "fuente": "FUENTE: la que cite cada capítulo"
+        "entra": 127.8,
+        "texto": "ARCHIVOS"
+      },
+      {
+        "id": "gente",
+        "x": 1250,
+        "y": 1440,
+        "ancho": 420,
+        "giro": 1,
+        "entra": 132.8,
+        "encabezado": "¿PARA QUIÉN?",
+        "cifra": "Para todos",
+        "texto": "para quien nunca ha leído algo de historia",
+        "fuente": "LEO EL PASADO"
       }
     ],
     "hilos": [
       [
         "hub",
-        "bloch"
-      ],
-      [
-        "hub",
-        "archivos"
+        "bloch",
+        23.0
       ],
       [
         "bloch",
-        "cartas"
+        "cita",
+        27.2
+      ],
+      [
+        "hub",
+        "carta",
+        68.0
+      ],
+      [
+        "carta",
+        "foto",
+        81.2
+      ],
+      [
+        "foto",
+        "expediente",
+        82.1
+      ],
+      [
+        "expediente",
+        "papel",
+        83.0
+      ],
+      [
+        "biblioteca",
+        "gente",
+        130.8
+      ],
+      [
+        "universidad",
+        "gente",
+        131.2
       ],
       [
         "archivos",
-        "fotos"
-      ],
-      [
-        "cartas",
-        "fotos"
+        "gente",
+        131.6
       ]
     ],
+    "brillo": 159.3,
     "camara": [
       [
         0,
         540,
-        520,
-        1.5
+        480,
+        1.25
       ],
       [
-        5.5,
+        6.9,
+        540,
+        480,
+        1.25
+      ],
+      [
+        8.6,
         540,
         520,
-        1.5
+        0.95
       ],
       [
-        13.4,
+        19.5,
         540,
         520,
-        1.5
+        0.95
       ],
       [
-        14.3,
-        290,
-        930,
-        1.5
+        21.5,
+        380,
+        1320,
+        1.3
       ],
       [
-        22.5,
-        290,
-        930,
-        1.5
+        26.8,
+        380,
+        1320,
+        1.3
       ],
       [
-        33.5,
-        545,
-        930,
+        28.4,
+        530,
+        1190,
+        1.0
+      ],
+      [
+        38.5,
+        530,
+        1190,
+        1.0
+      ],
+      [
+        39.6,
+        550,
+        1360,
+        0.95
+      ],
+      [
+        45,
+        550,
+        1360,
+        0.95
+      ],
+      [
+        64.5,
+        550,
+        1360,
+        0.95
+      ],
+      [
+        67.0,
+        540,
+        2180,
+        0.8
+      ],
+      [
+        80.0,
+        540,
+        2180,
+        0.8
+      ],
+      [
+        81.5,
+        540,
+        2180,
+        0.72
+      ],
+      [
+        101.1,
+        540,
+        2180,
+        0.72
+      ],
+      [
+        120.7,
+        1250,
+        1000,
         0.85
       ],
       [
-        39.5,
-        545,
-        930,
+        142.0,
+        1250,
+        1000,
         0.85
       ],
       [
-        40.5,
-        611,
-        1346,
-        0.7
+        143.5,
+        1250,
+        1440,
+        1.1
+      ],
+      [
+        145.7,
+        1250,
+        1440,
+        1.1
+      ],
+      [
+        148.5,
+        891,
+        2178,
+        0.35
       ]
     ]
   },
   "sellos": [
     {
       "texto": "NINGÚN HILO SIN FUENTE",
-      "t": 41.2,
-      "hasta": 43.5,
+      "t": 94.7,
+      "hasta": 100.9,
       "x": 540,
-      "y": 560,
+      "y": 620,
       "giro": -8
     },
     {
-      "texto": "HISTORIA PARA TODOS",
-      "t": 57.5,
-      "hasta": 61.5,
+      "texto": "SIN RIGOR · SIN FUENTES",
+      "t": 112.2,
+      "hasta": 120.5,
       "x": 540,
-      "y": 520,
+      "y": 560,
       "giro": -6
+    },
+    {
+      "texto": "DESINFORMACIÓN",
+      "t": 138.1,
+      "hasta": 141.6,
+      "x": 540,
+      "y": 600,
+      "giro": -7
     }
   ],
   "subtitulos": {
@@ -427,21 +726,28 @@
   "musica": {
     "golpes": [
       0,
-      13.6,
-      22.5,
-      33.5,
-      36.6,
-      44.2,
-      47.4,
-      61.5
+      8.2,
+      23.7,
+      27.6,
+      45.0,
+      64.5,
+      70.7,
+      72.8,
+      75.4,
+      77.7,
+      101.1,
+      104.8,
+      120.7,
+      132.8
     ],
     "sellos": [
-      41.2,
-      57.5
+      94.7,
+      112.2,
+      138.1
     ],
     "subidas": [
-      40.5
+      146.5
     ],
-    "final": 67.5
+    "final": 163.5
   }
 }
