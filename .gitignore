@@ -1,0 +1,18 @@
+# dependencias (se reinstalan con npm install / pip install -r requirements.txt)
+node_modules/
+__pycache__/
+.venv/
+
+# grabaciones crudas de Leo: privadas y pesadas, no van al repositorio
+grabaciones/
+
+# audio procesado y renders: se regeneran con los scripts
+public/episodios/*/*.wav
+out/
+tmp/
+
+# sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+.claude/

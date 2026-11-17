@@ -1,0 +1,31 @@
+{
+  "title": "Bananeras · mapa (tramo 6.0 s – 16.9 s de la voz)",
+  "width": 1080, "height": 1920, "fps": 30,
+  "projection": "equirect",
+  "basemap": { "style": "flat", "ocean": "#0b0908", "oceanDeep": "#070605", "shelf": "#2a1f16", "land": "#3a2b1e", "grain": 0.12, "vignette": 0.75 },
+  "borders": { "countries": true, "states": false, "color": "rgba(232,220,194,.28)", "width": 1.2 },
+  "autoSfx": false,
+  "shots": [
+    { "start": 0, "end": 2.6, "fadeIn": 0.3,
+      "cam": { "from": { "lon": -45, "lat": 12, "span": 300 }, "to": { "lon": -74, "lat": 7, "span": 55 }, "ease": "inOut", "dur": 2.4 },
+      "elements": [
+        { "type": "region", "set": "countries", "names": ["Colombia"], "fill": "#e8dcc2", "opacity": 0.22, "outline": "#e8dcc2", "t0": 0.9 },
+        { "type": "label", "lon": -73, "lat": 3.5, "text": "COLOMBIA", "size": 46, "color": "#e8dcc2", "t0": 1.4 }
+      ] },
+    { "start": 2.6, "end": 6.0,
+      "cam": { "from": { "lon": -74, "lat": 7, "span": 55 }, "to": { "lon": -74.2, "lat": 10.75, "span": 4.2 }, "ease": "inOut", "dur": 1.6 },
+      "elements": [
+        { "type": "region", "set": "countries", "names": ["Colombia"], "fill": "#e8dcc2", "opacity": 0.12, "outline": "#e8dcc2", "t0": 0 },
+        { "type": "pin", "lon": -74.25, "lat": 11.01, "label": "Ciénaga", "color": "#c1121f", "t0": 0.4 },
+        { "type": "dot", "lon": -74.25, "lat": 11.01, "color": "#c1121f", "ping": true, "t0": 0.5 }
+      ] },
+    { "start": 6.0, "end": 10.9, "fadeOut": 0.25,
+      "cam": { "from": { "lon": -74.2, "lat": 10.75, "span": 4.2 }, "to": { "lon": -74.2, "lat": 10.7, "span": 3.4 }, "ease": "linear", "dur": 4.9 },
+      "elements": [
+        { "type": "region", "set": "countries", "names": ["Colombia"], "fill": "#e8dcc2", "opacity": 0.12, "outline": "#e8dcc2", "t0": 0 },
+        { "type": "area", "points": [[-74.22, 11.0], [-74.08, 10.93], [-74.05, 10.7], [-74.1, 10.48], [-74.24, 10.44], [-74.32, 10.68], [-74.3, 10.92]], "smooth": true, "style": "glow", "fill": "#c1121f", "opacity": 0.55, "t0": 0.4, "label": "Zona bananera", "labelPill": true, "labelAt": [-73.75, 10.6] },
+        { "type": "pin", "lon": -74.25, "lat": 11.01, "label": "Ciénaga", "color": "#c1121f", "t0": 0 },
+        { "type": "pin", "lon": -74.19, "lat": 10.59, "label": "Aracataca", "color": "#e8dcc2", "t0": 1.2 }
+      ] }
+  ]
+}

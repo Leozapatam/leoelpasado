@@ -1,0 +1,364 @@
+{
+  "titulo": "¿Cuántos murieron en la Masacre de las Bananeras?",
+  "audio": "mezcla.wav",
+  "duracion": 50.2,
+  "glosario": {
+    "Siena Gamagdalena.": "Ciénaga, Magdalena.",
+    "Keffery,": "Caffery,",
+    "United Field Company,": "United Fruit Company,",
+    "te lo repetimos,": "todos repetimos,",
+    "3 .000,": "3.000,",
+    "100 años": "Cien años",
+    "novela": "novela:",
+    "ha respuestas,": "da respuestas,",
+    "sin fuentes.": "sin fuente.",
+    "las cifras en disputa.": "la cifra está en disputa.",
+    "Cienaga,": "Ciénaga,",
+    "ahora repetimos,": "todos repetimos,",
+    "3 .000": "3.000"
+  },
+  "gancho": {
+    "antetitulo": "EXPEDIENTE ABIERTO",
+    "texto": "¿Cuántos murieron en la Masacre de las Bananeras?",
+    "desde": 1.9,
+    "hasta": 5.8
+  },
+  "escenas": [
+    {
+      "tipo": "mapa",
+      "desde": 0,
+      "hasta": 17.3,
+      "mapa": {
+        "camara": [
+          {
+            "t": 0,
+            "lon": -40,
+            "lat": 15,
+            "span": 340
+          },
+          {
+            "t": 5.8,
+            "lon": -45,
+            "lat": 13,
+            "span": 300
+          },
+          {
+            "t": 8.3,
+            "lon": -74,
+            "lat": 6,
+            "span": 38
+          },
+          {
+            "t": 9.8,
+            "lon": -74.2,
+            "lat": 10.75,
+            "span": 3.2
+          },
+          {
+            "t": 17.3,
+            "lon": -74.15,
+            "lat": 10.72,
+            "span": 2.2
+          }
+        ],
+        "paises": [
+          {
+            "nombre": "Colombia",
+            "t": 6.6,
+            "estilo": "tenue"
+          }
+        ],
+        "etiquetas": [
+          {
+            "texto": "COLOMBIA",
+            "lon": -73.5,
+            "lat": 3.5,
+            "t": 7.0,
+            "hasta": 9.0
+          }
+        ],
+        "pines": [
+          {
+            "texto": "Ciénaga",
+            "lon": -74.25,
+            "lat": 11.01,
+            "t": 8.95,
+            "color": "rojo",
+            "lado": "der"
+          }
+        ],
+        "zonas": [
+          {
+            "texto": "Zona bananera",
+            "t": 12.9,
+            "etiquetaEn": [
+              -73.82,
+              10.5
+            ],
+            "puntos": [
+              [
+                -74.22,
+                11.0
+              ],
+              [
+                -74.08,
+                10.93
+              ],
+              [
+                -74.05,
+                10.7
+              ],
+              [
+                -74.1,
+                10.48
+              ],
+              [
+                -74.24,
+                10.44
+              ],
+              [
+                -74.32,
+                10.68
+              ],
+              [
+                -74.3,
+                10.92
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "tablero",
+      "desde": 17.3,
+      "hasta": 21.0
+    },
+    {
+      "tipo": "documento",
+      "desde": 21.0,
+      "hasta": 31.9,
+      "documento": {
+        "membrete": "DEPARTAMENTO DE ESTADO · DESPACHO",
+        "aviso": "RECREACIÓN · PARÁFRASIS",
+        "lineas": [
+          {
+            "texto": "Bogotá, 1929.",
+            "t": 21.2
+          },
+          {
+            "texto": "Al Secretario de Estado, Washington:",
+            "t": 22.4
+          },
+          {
+            "texto": "El representante de la United",
+            "t": 24.2
+          },
+          {
+            "texto": "Fruit Company en Bogotá me informó",
+            "t": 25.8
+          },
+          {
+            "texto": "que los huelguistas muertos por",
+            "t": 27.4
+          },
+          {
+            "texto": "las tropas colombianas superaron",
+            "t": 28.6
+          },
+          {
+            "texto": "el millar.",
+            "t": 29.8
+          }
+        ],
+        "resaltar": {
+          "linea": 6,
+          "desde": "el millar",
+          "t": 30.6
+        },
+        "firma": "— J. Caffery, embajador de EE. UU.",
+        "fuente": "FUENTE: despacho de J. Caffery al Depto. de Estado de EE. UU., 1929"
+      }
+    },
+    {
+      "tipo": "tablero",
+      "desde": 31.9,
+      "hasta": 44.9
+    },
+    {
+      "tipo": "cierre",
+      "desde": 44.9,
+      "hasta": 50.2
+    }
+  ],
+  "tablero": {
+    "fichas": [
+      {
+        "id": "hub",
+        "x": 540,
+        "y": 600,
+        "ancho": 470,
+        "giro": -1.5,
+        "entra": 16.9,
+        "encabezado": "EXPEDIENTE N.º 1928-12",
+        "cifra": "6 DIC 1928",
+        "texto": "Ciénaga (Magdalena). El Ejército dispara contra huelguistas de la zona bananera.",
+        "fuente": "CASO ABIERTO"
+      },
+      {
+        "id": "a",
+        "x": 300,
+        "y": 1010,
+        "giro": 2.5,
+        "entra": 17.6,
+        "encabezado": "PISTA 1 · VERSIÓN OFICIAL",
+        "cifra": "< 50",
+        "texto": "muertos según el gobierno y el Ejército",
+        "fuente": "FUENTE: partes oficiales, dic. 1928",
+        "lupa": {
+          "desde": 18.6,
+          "hasta": 20.8
+        }
+      },
+      {
+        "id": "b",
+        "x": 790,
+        "y": 1080,
+        "giro": -2,
+        "entra": 31.0,
+        "encabezado": "PISTA 2 · DESPACHO DIPLOMÁTICO",
+        "cifra": "+1.000",
+        "texto": "muertos «según la United Fruit Company»",
+        "fuente": "FUENTE: embajador J. Caffery al Depto. de Estado de EE. UU., 1929"
+      },
+      {
+        "id": "c",
+        "x": 540,
+        "y": 1490,
+        "ancho": 440,
+        "giro": 1.2,
+        "entra": 32.4,
+        "encabezado": "PISTA 3 · LITERATURA",
+        "cifra": "3.000",
+        "texto": "muertos en la novela, la cifra que todos repetimos",
+        "fuente": "FUENTE: G. García Márquez, Cien años de soledad, 1967",
+        "lupa": {
+          "desde": 33.6,
+          "hasta": 36.4
+        }
+      }
+    ],
+    "hilos": [
+      [
+        "hub",
+        "a"
+      ],
+      [
+        "hub",
+        "b"
+      ],
+      [
+        "hub",
+        "c"
+      ]
+    ],
+    "camara": [
+      [
+        0,
+        420,
+        820,
+        1.25
+      ],
+      [
+        17.3,
+        420,
+        820,
+        1.25
+      ],
+      [
+        18.0,
+        300,
+        1010,
+        1.55
+      ],
+      [
+        21.0,
+        300,
+        1010,
+        1.55
+      ],
+      [
+        31.9,
+        790,
+        1080,
+        1.25
+      ],
+      [
+        32.7,
+        540,
+        1490,
+        1.55
+      ],
+      [
+        38.3,
+        540,
+        1490,
+        1.55
+      ],
+      [
+        39.8,
+        623,
+        1479,
+        0.68
+      ]
+    ]
+  },
+  "sellos": [
+    {
+      "texto": "CIFRA EN DISPUTA",
+      "t": 16.0,
+      "x": 540,
+      "y": 640,
+      "giro": -10,
+      "hasta": 17.3
+    }
+  ],
+  "subtitulos": {
+    "resaltar": [
+      "1928",
+      "Ciénaga",
+      "Magdalena",
+      "Caffery",
+      "Washington",
+      "mil",
+      "novela",
+      "Cien",
+      "soledad",
+      "fuente"
+    ]
+  },
+  "cierre": {
+    "titulo": "Profe Leo",
+    "subtitulo": "LEO EL PASADO"
+  },
+  "musica": {
+    "golpes": [
+      6.6,
+      8.95,
+      17.3,
+      21.0,
+      30.7,
+      32.4
+    ],
+    "sellos": [
+      16.0
+    ],
+    "subidas": [
+      38.8
+    ],
+    "final": 44.9
+  },
+  "intro": {
+    "duracion": 3
+  }
+}
