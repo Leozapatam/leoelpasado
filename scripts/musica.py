@@ -10,7 +10,10 @@ from scipy.signal import butter, sosfilt, fftconvolve
 
 SLUG = sys.argv[1]
 CARPETA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "episodios", SLUG)
-EP = json.load(open(os.path.join(CARPETA, "episodio.json"), encoding="utf-8"))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from anclas import resolver  # noqa: E402
+EP = resolver(json.load(open(os.path.join(CARPETA, "episodio.json"), encoding="utf-8")),
+              json.load(open(os.path.join(CARPETA, "palabras.json"), encoding="utf-8")))
 M = EP["musica"]
 
 INTRO = EP.get("intro", {}).get("duracion", 0)  # la entrada va antes de la voz

@@ -118,7 +118,13 @@ python scripts/preparar_voz.py <slug> grabaciones/<archivo> --preset s24
 - Calcula la boca del narrador para cada fotograma → `boca.json`.
 - Si Whisper oye mal un nombre, agrégalo a `glosario` en `episodio.json` («lo que oyó» → «lo correcto») y repite el paso.
 
+### Regrabar una parte
+1. Leo graba solo el tramo nuevo (por ejemplo `grabaciones/cap0-definicion.m4a`).
+2. En `cortes.json` se usa `"piezas"` para unir la grabación original y el tramo nuevo (ver `scripts/editar_voz.py`). El volumen de cada pieza se iguala solo.
+3. Se repiten `preparar_voz.py`, `musica.py` y el render. Si los tiempos de `episodio.json` están **anclados a palabras** (`"@Bloch"`), no hay que recalcular nada a mano.
+
 ### Paso 3: escribir `episodio.json`
+Los tiempos pueden ser segundos (`23.7`) o **anclas a palabras** (recomendado): `"@Bloch"` (primera vez que se dice), `"@ogro#2"` (segunda vez), `"@ogro+0.4"` (con desfase), `"@ogro:fin"` (cuando termina la palabra). Ver `src/anclas.ts`.
 Copia `public/episodios/bananeras/episodio.json` como plantilla. Los tiempos son **segundos de la voz**: tómalos de la lista que imprime el paso 2. La regla es que cada cosa aparece **en la palabra que la nombra**.
 
 ### Paso 4: música y mezcla

@@ -34,6 +34,22 @@ Un saludo del Profe Leo. Esto es Leo el pasado.
 
 ---
 
+## Propuesta de regrabación · la definición (pendiente de que Leo elija)
+
+Se reemplaza desde «Pero hay una definición…» (0:19 de la grabación original) hasta «…explicar qué hace un historiador» (0:54). La frase del ogro se conserva tal cual. Por eso el tramo nuevo termina presentando a Bloch.
+
+**Opción A · Josep Fontana (recomendada)**
+Pero hay una definición que a mí me sirve mucho. Es la del historiador catalán Josep Fontana. Para él, la historia es análisis del pasado y proyecto social. O sea, el pasado no se estudia por pura curiosidad. Se estudia para entender cómo llegamos hasta aquí y para decidir hacia dónde queremos ir. La historia es una herramienta, y como toda herramienta, hay que aprender a usarla. Y otro historiador, el francés Marc Bloch, tenía una imagen muy bonita y un poquito aterradora para explicar qué hace un historiador.
+
+*Fuente:* Josep Fontana, *Historia: análisis del pasado y proyecto social* (Barcelona, Crítica, 1982). La definición es el título mismo del libro, así que no hay riesgo de cita mal atribuida.
+
+**Opción B · Walter Benjamin**
+Pero hay una idea que me sacude mucho. El filósofo alemán Walter Benjamin escribió que hacer historia es adueñarse de un recuerdo tal como relampaguea en un instante de peligro. Es decir, la historia no es un museo quieto. Es algo que tomamos en las manos justo cuando el presente nos pone en peligro. Y un historiador francés, Marc Bloch, tenía una imagen muy bonita y un poquito aterradora para explicar qué hace un historiador.
+
+*Fuente:* Walter Benjamin, «Sobre el concepto de historia», tesis VI (1940). La frase sigue la versión que cita Bolívar Echeverría en «Benjamin, mesianismo y utopía». Es más poética y más difícil para un niño.
+
+---
+
 ## Fuentes (para la descripción del post)
 - Marc Bloch, *Apologie pour l'histoire ou Métier d'historien*, publicado después de su muerte por Lucien Febvre en 1949. Capítulo I.
   - «Science des hommes […] des hommes, dans le temps» se traduce como «la ciencia de los hombres en el tiempo».

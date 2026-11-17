@@ -25,7 +25,7 @@ Cambia la plantilla (src/, scripts/) **solo si Leo pide algo nuevo**. Si lo hace
 ## Reglas que Leo ya decidió
 - Estilo noir de archivo: tinta, papel, **rojo hilo como único acento** (src/marca.ts). Regla n.º 1: **ningún hilo sin fuente**.
 - El narrador es **Profe Leo en pixel art, cuerpo entero, expresión seria** (public/personaje/), animado con la voz de Leo. Se mueve como una sola pieza (nunca separar cabeza y cuerpo). Movimiento sutil; se irá sofisticando poco a poco.
-- Todo video empieza con la **entrada** (`intro`, 3 s: Profe Leo señala el marco y la cámara entra a la primera escena) y termina con el **eslogan** «Profe Leo» / «LEO EL PASADO», nada más.
+- Todo video empieza con la **entrada** (`intro`, 3 s: Profe Leo señala el marco y la cámara entra a la primera escena) y termina con el **eslogan** «Profe Leo» y debajo «@leoelpasado», nada más.
 - Episodio en curso: `capitulo-0` (presentación del canal). Al recibir la voz: preparar_voz.py → reajustar tiempos del episodio.json a palabras.json → musica.py → render.
 - **Zona segura** TikTok/IG/FB (SEGURA en marca.ts): nada importante en los 250 px de arriba, los 480 de abajo ni los 160 de la derecha. Los subtítulos van como diálogo **a la altura de la cabeza del narrador** (SEGURA.abajo + 260), **nunca abajo del todo**: ahí se confunden con la descripción del post. El narrador se queda abajo a la izquierda.
 - **Responde siempre a Leo en español.**
