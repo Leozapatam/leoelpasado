@@ -11,19 +11,28 @@ def _limpia(w):
     return re.sub(r"[¿?¡!.,:;«»\"()]", "", w)
 
 
-def resolver(dato, palabras):
-    if isinstance(dato, str) and dato.startswith("@"):
-        m = ANCLA.match(dato)
-        if not m:
-            raise ValueError(f"Ancla mal escrita: {dato}")
-        palabra, n, fin, desfase = m.groups()
-        hits = [p for p in palabras if _limpia(p["w"]) == _limpia(palabra)]
-        if len(hits) < int(n or 1):
-            raise ValueError(f"Ancla sin coincidencia en la voz: {dato}")
-        p = hits[int(n or 1) - 1]
-        return round((p["e"] if fin else p["s"]) + float(desfase or 0), 2)
+# solo estos campos son tiempos (así un texto como "@leoelpasado" nunca se toma por ancla)
+CLAVES = {"t", "desde", "hasta", "entra", "revela", "brillo", "final"}
+LISTAS = {"camara", "hilos", "golpes", "sellos", "subidas"}
+
+
+def _ancla(dato, palabras):
+    m = ANCLA.match(dato)
+    if not m:
+        raise ValueError(f"Ancla mal escrita: {dato}")
+    palabra, n, fin, desfase = m.groups()
+    hits = [p for p in palabras if _limpia(p["w"]) == _limpia(palabra)]
+    if len(hits) < int(n or 1):
+        raise ValueError(f"Ancla sin coincidencia en la voz: {dato}")
+    p = hits[int(n or 1) - 1]
+    return round((p["e"] if fin else p["s"]) + float(desfase or 0), 2)
+
+
+def resolver(dato, palabras, es_tiempo=False):
+    if isinstance(dato, str):
+        return _ancla(dato, palabras) if es_tiempo and dato.startswith("@") else dato
     if isinstance(dato, list):
-        return [resolver(d, palabras) for d in dato]
+        return [resolver(d, palabras, es_tiempo) for d in dato]
     if isinstance(dato, dict):
-        return {k: resolver(v, palabras) for k, v in dato.items()}
+        return {k: resolver(v, palabras, k in CLAVES or (k in LISTAS and isinstance(v, list))) for k, v in dato.items()}
     return dato

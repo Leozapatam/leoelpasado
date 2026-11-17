@@ -22,11 +22,17 @@ export const resolverAncla = (texto: string, palabras: Palabra[]): number => {
   return Math.round(((fin ? p.e : p.s) + (desfase ? Number(desfase) : 0)) * 100) / 100;
 };
 
-/** Recorre todo el episodio y cambia cada "@ancla" por su segundo */
-export const resolverAnclas = <X>(dato: X, palabras: Palabra[]): X => {
-  if (typeof dato === "string") return (dato.startsWith("@") && ANCLA.test(dato) ? resolverAncla(dato, palabras) : dato) as X;
-  if (Array.isArray(dato)) return dato.map((d) => resolverAnclas(d, palabras)) as X;
+// solo estos campos son tiempos (así un texto como "@leoelpasado" nunca se toma por ancla)
+const CLAVES = new Set(["t", "desde", "hasta", "entra", "revela", "brillo", "final"]);
+const LISTAS = new Set(["camara", "hilos", "golpes", "sellos", "subidas"]);
+
+/** Recorre todo el episodio y cambia cada "@ancla" de los campos de tiempo por su segundo */
+export const resolverAnclas = <X>(dato: X, palabras: Palabra[], esTiempo = false): X => {
+  if (typeof dato === "string") return (esTiempo && dato.startsWith("@") ? resolverAncla(dato, palabras) : dato) as X;
+  if (Array.isArray(dato)) return dato.map((d) => resolverAnclas(d, palabras, esTiempo)) as X;
   if (dato && typeof dato === "object")
-    return Object.fromEntries(Object.entries(dato).map(([k, v]) => [k, resolverAnclas(v, palabras)])) as X;
+    return Object.fromEntries(
+      Object.entries(dato).map(([k, v]) => [k, resolverAnclas(v, palabras, CLAVES.has(k) || (LISTAS.has(k) && Array.isArray(v)))]),
+    ) as X;
   return dato;
 };

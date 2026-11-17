@@ -17,7 +17,7 @@ Para un episodio nuevo, **no reescribas componentes ni explores el código**. Ha
 0. Si Leo grabó tomas repetidas: transcribe, elige la toma final, anota los tramos en `public/episodios/<slug>/cortes.json` y ejecuta `python scripts/editar_voz.py <slug> <grabación>`. El guion final se escribe a partir de lo que Leo dijo (su voz manda). Para medir siseo y eses antes y después: `python scripts/medir_voz.py <archivos>`. Correcciones de Whisper: agrégalas al `glosario` y usa `--solo-glosario`.
 1. `python scripts/preparar_voz.py <slug> <audio> --preset s24` (o `sala`) → voz.wav, palabras.json, boca.json
 2. Copia `public/episodios/bananeras/episodio.json` → `public/episodios/<slug>/episodio.json` y cambia textos y tiempos (segundos de la voz, tomados de la salida del paso 1)
-3. `python scripts/musica.py <slug>` → musica.wav, mezcla.wav
+3. `python scripts/musica.py <slug>`, `python scripts/efectos.py <slug>` y `python scripts/mezclar.py <slug>` → música, efectos automáticos y mezcla (método fijo: no se eligen efectos a mano salvo pedidos del relato)
 4. Revisa 3–5 fotogramas con `--props='{"slug":"<slug>","guias":true}'` y luego `npm run render -- <slug>`
 
 Cambia la plantilla (src/, scripts/) **solo si Leo pide algo nuevo**. Si lo haces, actualiza `PLANTILLA.md`.
@@ -31,7 +31,8 @@ Cambia la plantilla (src/, scripts/) **solo si Leo pide algo nuevo**. Si lo hace
 - **Responde siempre a Leo en español.**
 - Rigor: cada cifra coincide con su fuente; los documentos recreados llevan «RECREACIÓN · PARÁFRASIS»; no se inventan citas.
 - Leo graba con un Samsung S24 Ultra (preset `s24`).
-- La música es original (scripts/musica.py), sin derechos de autor.
+- La música y los efectos son originales y sintetizados (scripts/musica.py, scripts/sonidos.py), sin derechos de terceros. **Todo lo que pasa en pantalla suena**, tenue, y cada escena tiene su ambiente. La voz va integrada en la mezcla, no pegada encima.
+- **El método no se cambia por episodio:** cambian los mapas, las fichas y las conexiones; las reglas (identidad, escenarios, sonido, flujo) permanecen.
 
 Manual completo: `PLANTILLA.md`.
 

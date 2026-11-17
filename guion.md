@@ -34,19 +34,20 @@ Un saludo del Profe Leo. Esto es Leo el pasado.
 
 ---
 
-## Propuesta de regrabación · la definición (pendiente de que Leo elija)
+## Regrabación · tramo de Walter Benjamin (elegido por Leo)
 
-Se reemplaza desde «Pero hay una definición…» (0:19 de la grabación original) hasta «…explicar qué hace un historiador» (0:54). La frase del ogro se conserva tal cual. Por eso el tramo nuevo termina presentando a Bloch.
+Reemplaza desde «Pero hay una definición…» (0:19 de `Piloto.m4a`) hasta «…explicar qué hace un historiador» (0:54). Después sigue tu grabación original con «Decía que el buen historiador se parecía al ogro…».
 
-**Opción A · Josep Fontana (recomendada)**
-Pero hay una definición que a mí me sirve mucho. Es la del historiador catalán Josep Fontana. Para él, la historia es análisis del pasado y proyecto social. O sea, el pasado no se estudia por pura curiosidad. Se estudia para entender cómo llegamos hasta aquí y para decidir hacia dónde queremos ir. La historia es una herramienta, y como toda herramienta, hay que aprender a usarla. Y otro historiador, el francés Marc Bloch, tenía una imagen muy bonita y un poquito aterradora para explicar qué hace un historiador.
+**[WALTER BENJAMIN]**
+Pero hay una idea que a mí me sacude mucho. Es de Walter Benjamin, un filósofo alemán que escribió en plena Segunda Guerra Mundial, perseguido por los nazis. Él decía que hacer historia es adueñarse de un recuerdo tal como relampaguea en un instante de peligro.
 
-*Fuente:* Josep Fontana, *Historia: análisis del pasado y proyecto social* (Barcelona, Crítica, 1982). La definición es el título mismo del libro, así que no hay riesgo de cita mal atribuida.
+**[QUÉ QUIERE DECIR]**
+¿Y eso qué quiere decir? Que el pasado no es una vitrina de museo para mirar de lejos. Hay recuerdos que se encienden justo cuando el presente se pone difícil. Y ahí hay que agarrarlos, porque nos ayudan a entender lo que nos está pasando. Y porque si no lo hacemos nosotros, otros lo van a usar a su favor. Por eso la historia es una herramienta, y hay que aprender a usarla bien.
 
-**Opción B · Walter Benjamin**
-Pero hay una idea que me sacude mucho. El filósofo alemán Walter Benjamin escribió que hacer historia es adueñarse de un recuerdo tal como relampaguea en un instante de peligro. Es decir, la historia no es un museo quieto. Es algo que tomamos en las manos justo cuando el presente nos pone en peligro. Y un historiador francés, Marc Bloch, tenía una imagen muy bonita y un poquito aterradora para explicar qué hace un historiador.
+**[VUELTA A BLOCH]**
+Ahora, ¿cómo trabaja un historiador con esos recuerdos? Marc Bloch, un historiador francés, tenía una imagen muy bonita y un poquito aterradora para explicarlo.
 
-*Fuente:* Walter Benjamin, «Sobre el concepto de historia», tesis VI (1940). La frase sigue la versión que cita Bolívar Echeverría en «Benjamin, mesianismo y utopía». Es más poética y más difícil para un niño.
+*Fuente:* Walter Benjamin, «Sobre el concepto de historia», tesis VI (1940), en la versión que cita Bolívar Echeverría («Benjamin, mesianismo y utopía»). En esa misma tesis Benjamin advierte que el peligro amenaza con convertir la tradición en instrumento de los poderosos. De ahí sale «otros lo van a usar a su favor».
 
 ---
 
@@ -55,4 +56,5 @@ Pero hay una idea que me sacude mucho. El filósofo alemán Walter Benjamin escr
   - «Science des hommes […] des hommes, dans le temps» se traduce como «la ciencia de los hombres en el tiempo».
   - «Le bon historien, lui, ressemble à l'ogre de la légende. Là où il flaire la chair humaine, il sait que là est son gibier.» En el video va en versión libre y hablada.
 - Edición en español: *Apología para la historia o el oficio de historiador*, FCE (edición anotada por Étienne Bloch, prefacio de Jacques Le Goff).
+- Walter Benjamin, «Sobre el concepto de historia» (1940), tesis VI. Traducción citada por Bolívar Echeverría.
 - Marc Bloch (1886–1944) fue cofundador de la revista *Annales*. Participó en la Resistencia francesa y lo fusilaron los nazis en 1944.

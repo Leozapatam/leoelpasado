@@ -1,9 +1,9 @@
 """Paso 2 de cada episodio: música noir original + mezcla con la voz.
 
 Uso: python scripts/musica.py <slug>
-Lee "musica" y "duracion" de public/episodios/<slug>/episodio.json y crea musica.wav y mezcla.wav.
+Lee "musica" y "duracion" de public/episodios/<slug>/episodio.json y crea musica.wav.
 Pad menor, pulso de corazón, tic-tac, piano y golpes sincronizados con los momentos del episodio.
-La música baja sola cuando hablas (sidechain) y la mezcla queda a -14 LUFS (estándar Reels/TikTok)."""
+La mezcla con la voz y los efectos la hace scripts/mezclar.py."""
 import json, os, subprocess, sys, wave
 import numpy as np
 from scipy.signal import butter, sosfilt, fftconvolve
@@ -158,9 +158,5 @@ with wave.open(musica, "w") as w:
     w.writeframes((st * 32767).astype(np.int16).tobytes())
 print("musica.wav ->", DUR, "s")
 
-# Mezcla: la música (-5 dB) se agacha cuando hablas y todo queda a -14 LUFS
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", musica, "-i", os.path.join(CARPETA, "voz.wav"), "-filter_complex",
-    f"[0:a]volume=0.55[m];[1:a]adelay={int(INTRO * 1000)}|{int(INTRO * 1000)},apad[vd];[vd]asplit=2[v][sc];[m][sc]sidechaincompress=threshold=0.03:ratio=6:attack=40:release=450[md];"
-    "[md][v]amix=inputs=2:normalize=0:duration=first,alimiter=limit=0.95,loudnorm=I=-14:TP=-1:LRA=9",
-    "-ar", "48000", os.path.join(CARPETA, "mezcla.wav")], check=True)
-print("mezcla.wav listo")
+# La mezcla con voz y efectos la hace scripts/mezclar.py (paso siguiente)
+print("siguiente: python scripts/efectos.py", SLUG, "&& python scripts/mezclar.py", SLUG)

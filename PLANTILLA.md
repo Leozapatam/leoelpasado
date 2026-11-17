@@ -127,10 +127,20 @@ python scripts/preparar_voz.py <slug> grabaciones/<archivo> --preset s24
 Los tiempos pueden ser segundos (`23.7`) o **anclas a palabras** (recomendado): `"@Bloch"` (primera vez que se dice), `"@ogro#2"` (segunda vez), `"@ogro+0.4"` (con desfase), `"@ogro:fin"` (cuando termina la palabra). Ver `src/anclas.ts`.
 Copia `public/episodios/bananeras/episodio.json` como plantilla. Los tiempos son **segundos de la voz**: tómalos de la lista que imprime el paso 2. La regla es que cada cosa aparece **en la palabra que la nombra**.
 
-### Paso 4: música y mezcla
+### Paso 4: música, efectos y mezcla (método fijo)
 ```bash
-python scripts/musica.py <slug>
+python scripts/musica.py <slug>     # música noir original -> musica.wav
+python scripts/efectos.py <slug>    # efectos automáticos + ambientes -> efectos.wav
+python scripts/mezclar.py <slug>    # voz integrada + música + efectos -> mezcla.wav
 ```
+**Efectos (siempre los mismos, tabla `REGLAS` en `efectos.py`):**
+- ficha: papel y chincheta · polaroid: obturador · hilo: hilo que se tensa · sello: golpe de tinta · lupa: destello
+- documento: teclas de máquina de escribir y campanita al final de cada línea · gancho: teclas
+- mapa: tono de tinta por país, «pop» por pin, *whoosh* grave en los zooms · cambio de escena: *whoosh* · entrada: láser y *whoosh*
+
+**Ambientes por escena:** tablero → sala de archivo · escritorio → lámpara y reloj · mapa → viento suave.
+**A mano**, si el relato lo pide: `"efectos": [{"t": "@aplaudan", "sonido": "aplausos", "vol": 0.4}]` (también `murmullo`, `campanita`, `obturador`…). La biblioteca está en `scripts/sonidos.py`; `python scripts/sonidos.py` la exporta a `out/sonidos/` para escucharla.
+**Voz integrada:** pasa por la misma sala que la música y los efectos, con calidez suave; la música y los ambientes bajan cuando hablas; compresión de bus y -14 LUFS.
 Compone música noir original (sin derechos de autor) con golpes en los momentos de `musica.golpes`. La música baja sola cuando hablas, y la mezcla final queda a -14 LUFS.
 
 ### Paso 5: revisar y renderizar
