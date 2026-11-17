@@ -30,7 +30,7 @@ Cambia la plantilla (src/, scripts/) **solo si Leo pide algo nuevo**. Si lo hace
 - **Zona segura** TikTok/IG/FB (SEGURA en marca.ts): nada importante en los 250 px de arriba, los 480 de abajo ni los 160 de la derecha. Los subtítulos van como diálogo **a la altura de la cabeza del narrador** (SEGURA.abajo + 260), **nunca abajo del todo**: ahí se confunden con la descripción del post. El narrador se queda abajo a la izquierda.
 - **Responde siempre a Leo en español.**
 - Rigor: cada cifra coincide con su fuente; los documentos recreados llevan «RECREACIÓN · PARÁFRASIS»; no se inventan citas.
-- Leo graba con un Samsung S24 Ultra (preset `s24`).
+- Leo graba con un Samsung S24 Ultra. La voz se limpia con **IA (DeepFilterNet, `~/leoelpasado-deps/deep-filter.exe`)** dentro de `editar_voz.py` y luego va el preset **`lark`**. Si el programa no está, usa el preset `s24`.
 - La música y los efectos son originales y sintetizados (scripts/musica.py, scripts/sonidos.py), sin derechos de terceros. **Todo lo que pasa en pantalla suena**, tenue, y cada escena tiene su ambiente. La voz va integrada en la mezcla, no pegada encima.
 - **El método no se cambia por episodio:** cambian los mapas, las fichas y las conexiones; las reglas (identidad, escenarios, sonido, flujo) permanecen.
 

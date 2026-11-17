@@ -11,6 +11,7 @@ Crea en public/episodios/<slug>/:
 Presets:
   s24   Samsung S24 Ultra (Grabadora de voz, calidad alta). El teléfono ya limpia el ruido: se trata suave.
   sala  webcam o micrófono del PC en una habitación con eco ("encocado"): corrección fuerte.
+  lark  (recomendado) voz ya limpiada con IA por editar_voz.py: solo color de micrófono, eses y compresión.
 """
 import argparse, json, os, re, subprocess, tempfile, wave
 import numpy as np
@@ -28,6 +29,13 @@ PRESETS = {
            "acompressor=threshold=-20dB:ratio=2.5:attack=15:release=200:makeup=2,"
            "agate=threshold=0.025:ratio=3:range=0.12:attack=8:release=350:knee=4,"
            "alimiter=limit=0.9,loudnorm=I=-16:TP=-1.5:LRA=7",
+    # Después de la limpieza IA (DeepFilterNet, en editar_voz.py): el ruido ya no está, así que no hay
+    # reducción de ruido ni puerta; solo el color "de micrófono de solapa" (estilo Lark), eses y compresión.
+    "lark": "highpass=f=80:poles=2,lowpass=f=16000,"
+            "equalizer=f=140:t=q:w=1:g=1.5,equalizer=f=330:t=q:w=1.2:g=-2,equalizer=f=3200:t=q:w=1:g=2,"
+            "highshelf=f=9000:g=1.5,deesser=i=0.45:m=0.5:f=0.55,equalizer=f=7000:t=q:w=1.5:g=-1.5,"
+            "acompressor=threshold=-20dB:ratio=2.5:attack=15:release=200:makeup=2,"
+            "alimiter=limit=0.9,loudnorm=I=-16:TP=-1.5:LRA=7",
     # habitación con eco: recorte fuerte de 250-600 Hz y expansor para la cola de la sala
     "sala": "highpass=f=75,afftdn=nf=-30:tn=1,"
             "equalizer=f=120:t=q:w=1:g=2.5,equalizer=f=280:t=q:w=1.2:g=-3,equalizer=f=480:t=q:w=1.4:g=-4.5,"

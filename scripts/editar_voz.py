@@ -41,8 +41,9 @@ def limpiar_ia(wav):
         return wav
     salida = os.path.join(tempfile.gettempdir(), "limpia_ia")
     os.makedirs(salida, exist_ok=True)
-    # --atten-lim-db: cuánto puede bajar el ruido como máximo; 30 dB limpia sin dejar la voz "robótica"
-    subprocess.run([DEEP_FILTER, "--atten-lim-db", "30", "-o", salida, wav], check=True, capture_output=True)
+    # -D: compensa el retardo del modelo (la voz no se corre respecto a los cortes ni al lipsync)
+    # -a 35: el ruido baja hasta 35 dB; limpia mucho sin dejar la voz "robótica" (medido: ruido de 26 a ~55 dB bajo la voz)
+    subprocess.run([DEEP_FILTER, "-D", "-a", "35", "-o", salida, wav], check=True, capture_output=True)
     print("  limpieza IA (DeepFilterNet) aplicada")
     return os.path.join(salida, os.path.basename(wav))
 
@@ -69,7 +70,10 @@ def acortar_pausas(x, max=0.8, nueva=0.5, umbral_db=-20):
     v = x[: len(x) // w * w].reshape(-1, w)
     rms = 20 * np.log10(np.sqrt((v ** 2).mean(1)) + 1e-9)
     voz = np.median(rms[rms > np.percentile(rms, 60)])
-    calla = rms < voz + umbral_db
+    piso = np.percentile(rms, 5)
+    # silencio = por debajo de la voz Y cerca del piso de ruido. Así, con audio muy limpio (IA),
+    # las sílabas suaves no se confunden con silencio.
+    calla = rms < min(voz + umbral_db, piso + 10)
     trozos, i, quitado = [], 0, 0.0
     k = 0
     while k < len(calla):

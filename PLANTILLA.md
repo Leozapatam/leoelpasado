@@ -108,6 +108,10 @@ Lee en voz alta cada cifra y comprueba que diga **lo mismo que la fuente** (ojo 
 
 Alternativa: `npm run grabadora`, luego abrir `http://localhost:4567` **en Chrome**, con teleprompter incluido. Las tomas se guardan solas en `grabaciones/`.
 
+### Limpieza con IA (estilo micrófono Lark)
+`editar_voz.py` pasa cada grabación por **DeepFilterNet** (supresión de ruido con IA, código abierto) antes de cortarla e igualar el timbre. Así el ecualizador no sube el ruido. Medido en el Capítulo 0: el ruido de fondo pasó de 26 dB a 54 dB por debajo de la voz.
+Instalación: descargar `deep-filter-0.5.6-x86_64-pc-windows-msvc.exe` de github.com/Rikorose/DeepFilterNet/releases y guardarlo como `%USERPROFILE%\leoelpasado-deps\deep-filter.exe`. Si no está, todo sigue funcionando sin limpieza IA.
+
 ### Paso 2: preparar la voz
 ```bash
 python scripts/preparar_voz.py <slug> grabaciones/<archivo> --preset s24
