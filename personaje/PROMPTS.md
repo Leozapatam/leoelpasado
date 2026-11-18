@@ -1,46 +1,66 @@
 # Prompts para generar los assets de personajes
 
-Úsalos en Gemini (o el generador que prefieras). **Adjunta siempre como referencia**:
-- tu imagen de Profe Leo que más te guste (la del mapa con el láser o la del retrato),
-- y la de Walter Benjamin o Marc Bloch (para copiar el estilo).
-
-Pide **una imagen por pose**: si pides todas juntas en una hoja, el personaje cambia de una a otra.
-Cuando tengas las imágenes, súbelas a `personaje/originales/` con el nombre de la pose (por ejemplo `leo-senala.png`) y ejecuta `python scripts/sprite.py personaje/originales/leo-senala.png leo-senala`.
+**Referencia oficial de Profe Leo:** `personaje/originales/leo-base-microfono.png` (Leo con el micrófono antiguo, fondo blanco).
+Adjúntala **en cada pedido**. Pide **una imagen por pose**. Si pides varias juntas, el personaje cambia.
+Cuando las tengas: guárdalas en `personaje/originales/leo-<pose>.png` y ejecuta `python scripts/sprite.py personaje/originales/leo-<pose>.png leo-<pose>`.
 
 ---
 
-## 1. Prompt base (pégalo siempre primero)
+## 1. Prompt base (pégalo siempre primero, en inglés da mejores resultados)
 
-> Pixel art chibi character, full body, front view, standing on a plain pure white background. Exactly the same art style as the reference image of the historian: thick dark outline, soft two-tone shading, clean pixel grid of about 60 pixels wide, big head, small body, no text, no shadow on the floor, nothing else in the image.
-> The character is **Profe Leo**, the same person as the reference photo: young Colombian man with long curly dark-brown hair to the shoulders, light-brown skin, short goatee and thin mustache, black crew-neck t-shirt, dark blue jeans, brown boots. Calm, serious and kind expression, like a teacher about to explain something. Keep his face, hair and clothes identical in every image.
+```
+Pixel art chibi character, full body, front view, standing, on a plain pure white background.
+EXACTLY the same character, art style, pixel size, proportions, outline and colors as the attached reference image.
+Character: Profe Leo. Young man, long thick curly dark-brown hair down to the shoulders, light-brown skin,
+straight thick dark eyebrows, small dark eyes, dark mustache and short goatee, black crew-neck t-shirt,
+dark navy jeans, dark brown boots. Calm, serious and kind expression.
+Big head, small body, thick dark outline, two-tone soft shading, clean pixel grid.
+No text, no floor shadow, no background objects, nothing else in the image.
+Pose:
+```
 
-## 2. Poses (añade una línea al final del prompt base, una imagen por línea)
+## 2. Poses (añade UNA línea después de «Pose:»)
 
-| archivo | qué añadir al prompt |
+### Narrador del video
+| archivo | línea a añadir |
 |---|---|
-| `leo-normal` | Standing relaxed, arms down, looking at the viewer. |
-| `leo-habla` | Talking, one open hand raised at chest height as if explaining. |
-| `leo-senala` | Pointing to the right side of the image with a small laser pointer in his right hand, arm extended. |
-| `leo-senala-izq` | Pointing to the left side of the image with his left hand, arm extended. |
+| `leo-normal` | Standing relaxed, arms down at his sides, looking at the viewer. |
+| `leo-habla` | Talking to the viewer, one open hand raised at chest height as if explaining. |
+| `leo-senala` | Pointing to the right side of the image with a small laser pointer, right arm fully extended. |
+| `leo-senala-izq` | Pointing to the left side of the image with his left index finger, arm fully extended. |
 | `leo-piensa` | Thinking, one hand on his chin, eyes looking slightly up. |
-| `leo-lupa` | Holding a vintage magnifying glass in front of one eye, curious. |
-| `leo-documento` | Reading an old yellowed paper document held with both hands. |
-| `leo-libro` | Holding an open old book, looking at the viewer. |
-| `leo-brazos` | Arms crossed, serious, confident. |
-| `leo-sorpresa` | Surprised, eyebrows up, both hands slightly open. |
-| `leo-saluda` | Waving hello with one hand, warm half smile (for the farewell). |
-| `leo-camina` | Walking to the right, side three-quarter view, mid-step. |
+| `leo-lupa` | Holding a vintage brass magnifying glass in front of one eye, curious. |
+| `leo-documento` | Reading an old yellowed paper document held with both hands at chest height. |
+| `leo-libro` | Holding an open old leather book with both hands, looking at the viewer. |
+| `leo-brazos` | Arms crossed over his chest, serious and confident. |
+| `leo-sorpresa` | Surprised, eyebrows raised, both hands slightly open at his sides. |
+| `leo-saluda` | Waving hello with his right hand raised, warm half smile. |
 
-## 3. Personajes históricos (mismo estilo)
+### Formato podcast (con micrófono antiguo)
+| archivo | línea a añadir |
+|---|---|
+| `leo-mic-habla` | Standing next to a vintage chrome stand microphone, holding the stand with one hand and gesturing with the other, talking. *(es la imagen base)* |
+| `leo-mic-escucha` | Standing next to the same vintage stand microphone, both hands down, listening, mouth closed. |
+| `leo-mic-mano` | Holding a vintage handheld microphone close to his mouth with both hands, talking. |
+| `leo-mic-ríe` | Next to the vintage stand microphone, laughing, eyes closed, one hand on his belly. |
+| `leo-mic-perfil` | Three-quarter side view facing right, talking into the vintage stand microphone. |
 
-> Same pixel art chibi style as the reference, full body, front view, plain pure white background, no text.
-> **[Nombre]**, [época], [rasgos y ropa basados en fotos de la época]. Serious, dignified expression.
+### Utilería suelta (mismo estilo, fondo blanco, sin personaje)
+```
+Pixel art object, same art style and pixel size as the attached reference image, plain pure white background, no text: 
+```
++ una de estas: `vintage chrome stand microphone` · `vintage brass magnifying glass` · `old typewriter` · `empty polaroid photo frame` · `open old leather book` · `old letter with red wax seal` · `old case file folder tied with red string` · `rolled old map` · `green banker desk lamp` · `red push pins`.
 
-Ejemplos:
-- *Josep Fontana, 1980s, Catalan historian, grey hair, glasses, dark jacket, holding a book.*
-- *Policarpa Salavarrieta, 1817, New Granada patriot, long dark dress of the period, shawl.*
+## 3. Figuras históricas (mismo estilo)
+```
+Pixel art chibi character, full body, front view, plain pure white background, no text.
+Same art style, pixel size and proportions as the attached reference image.
+Character: [NOMBRE], [época], [rasgos y ropa según fotos o retratos de la época]. Serious, dignified expression.
+```
+**Rigor:** son **ilustraciones**, no retratos. En el video llevan su nombre y la marca ILUSTRACIÓN. Para personas reales, básalos en fotos o retratos de la época, y nunca los pongas a decir cosas que no dijeron.
 
-**Rigor:** los personajes en pixel art son **ilustraciones**, no retratos. En el video llevan su nombre y se presentan como ilustración. Para personas reales, básalos en fotos o retratos de la época, y nunca los pongas a decir cosas que no dijeron.
+---
 
-## 4. Utilería opcional (mismo estilo, fondo blanco)
-Lupa antigua · máquina de escribir · polaroid vacía · libro abierto · carta con sello de lacre · expediente con cinta roja · mapa enrollado · lámpara de escritorio · chinchetas rojas.
+## Ideas en cola (para después de tener los assets)
+1. **Filtro de micrófono antiguo** para la voz: un sonido de radio o micrófono de los años 40 (banda más angosta, leve saturación, un poco de ruido de válvula). El «ruido» deja de ser un defecto y pasa a ser parte de la estética.
+2. **Formato podcast**: Profe Leo junto al micrófono antiguo como escenario fijo, con efectos y cortinas, gestionable desde la misma plantilla (otro tipo de escena y otro preset de audio).
