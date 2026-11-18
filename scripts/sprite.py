@@ -37,7 +37,7 @@ def rejilla(im, minimo=3.5, maximo=13.0):
     return mejor[1:]
 
 
-def limpiar(sprite):
+def limpiar(sprite, personaje=False):
     """Para sprites recortados de hojas: quita blancos encerrados (entre brazo y cuerpo, junto al micrófono),
     el halo claro del borde y las motas sueltas que vienen de la pose vecina."""
     rgb = sprite[..., :3].astype(int)
@@ -55,6 +55,14 @@ def limpiar(sprite):
         for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             borde |= np.roll(~alfa, (dy, dx), (0, 1))
         alfa &= ~(borde & (lum > 190) & (sat < 40))
+    # 2b. personajes: el contorno gris claro de 1 píxel (resto del suavizado del dibujo original).
+    #     Se quita todo píxel del borde que sea más claro que el contorno oscuro y casi sin color.
+    if personaje:
+        for _ in range(2):
+            borde = np.zeros_like(alfa)
+            for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                borde |= np.roll(~alfa, (dy, dx), (0, 1))
+            alfa &= ~(borde & (lum > 80) & (sat < 45))
     # 3. motas sueltas: solo quedan las piezas grandes (el personaje y lo que sostiene)
     lab, n = label(alfa)
     if n > 1:
@@ -87,7 +95,7 @@ def extraer(ruta, nombre, nativo=False):
     sprite[..., :3] = np.nan_to_num(px).astype(np.uint8)
     sprite[..., 3] = np.where(fondo, 0, 255)
     if nativo:
-        sprite = limpiar(sprite)
+        sprite = limpiar(sprite, personaje=not nombre.startswith("obj-"))
     ys, xs = np.where(sprite[..., 3] > 0)
     sprite = sprite[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
     sprite[sprite[..., 3] == 0] = 0

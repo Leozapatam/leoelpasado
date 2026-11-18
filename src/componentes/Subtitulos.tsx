@@ -1,6 +1,6 @@
 import React from "react";
 import { interpolate } from "remotion";
-import { C, SEGURA, SERIF, clamp } from "../marca";
+import { C, SEGURA, SERIF, SUBTITULOS_IZQ, clamp } from "../marca";
 import type { Palabra } from "../tipos";
 
 const limpia = (w: string) => w.toLowerCase().replace(/[¿?¡!.,:;«»"()]/g, "");
@@ -44,7 +44,7 @@ export const Subtitulos: React.FC<{ grupos: Grupo[]; resaltar: string[]; frame: 
         // a la altura de la cabeza del narrador, como un "diálogo": bien lejos de la descripción
         // del post que TikTok/Instagram ponen abajo, para que no se confundan con ella
         position: "absolute",
-        left: 290,
+        left: SUBTITULOS_IZQ,
         right: SEGURA.derecha,
         bottom: SEGURA.abajo + 260,
         minHeight: 200,

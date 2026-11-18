@@ -32,3 +32,8 @@ export const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as 
  * Todo lo importante (narrador, subtítulos, cifras) vive dentro de este rectángulo.
  */
 export const SEGURA = { arriba: 250, abajo: 480, derecha: 160, izquierda: 60, botonesDesde: 700 };
+
+/** Profe Leo narrador: lejos del borde izquierdo y por encima de la franja de abajo de Instagram/TikTok */
+export const NARRADOR = { x: SEGURA.izquierda + 160, pies: 1920 - SEGURA.abajo - 40, alto: 350 };
+/** Los subtítulos empiezan a la derecha del narrador */
+export const SUBTITULOS_IZQ = SEGURA.izquierda + 300;

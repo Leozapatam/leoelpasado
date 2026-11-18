@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { C, SEGURA, SERIF, T, TYPE, clamp } from "./marca";
+import { C, NARRADOR, SEGURA, SERIF, T, TYPE, clamp } from "./marca";
 import { Grano, Sello, entrada } from "./componentes/Basicos";
 import { Subtitulos, agrupar } from "./componentes/Subtitulos";
 import { CENTRO_LEO, Personaje, poseEn, spriteLeo } from "./componentes/Personaje";
@@ -96,7 +96,8 @@ export const Episodio: React.FC<EpisodioProps> = ({ slug, ep, palabras, boca, gu
           ))}
           <Gancho g={ep.gancho} frame={frame} />
           {(!cierre || frame < T(cierre.desde)) && (
-            <Personaje sprite={spriteLeo(pose)} frame={frame} fps={fps} alto={378} x={spriteLeo(pose).startsWith("cuerpo") ? SEGURA.izquierda + 63 + CENTRO_LEO(spriteLeo(pose), 6) : SEGURA.izquierda + 95} y={1920 - SEGURA.abajo - 10} entra={4} />
+            <Personaje sprite={spriteLeo(pose)} frame={frame} fps={fps} alto={NARRADOR.alto}
+              x={spriteLeo(pose).startsWith("cuerpo") ? NARRADOR.x + CENTRO_LEO(spriteLeo(pose), 6) : NARRADOR.x} y={NARRADOR.pies} entra={4} />
           )}
           <Subtitulos grupos={grupos} resaltar={ep.subtitulos.resaltar} frame={frame}
             ocultar={(t) => t < ep.gancho.hasta || (cierre ? t >= cierre.desde : false)} />
