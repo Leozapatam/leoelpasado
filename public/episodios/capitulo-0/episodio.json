@@ -1,7 +1,7 @@
 {
   "titulo": "Capítulo 0 · ¿Qué es la historia?",
   "audio": "mezcla.wav",
-  "duracion": 182.2,
+  "duracion": 161.5,
   "intro": {
     "duracion": 3
   },
@@ -34,7 +34,11 @@
     "Mark Block,": "Marc Bloch,",
     "Piénsenlo, lo que busca la historia de Oreses,": "Piénsenlo. Lo que busca el historiador es eso,",
     "y porque hablar de historia ahora,": "¿Y por qué hablar de historia ahora?",
-    "leído,": "leído"
+    "leído,": "leído",
+    "bobamos": "podamos",
+    "perfil que": "perfil, que",
+    "al logro": "al ogro",
+    "Piénselo,": "Piénsenlo,"
   },
   "gancho": {
     "antetitulo": "EXPEDIENTE N.º 0",
@@ -45,12 +49,32 @@
   "narrador": {
     "poses": [
       {
+        "t": "@preguntas",
+        "pose": "habla"
+      },
+      {
         "t": "@Benjamin",
         "pose": "senala"
       },
       {
         "t": "@filósofo",
-        "pose": "normal"
+        "pose": "habla"
+      },
+      {
+        "t": "@quiere",
+        "pose": "piensa"
+      },
+      {
+        "t": "@vitrina",
+        "pose": "habla"
+      },
+      {
+        "t": "@herramienta",
+        "pose": "brazos"
+      },
+      {
+        "t": "@trabaj*",
+        "pose": "piensa"
       },
       {
         "t": "@Marc",
@@ -58,7 +82,19 @@
       },
       {
         "t": "@francés",
-        "pose": "normal"
+        "pose": "habla"
+      },
+      {
+        "t": "@Decía#2",
+        "pose": "documento"
+      },
+      {
+        "t": "@Piéns*",
+        "pose": "habla"
+      },
+      {
+        "t": "@rastro",
+        "pose": "lupa"
       },
       {
         "t": "@carta",
@@ -66,15 +102,39 @@
       },
       {
         "t": "@criminal",
+        "pose": "habla"
+      },
+      {
+        "t": "@prueba",
+        "pose": "lupa"
+      },
+      {
+        "t": "@regla",
+        "pose": "brazos"
+      },
+      {
+        "t": "@leído",
+        "pose": "libro"
+      },
+      {
+        "t": "@Entonces#2",
+        "pose": "habla"
+      },
+      {
+        "t": "@calma",
         "pose": "normal"
       },
       {
-        "t": "@Colombia",
+        "t": "@Además",
+        "pose": "habla"
+      },
+      {
+        "t": "@común",
         "pose": "senala"
       },
       {
-        "t": "@surgiendo",
-        "pose": "normal"
+        "t": "@sociedad",
+        "pose": "habla"
       }
     ]
   },
@@ -107,7 +167,7 @@
     {
       "tipo": "documento",
       "desde": "@Decía#2-0.3",
-      "hasta": "@Piénsenlo-0.3",
+      "hasta": "@Piéns*-0.3",
       "documento": {
         "membrete": "M. BLOCH · APOLOGIE POUR L'HISTOIRE (1949)",
         "aviso": "CITA ORIGINAL",
@@ -140,184 +200,13 @@
     },
     {
       "tipo": "tablero",
-      "desde": "@Piénsenlo-0.3",
-      "hasta": "@ahora-1.2"
-    },
-    {
-      "tipo": "mapa",
-      "desde": "@ahora-1.2",
-      "hasta": "@Además-0.3",
-      "mapa": {
-        "camara": [
-          {
-            "t": "@ahora-1.2",
-            "lon": -74,
-            "lat": 4,
-            "span": 45
-          },
-          {
-            "t": "@Colombia-0.4",
-            "lon": -74,
-            "lat": 4,
-            "span": 38
-          },
-          {
-            "t": "@Latinoamérica+0.3",
-            "lon": -70,
-            "lat": -8,
-            "span": 95
-          },
-          {
-            "t": "@Además-0.3",
-            "lon": -72,
-            "lat": -10,
-            "span": 88
-          }
-        ],
-        "paises": [
-          {
-            "nombre": "Colombia",
-            "t": "@Colombia",
-            "estilo": "rojo"
-          },
-          {
-            "nombre": "Mexico",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Guatemala",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Belize",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Honduras",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "El Salvador",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Nicaragua",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Costa Rica",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Panama",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Venezuela",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Ecuador",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Peru",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Bolivia",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Brazil",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Paraguay",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Chile",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Argentina",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Uruguay",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Cuba",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Dominican Rep.",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Haiti",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Guyana",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          },
-          {
-            "nombre": "Suriname",
-            "t": "@Latinoamérica",
-            "estilo": "tenue"
-          }
-        ],
-        "etiquetas": [
-          {
-            "texto": "COLOMBIA",
-            "lon": -73.5,
-            "lat": 3.5,
-            "t": "@Colombia+0.2",
-            "hasta": "@Latinoamérica+0.4"
-          },
-          {
-            "texto": "AMÉRICA LATINA",
-            "lon": -62,
-            "lat": -12,
-            "t": "@Latinoamérica+0.6",
-            "tam": 64
-          }
-        ]
-      }
-    },
-    {
-      "tipo": "tablero",
-      "desde": "@Además-0.3",
+      "desde": "@Piéns*-0.3",
       "hasta": "@saludo-0.4"
     },
     {
       "tipo": "cierre",
       "desde": "@saludo-0.4",
-      "hasta": 182.2
+      "hasta": 161.5
     }
   ],
   "tablero": {
@@ -491,19 +380,19 @@
         "entra": "@carta",
         "texto": "Una carta antigua",
         "fuente": "FUENTE: archivo · fondo · folio",
-        "ilustracion": true
+        "ilustracion": true,
+        "sprite": "obj-carta"
       },
       {
         "id": "foto",
-        "tipo": "objeto",
-        "objeto": "foto",
+        "tipo": "polaroid",
         "x": 790,
-        "y": 1980,
-        "giro": 2,
+        "y": 1990,
+        "giro": 2.5,
         "entra": "@foto",
         "texto": "Una foto en un cajón",
-        "fuente": "FUENTE: colección · autor · año",
-        "ilustracion": true
+        "imagen": "imagenes/leon-de-greiff-1896.jpg",
+        "fuente": "León de Greiff, 1896 · Foto: Melitón Rodríguez"
       },
       {
         "id": "expediente",
@@ -515,7 +404,8 @@
         "entra": "@expediente",
         "texto": "Un expediente criminal",
         "fuente": "FUENTE: juzgado · caja · folio",
-        "ilustracion": true
+        "ilustracion": true,
+        "sprite": "obj-expediente"
       },
       {
         "id": "papel",
@@ -575,6 +465,19 @@
         "cifra": "Para todos",
         "texto": "para quien nunca ha leído algo de historia",
         "fuente": "LEO EL PASADO"
+      },
+      {
+        "id": "zapateros",
+        "tipo": "polaroid",
+        "apaisada": true,
+        "ancho": 520,
+        "x": 760,
+        "y": 1450,
+        "giro": -1.5,
+        "entra": "@común",
+        "texto": "«Los zapateros», Medellín, 1895",
+        "imagen": "imagenes/zapateros-meliton-rodriguez.jpg",
+        "fuente": "Foto: Melitón Rodríguez · dominio público"
       }
     ],
     "hilos": [
@@ -622,6 +525,11 @@
         "archivos",
         "gente",
         "@historiadores#3+0.6"
+      ],
+      [
+        "gente",
+        "zapateros",
+        "@común-0.6"
       ]
     ],
     "brillo": "@calma",
@@ -663,7 +571,7 @@
         0.9
       ],
       [
-        "@Marc",
+        "@trabaj*",
         491,
         1509,
         1.1
@@ -675,7 +583,7 @@
         1.1
       ],
       [
-        "@Piénsenlo-0.3",
+        "@Piéns*-0.3",
         491,
         1509,
         1.1
@@ -693,46 +601,52 @@
         0.8
       ],
       [
-        "@puntos",
-        540,
-        2350,
-        0.72
-      ],
-      [
-        "@ahora-1.2",
-        540,
-        2350,
-        0.72
-      ],
-      [
         "@Además-0.3",
         1250,
         1000,
         0.85
       ],
       [
-        "@leído-1.2",
+        "@puntos",
+        540,
+        2350,
+        0.72
+      ],
+      [
+        "@Además-0.6",
+        540,
+        2350,
+        0.72
+      ],
+      [
+        "@Además",
         1250,
         1000,
         0.85
       ],
       [
-        "@leído",
+        "@común-0.8",
         1250,
-        1440,
-        1.1
+        1000,
+        0.85
+      ],
+      [
+        "@común",
+        980,
+        1650,
+        0.78
       ],
       [
         "@Entonces#2-0.2",
-        1250,
-        1440,
-        1.1
+        980,
+        1650,
+        0.78
       ],
       [
-        "@Entonces#2+2.8",
-        891,
-        2178,
-        0.35
+        "@Entonces#2+2.6",
+        "todo",
+        0,
+        0
       ]
     ]
   },
@@ -740,18 +654,10 @@
     {
       "texto": "NINGÚN HILO SIN FUENTE",
       "t": "@ningún",
-      "hasta": "@ahora-1.3",
+      "hasta": "@Además-0.3",
       "x": 540,
       "y": 620,
       "giro": -8
-    },
-    {
-      "texto": "SIN RIGOR · SIN FUENTES",
-      "t": "@rigor",
-      "hasta": "@Además-0.4",
-      "x": 540,
-      "y": 560,
-      "giro": -6
     },
     {
       "texto": "DESINFORMACIÓN",
@@ -801,25 +707,26 @@
       "@adueñarse",
       "@Marc",
       "@Decía#2",
-      "@Piénsenlo",
+      "@Piéns*",
       "@carta",
       "@foto",
       "@expediente",
       "@papel",
-      "@ahora",
-      "@Colombia",
       "@Además",
-      "@gente"
+      "@gente",
+      "@común"
     ],
     "sellos": [
       "@peligro",
       "@ningún",
-      "@rigor",
       "@desinformación"
     ],
     "subidas": [
       "@Entonces#2+1.5"
     ],
     "final": "@saludo-0.4"
+  },
+  "voz": {
+    "estilo": "microfono_antiguo"
   }
 }

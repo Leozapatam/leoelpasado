@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, Easing, interpolate } from "remotion";
 import { C, SERIF, TYPE, clamp } from "../marca";
 import { Foco, Grano, Textura } from "../componentes/Basicos";
-import { Personaje, spriteLeo } from "../componentes/Personaje";
+import { CENTRO_LEO, Personaje, puntaEnPantalla, spriteLeo } from "../componentes/Personaje";
 
 // Marco en la pared: misma proporción que el video (9:16), así el zoom termina
 // exactamente en la primera escena real.
@@ -31,7 +31,12 @@ export const Intro: React.FC<{ frame: number; fps: number; duracion: number; des
   // punta del láser (mano del personaje) y punto rojo en el tablero
   const ES = 7; // escala del personaje
   const PX = 40, PY = 1440; // pies del personaje
-  const puntaX = PX + 38.5 * ES, puntaY = PY - 63 * ES + 26.5 * ES;
+  const ALTO = 63 * ES;
+  const pieX = PX + 13.5 * ES; // centro de los pies de Profe Leo
+  const sprSenala = spriteLeo("senala");
+  const [puntaX, puntaY] = sprSenala.startsWith("cuerpo")
+    ? [PX + 38.5 * ES, PY - 63 * ES + 26.5 * ES]
+    : puntaEnPantalla(sprSenala, pieX, PY, ALTO);
   const puntoX = MARCO_X + 40, puntoY = MARCO_Y + MARCO_H * 0.42;
 
   return (
@@ -63,7 +68,8 @@ export const Intro: React.FC<{ frame: number; fps: number; duracion: number; des
             )}
           </svg>
         )}
-        <Personaje sprite={spriteLeo(senala ? "senala" : "normal")} frame={frame} fps={fps} alto={63 * ES} x={PX + 20 * ES} y={PY} />
+        <Personaje sprite={spriteLeo(senala ? "senala" : "normal")} frame={frame} fps={fps} alto={ALTO}
+          x={pieX + CENTRO_LEO(spriteLeo(senala ? "senala" : "normal"), ES)} y={PY} />
         {/* placa con el nombre */}
         <div style={{ position: "absolute", left: 50, top: 800, opacity: interpolate(frame, [6, 14], [0, 1], clamp) }}>
           <div style={{ fontFamily: SERIF, fontWeight: 900, fontSize: 64, color: C.hueso, lineHeight: 1 }}>Profe Leo</div>

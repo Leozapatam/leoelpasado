@@ -2,6 +2,8 @@ import React from "react";
 import { AbsoluteFill, Easing, interpolate, spring, staticFile } from "remotion";
 import { C, SERIF, T, TYPE, clamp } from "../marca";
 import { Foco, Textura } from "../componentes/Basicos";
+import { existeSprite } from "../componentes/Personaje";
+import { Img } from "remotion";
 import type { DocumentoDatos } from "../tipos";
 
 const PAPEL_X = 110, PAPEL_Y = 380, PAPEL_W = 860, PAPEL_H = 1120;
@@ -30,6 +32,14 @@ export const Documento: React.FC<{ doc: DocumentoDatos; desde: number; hasta: nu
       <div style={{ position: "absolute", inset: 0, transformOrigin: "0 0",
         transform: `translate(${540 - 540 * push}px, ${960 - camY * push}px) scale(${push})` }}>
         <Textura src="madera.jpg" style={{ left: -660, top: -740, width: 2400, height: 3400 }} />
+        {existeSprite("obj-lampara") && (
+          <Img src={staticFile("personaje/obj-lampara.png")} style={{ position: "absolute", left: 700, top: 120, width: 330, imageRendering: "pixelated",
+            filter: "drop-shadow(12px 18px 10px rgba(0,0,0,.6))" }} />
+        )}
+        {existeSprite("obj-lupa") && (
+          <Img src={staticFile("personaje/obj-lupa.png")} style={{ position: "absolute", left: 40, top: 1560, width: 240, transform: "rotate(-18deg)", imageRendering: "pixelated",
+            filter: "drop-shadow(10px 14px 8px rgba(0,0,0,.6))" }} />
+        )}
         {/* luz de lámpara */}
         <div style={{ position: "absolute", left: -400, top: -300, width: 1900, height: 2500,
           background: "radial-gradient(ellipse 38% 32% at 50% 44%, rgba(255,214,150,.28), rgba(0,0,0,0) 70%)" }} />

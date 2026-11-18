@@ -96,7 +96,7 @@ export const Episodio: React.FC<EpisodioProps> = ({ slug, ep, palabras, boca, gu
           ))}
           <Gancho g={ep.gancho} frame={frame} />
           {(!cierre || frame < T(cierre.desde)) && (
-            <Personaje sprite={spriteLeo(pose)} frame={frame} fps={fps} alto={378} x={SEGURA.izquierda + 63 + CENTRO_LEO(spriteLeo(pose), 6)} y={1920 - SEGURA.abajo - 10} entra={4} />
+            <Personaje sprite={spriteLeo(pose)} frame={frame} fps={fps} alto={378} x={spriteLeo(pose).startsWith("cuerpo") ? SEGURA.izquierda + 63 + CENTRO_LEO(spriteLeo(pose), 6) : SEGURA.izquierda + 95} y={1920 - SEGURA.abajo - 10} entra={4} />
           )}
           <Subtitulos grupos={grupos} resaltar={ep.subtitulos.resaltar} frame={frame}
             ocultar={(t) => t < ep.gancho.hasta || (cierre ? t >= cierre.desde : false)} />

@@ -10,6 +10,8 @@ export type Ficha = {
   imagen?: string; // polaroid: archivo en public/ (sin imagen = silueta)
   objeto?: "carta" | "foto" | "expediente" | "papel"; // objeto: qué dibujar
   ilustracion?: boolean; // marca ILUSTRACIÓN (no es un documento real)
+  apaisada?: boolean; // polaroid: foto horizontal (usa "ancho")
+  sprite?: string; // objeto: dibujo de public/personaje/<sprite>.png en vez del dibujo por código
   x: number; // posición en el tablero (1080 x 1920)
   y: number;
   ancho?: number;

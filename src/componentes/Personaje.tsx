@@ -3,8 +3,18 @@ import { Img, interpolate, spring, staticFile } from "remotion";
 import SPRITES from "../../public/personaje/sprites.json";
 import { C, SERIF, TYPE, clamp } from "../marca";
 
-const REG = SPRITES as Record<string, [number, number]>;
+// [ancho, alto, centro de los pies (x), punta derecha [x, y]] en píxeles del dibujo (lo escribe scripts/sprite.py)
+type Registro = [number, number, number?, [number, number]?];
+const REG = SPRITES as unknown as Record<string, Registro>;
 export const existeSprite = (n: string) => n in REG;
+
+/** Dónde queda en pantalla la punta derecha del sprite (mano o puntero), para dibujar el láser */
+export const puntaEnPantalla = (sprite: string, x: number, y: number, alto: number): [number, number] => {
+  const [sw, sh, cx, punta] = REG[sprite] ?? [40, 63];
+  const px = alto / sh;
+  const [qx, qy] = punta ?? [sw, sh * 0.4];
+  return [x + (qx - (cx ?? sw / 2)) * px, y - alto + qy * px];
+};
 
 /**
  * Un personaje en pixel art (Profe Leo o una figura histórica).
@@ -26,9 +36,10 @@ export const Personaje: React.FC<{
   sombra?: boolean;
 }> = ({ sprite, frame, fps, x, y, alto, entra = 0, sale, nombre, fase = 0, sombra = true }) => {
   if (frame < entra || (sale !== undefined && frame > sale)) return null;
-  const [sw, sh] = REG[sprite] ?? [40, 63];
+  const [sw, sh, cx] = REG[sprite] ?? [40, 63];
   const px = alto / sh; // tamaño de un píxel del dibujo en pantalla
   const w = sw * px;
+  const izq = x - (cx ?? sw / 2) * px; // x = centro de los pies, aunque la pose estire un brazo
   const e = spring({ frame: frame - entra, fps, config: { damping: 14, stiffness: 150 } });
   const fuera = sale !== undefined ? interpolate(frame, [sale - 8, sale], [1, 0], clamp) : 1;
   const inhala = Math.floor((frame + fase) / 36) % 2 === 1; // 1,2 s arriba, 1,2 s abajo
@@ -40,7 +51,7 @@ export const Personaje: React.FC<{
     <div
       style={{
         position: "absolute",
-        left: x - w / 2,
+        left: izq,
         top: y - alto + interpolate(e, [0, 1], [alto * 0.25, 0]),
         width: w,
         height: alto,
@@ -53,7 +64,7 @@ export const Personaje: React.FC<{
       {/* torso y cabeza: suben un píxel al inhalar */}
       <div style={{ position: "absolute", inset: 0, clipPath: `inset(0 0 ${(sh - cintura) * px}px 0)`, transform: `translateY(${inhala ? -px : 0}px)` }}>{img}</div>
       {nombre && (
-        <div style={{ position: "absolute", left: "50%", top: alto + 10, transform: "translateX(-50%) rotate(-1.5deg)", whiteSpace: "nowrap",
+        <div style={{ position: "absolute", left: (cx ?? sw / 2) * px, top: alto + 10, transform: "translateX(-50%) rotate(-1.5deg)", whiteSpace: "nowrap",
           background: C.papel, padding: "4px 12px 6px", boxShadow: "3px 5px 10px rgba(0,0,0,.55)", textAlign: "center" }}>
           <div style={{ fontFamily: SERIF, fontWeight: 900, fontSize: 30, color: C.texto }}>{nombre}</div>
           <div style={{ fontFamily: TYPE, fontSize: 12, color: C.gris, letterSpacing: 1 }}>ILUSTRACIÓN</div>

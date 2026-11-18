@@ -30,6 +30,27 @@ def escribir(p, x):
         w.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
 
 
+def microfono_antiguo(voz):
+    """Estilo «micrófono antiguo» (cinta de los años 40): banda más angosta, presencia cálida,
+    saturación suave de válvula y un ruido de fondo muy tenue. El ruido pasa a ser estética, no defecto."""
+    from scipy.signal import butter, sosfilt, lfilter
+    sos = butter(2, [160, 6000], "band", fs=SR, output="sos")
+    v = sosfilt(sos, voz, axis=0)
+    # presencia cálida en 1,6 kHz (+3 dB) y un poco menos de "caja" en 400 Hz (-1,5 dB)
+    for fc, g, q in ((1600, 3.0, 0.9), (400, -1.5, 1.0)):
+        A = 10 ** (g / 40); w0 = 2 * np.pi * fc / SR; al = np.sin(w0) / (2 * q)
+        b = np.array([1 + al * A, -2 * np.cos(w0), 1 - al * A]); a = np.array([1 + al / A, -2 * np.cos(w0), 1 - al / A])
+        v = lfilter(b / a[0], a / a[0], v, axis=0)
+    pico = np.abs(v).max() + 1e-9
+    sat = np.tanh(v / pico * 2.2) * pico / np.tanh(2.2)
+    v = v * 0.6 + sat * 0.4
+    # ruido de válvula: rosa suave, filtrado, a unos -50 dB de la voz
+    rng = np.random.default_rng(1940)
+    ruido = sosfilt(butter(1, [300, 5000], "band", fs=SR, output="sos"), rng.standard_normal(v.shape), axis=0)
+    ruido *= np.sqrt((v ** 2).mean()) * 10 ** (-50 / 20) / (np.sqrt((ruido ** 2).mean()) + 1e-9)
+    return (v + ruido).astype(np.float32)
+
+
 def main():
     slug = sys.argv[1]
     car = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "episodios", slug)
@@ -40,6 +61,10 @@ def main():
     voz = leer(os.path.join(car, "voz.wav"))
     if voz.shape[1] == 1:
         voz = np.repeat(voz, 2, 1)
+    estilo = ep.get("voz", {}).get("estilo")
+    if estilo == "microfono_antiguo":
+        voz = microfono_antiguo(voz)
+        print("voz: estilo micrófono antiguo")
     ir = S.reverb_ir()
     sala = np.stack([fftconvolve(voz[:, 0], ir[0])[: len(voz)], fftconvolve(voz[:, 1], ir[1])[: len(voz)]], 1)
     sala *= np.abs(voz).max() / (np.abs(sala).max() + 1e-9)

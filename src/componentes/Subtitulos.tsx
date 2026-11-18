@@ -44,7 +44,7 @@ export const Subtitulos: React.FC<{ grupos: Grupo[]; resaltar: string[]; frame: 
         // a la altura de la cabeza del narrador, como un "diálogo": bien lejos de la descripción
         // del post que TikTok/Instagram ponen abajo, para que no se confundan con ella
         position: "absolute",
-        left: 230,
+        left: 290,
         right: SEGURA.derecha,
         bottom: SEGURA.abajo + 260,
         minHeight: 200,

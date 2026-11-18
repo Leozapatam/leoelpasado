@@ -9,7 +9,7 @@ import type { Episodio, Ficha } from "../tipos";
 const tam = (f: Ficha): [number, number] => {
   switch (f.tipo) {
     case "mini": return [150, 110];
-    case "polaroid": return [300, 370];
+    case "polaroid": return f.apaisada ? [f.ancho ?? 460, Math.round(((f.ancho ?? 460) - 36) * 0.75) + 100] : [300, 370];
     case "objeto": return [340, 330];
     case "etiqueta": return [f.ancho ?? 300, 76];
     default: return [f.ancho ?? 420, 330];
@@ -43,7 +43,7 @@ const Cuerpo: React.FC<{ f: Ficha; hub: boolean; frame: number; brilla: number }
   if (f.tipo === "polaroid") {
     return (
       <div style={{ width: w, height: h, background: "#f1ece0", padding: "18px 18px 0", boxSizing: "border-box", position: "relative" }}>
-        <div style={{ width: w - 36, height: w - 36, overflow: "hidden", background: "#3a2c1e" }}>
+        <div style={{ width: w - 36, height: f.apaisada ? Math.round((w - 36) * 0.75) : w - 36, overflow: "hidden", background: "#3a2c1e" }}>
           {f.imagen ? (
             <Img src={staticFile(f.imagen)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 30%", filter: "grayscale(1) sepia(.35) contrast(1.05)" }} />
           ) : (
@@ -59,7 +59,13 @@ const Cuerpo: React.FC<{ f: Ficha; hub: boolean; frame: number; brilla: number }
   if (f.tipo === "objeto") {
     return (
       <div style={{ width: w, height: h, position: "relative" }}>
-        <div style={{ position: "absolute", left: 10, top: 0 }}><Objeto tipo={f.objeto ?? "papel"} /></div>
+        <div style={{ position: "absolute", left: 10, top: 0 }}>
+          {f.sprite ? (
+            <Img src={staticFile(`personaje/${f.sprite}.png`)} style={{ width: 320, height: 240, objectFit: "contain", imageRendering: "pixelated" }} />
+          ) : (
+            <Objeto tipo={f.objeto ?? "papel"} />
+          )}
+        </div>
         <div style={{ position: "absolute", left: 0, right: 0, top: 246, ...papel, padding: "8px 12px", boxShadow: "3px 5px 10px rgba(0,0,0,.5)", transform: "rotate(-1.5deg)" }}>
           <div style={{ fontFamily: SERIF, fontWeight: 900, fontSize: 24, color: C.texto }}>{f.texto}</div>
           <Fuente texto={f.fuente} brilla={brilla} tamano={13} />
@@ -158,8 +164,23 @@ const Hilo: React.FC<{ a: Ficha; b: Ficha; t?: number; frame: number }> = ({ a, 
 };
 
 // ---------- Cámara ----------
-const camara = (keys: Episodio["tablero"]["camara"], f: number) => {
-  const k = keys.map(([t, x, y, z]) => [T(t), x, y, z]);
+/** Encuadre que muestra TODAS las fichas ya clavadas, dentro de la zona segura y por encima de los subtítulos */
+const encuadreTodo = (ep: Episodio, segundo: number) => {
+  const vis = ep.tablero.fichas.filter((f) => (f.entra as number) <= segundo);
+  if (!vis.length) return [540, 960, 1];
+  const xs = vis.flatMap((f) => [f.x - tam(f)[0] / 2, f.x + tam(f)[0] / 2]);
+  const ys = vis.flatMap((f) => [f.y - tam(f)[1] / 2, f.y + tam(f)[1] / 2]);
+  const [x0, x1, y0, y1] = [Math.min(...xs) - 30, Math.max(...xs) + 30, Math.min(...ys) - 30, Math.max(...ys) + 30];
+  const caja = { x0: 70, x1: 910, y0: 270, y1: 1010 }; // zona libre: ni interfaz de la app ni subtítulos
+  const z = Math.min((caja.x1 - caja.x0) / (x1 - x0), (caja.y1 - caja.y0) / (y1 - y0), 1.4);
+  const cx = (caja.x0 + caja.x1) / 2, cy = (caja.y0 + caja.y1) / 2;
+  return [(x0 + x1) / 2 + (540 - cx) / z, (y0 + y1) / 2 + (960 - cy) / z, z];
+};
+
+const camara = (ep: Episodio, f: number) => {
+  // [t, "todo"] = encuadre automático de todo lo que hay en el tablero en ese momento
+  const k = ep.tablero.camara.map(([t, x, y, z]) =>
+    (x as unknown) === "todo" ? [T(t), ...encuadreTodo(ep, t)] : [T(t), x, y, z]);
   for (let i = 0; i < k.length - 1; i++) {
     const [f0, x0, y0, z0] = k[i], [f1, x1, y1, z1] = k[i + 1];
     if (f <= f1) {
@@ -174,7 +195,7 @@ const camara = (keys: Episodio["tablero"]["camara"], f: number) => {
 };
 
 export const Tablero: React.FC<{ ep: Episodio; frame: number; fps: number }> = ({ ep, frame, fps }) => {
-  const cam = camara(ep.tablero.camara, frame);
+  const cam = camara(ep, frame);
   const porId = Object.fromEntries(ep.tablero.fichas.map((f) => [f.id, f]));
   const hubId = ep.tablero.fichas[0]?.id;
   const brilla = ep.tablero.brillo !== undefined ? interpolate(frame, [T(ep.tablero.brillo), T(ep.tablero.brillo) + 15], [0, 1], clamp) : 0;

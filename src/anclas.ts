@@ -16,7 +16,10 @@ export const resolverAncla = (texto: string, palabras: Palabra[]): number => {
   if (!m) throw new Error(`Ancla mal escrita: ${texto}`);
   const [, palabra, n, fin, desfase] = m;
   const objetivo = limpia(palabra);
-  const hits = palabras.filter((p) => limpia(p.w) === objetivo);
+  // prefijo: "@trabaj*" sirve para trabaja, trabajó, trabajan…
+  const hits = objetivo.endsWith("*")
+    ? palabras.filter((p) => limpia(p.w).startsWith(objetivo.slice(0, -1)))
+    : palabras.filter((p) => limpia(p.w) === objetivo);
   const p = hits[(n ? Number(n) : 1) - 1];
   if (!p) throw new Error(`Ancla sin coincidencia en la voz: ${texto}`);
   return Math.round(((fin ? p.e : p.s) + (desfase ? Number(desfase) : 0)) * 100) / 100;

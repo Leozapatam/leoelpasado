@@ -1,5 +1,5 @@
 {
-  "nota": "Capítulo 0 v2: definición de Walter Benjamin (PILOTO2) en lugar de la de Bloch. Del piloto 2 se quita «cual» (17.36–18.32: tal cual como → tal como) y la primera de las dos preguntas «¿Cómo trabaja un historiador…?». Silencios de más de 0,8 s se acortan a 0,5 s. Se quita también el primer «otros lo van a» repetido (41.92–43.60).",
+  "nota": "Capítulo 0 v3. Benjamin del PILOTO2 (sin «cual» ni el «otros lo van a» repetido). Sin el tramo de mapas («¿Y por qué hablar de historia ahora?… esto es necesario»): de «ningún hilo sin fuente» pasa a «Además…». En el cierre se quita «o estos canales de» (queda «de eso se trata este perfil, que podamos leer…»).",
   "piezas": [
     {
       "archivo": "grabaciones/piloto.m4a",
@@ -32,17 +32,19 @@
     {
       "archivo": "grabaciones/piloto.m4a",
       "desde": 54.3,
-      "hasta": 103.6
+      "hasta": 100.3
     },
     {
       "archivo": "grabaciones/piloto.m4a",
-      "desde": 156.4,
-      "hasta": 160.3
+      "desde": 178.8,
+      "hasta": 211.45,
+      "exacto": true
     },
     {
       "archivo": "grabaciones/piloto.m4a",
-      "desde": 166.3,
-      "hasta": 999
+      "desde": 214.12,
+      "hasta": 999,
+      "exacto": true
     }
   ],
   "pausas": {

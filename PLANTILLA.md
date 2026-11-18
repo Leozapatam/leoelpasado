@@ -60,6 +60,8 @@ Encima de todo van el **gancho** (pregunta tecleada al inicio), los **sellos** d
 - **Respiración de un píxel** para todos: el torso sube un píxel del dibujo cada 1,2 s y vuelve.
 - **Figuras históricas:** imagen pixel art de cuerpo entero sobre fondo blanco → `python scripts/sprite.py <imagen> <nombre>` → `"personajes": [{"sprite": "benjamin", "nombre": "Walter Benjamin", "desde": "@Benjamin", "hasta": "@Entonces"}]`. Salen con placa de nombre y la marca ILUSTRACIÓN.
 - **Prompts** para generar las poses de Profe Leo y nuevos personajes con el mismo estilo: `personaje/PROMPTS.md`.
+- **Hojas de 8 poses:** `python scripts/sprite.py <hoja.png> nombre1,…,nombre8 --hoja` las corta (4 × 2), limpia el fondo y registra cada pose con el centro de sus pies.
+- **Poses de Profe Leo disponibles:** normal, habla, senala, senala-izq, piensa, lupa, documento, saluda, brazos, sorpresa, libro, camina, mic-escucha, mic-mano, mic-rie, mic-perfil. **Objetos:** obj-microfono, obj-lupa, obj-maquina, obj-polaroid, obj-libro, obj-carta, obj-expediente, obj-lampara.
 
 ### El narrador: Profe Leo en pixel art (versión anterior, referencia)
 - **Cuerpo entero** (40×63 píxeles: camiseta negra, jean, botas), con expresión seria (cejas rectas). Dos poses: `normal` y `senala` (brazo extendido con el láser, usada en la entrada).
@@ -135,7 +137,8 @@ python scripts/preparar_voz.py <slug> grabaciones/<archivo> --preset s24
 3. Se repiten `preparar_voz.py`, `musica.py` y el render. Si los tiempos de `episodio.json` están **anclados a palabras** (`"@Bloch"`), no hay que recalcular nada a mano.
 
 ### Paso 3: escribir `episodio.json`
-Los tiempos pueden ser segundos (`23.7`) o **anclas a palabras** (recomendado): `"@Bloch"` (primera vez que se dice), `"@ogro#2"` (segunda vez), `"@ogro+0.4"` (con desfase), `"@ogro:fin"` (cuando termina la palabra). Ver `src/anclas.ts`.
+Los tiempos pueden ser segundos (`23.7`) o **anclas a palabras** (recomendado): `"@Bloch"` (primera vez que se dice), `"@ogro#2"` (segunda vez), `"@ogro+0.4"` (con desfase), `"@ogro:fin"` (cuando termina la palabra), `"@trabaj*"` (prefijo: aguanta que Whisper escriba trabaja o trabajó). Ver `src/anclas.ts`.
+En la cámara del tablero, `["@palabra", "todo"]` encuadra automáticamente todo lo que ya está clavado, sin alejarse de más.
 Copia `public/episodios/bananeras/episodio.json` como plantilla. Los tiempos son **segundos de la voz**: tómalos de la lista que imprime el paso 2. La regla es que cada cosa aparece **en la palabra que la nombra**.
 
 ### Paso 4: música, efectos y mezcla (método fijo)
@@ -151,6 +154,7 @@ python scripts/mezclar.py <slug>    # voz integrada + música + efectos -> mezcl
 
 **Ambientes por escena:** tablero → sala de archivo · escritorio → lámpara y reloj · mapa → viento suave.
 **A mano**, si el relato lo pide: `"efectos": [{"t": "@aplaudan", "sonido": "aplausos", "vol": 0.4}]` (también `murmullo`, `campanita`, `obturador`…). La biblioteca está en `scripts/sonidos.py`; `python scripts/sonidos.py` la exporta a `out/sonidos/` para escucharla.
+**Estilo de voz opcional:** `"voz": {"estilo": "microfono_antiguo"}` en `episodio.json` da el sonido de micrófono de cinta de los años 40 (banda más angosta, presencia cálida, saturación suave y un ruido de válvula muy tenue).
 **Voz integrada:** pasa por la misma sala que la música y los efectos, con calidez suave; la música y los ambientes bajan cuando hablas; compresión de bus y -14 LUFS.
 Compone música noir original (sin derechos de autor) con golpes en los momentos de `musica.golpes`. La música baja sola cuando hablas, y la mezcla final queda a -14 LUFS.
 

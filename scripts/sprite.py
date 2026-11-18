@@ -1,6 +1,7 @@
 """Convierte una imagen pixel art (personaje sobre fondo blanco o claro) en un sprite limpio a su resolución real.
 
 Uso: python scripts/sprite.py <imagen> <nombre>
+     python scripts/sprite.py <hoja> <nombre1,nombre2,...,nombre8> --hoja     (hoja de 4 x 2 poses)
 Salida: public/personaje/<nombre>.png  (fondo transparente, 1 píxel = 1 píxel del dibujo)
         personaje/vista-<nombre>.png   (ampliado con rejilla y coordenadas, para revisar)
 
@@ -15,37 +16,78 @@ from scipy.ndimage import label
 RAIZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
 
-def rejilla(im):
-    """Busca el tamaño de píxel y el desfase que dejan cada celda más uniforme."""
-    def error(g, ox, oy):
-        h, w, _ = im.shape
-        e = 0.0
-        for y in np.arange(oy, h - g, g * 2):
-            for x in np.arange(ox, w - g, g * 2):
-                c = im[int(y) + 2:int(y + g) - 2, int(x) + 2:int(x + g) - 2]
-                e += c.var(axis=(0, 1)).sum()
-        return e
-    return min((error(g, ox, oy), g, ox, oy) for g in np.arange(7.0, 13.01, 0.1)
-               for ox in np.arange(0, g, 1.5) for oy in np.arange(0, g, 1.5))[1:]
+def rejilla(im, minimo=3.5, maximo=13.0):
+    """Busca el tamaño de píxel y el desfase que dejan cada celda más uniforme.
+    Se mide el borde de cada celda contra su interior (vectorizado, rápido también con píxeles chicos)."""
+    gris = im.mean(2)
+    mejor = None
+    for g in np.arange(minimo, maximo + 0.01, 0.05):
+        m = max(1, int(g * 0.22))
+        for ox in np.arange(0, g, max(0.5, g / 8)):
+            for oy in np.arange(0, g, max(0.5, g / 8)):
+                ys = (oy + np.arange(int((im.shape[0] - oy) // g)) * g).astype(int)
+                xs = (ox + np.arange(int((im.shape[1] - ox) // g)) * g).astype(int)
+                # varianza dentro de cada celda (muestreo de 2x2 puntos interiores)
+                a = gris[np.ix_(ys + m, xs + m)]
+                b = gris[np.ix_(ys + int(g) - 1 - m, xs + int(g) - 1 - m)]
+                c = gris[np.ix_(ys + m, xs + int(g) - 1 - m)]
+                e = (np.abs(a - b) + np.abs(a - c)).mean() + 0.02 * g  # penaliza rejillas muy chicas por igual
+                if mejor is None or e < mejor[0]:
+                    mejor = (e, g, ox, oy)
+    return mejor[1:]
 
 
-def extraer(ruta, nombre):
-    im = np.asarray(Image.open(ruta).convert("RGB")).astype(float)
-    g, ox, oy = rejilla(im)
+def limpiar(sprite):
+    """Para sprites recortados de hojas: quita blancos encerrados (entre brazo y cuerpo, junto al micrófono),
+    el halo claro del borde y las motas sueltas que vienen de la pose vecina."""
+    rgb = sprite[..., :3].astype(int)
+    alfa = sprite[..., 3] > 0
+    lum, sat = rgb.mean(2), rgb.max(2) - rgb.min(2)
+    # 1. blancos encerrados grandes (los ojos y brillos son chicos y se respetan)
+    blanco = alfa & (lum > 232) & (sat < 18)
+    lab, n = label(blanco)
+    for k in range(1, n + 1):
+        if (lab == k).sum() > 40:
+            alfa[lab == k] = False
+    # 2. halo: píxeles claros pegados al fondo (dos pasadas)
+    for _ in range(2):
+        borde = np.zeros_like(alfa)
+        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            borde |= np.roll(~alfa, (dy, dx), (0, 1))
+        alfa &= ~(borde & (lum > 190) & (sat < 40))
+    # 3. motas sueltas: solo quedan las piezas grandes (el personaje y lo que sostiene)
+    lab, n = label(alfa)
+    if n > 1:
+        tam = np.bincount(lab.ravel())[1:]
+        for k, t in enumerate(tam, 1):
+            if t < 0.02 * tam.max():
+                alfa[lab == k] = False
+    sprite[..., 3] = np.where(alfa, 255, 0)
+    sprite[~alfa] = 0
+    return sprite
+
+
+def extraer(ruta, nombre, nativo=False):
+    im = ruta if isinstance(ruta, np.ndarray) else np.asarray(Image.open(ruta).convert("RGB")).astype(float)
+    # nativo: sin ajustar a la rejilla (para hojas reescaladas, donde no hay rejilla limpia)
+    g, ox, oy = (1.0, 0.0, 0.0) if nativo else rejilla(im)
     filas, cols = int((im.shape[0] - oy) // g), int((im.shape[1] - ox) // g)
-    px = np.zeros((filas, cols, 3))
-    for r in range(filas):
+    px = im.copy() if nativo else np.zeros((filas, cols, 3))
+    for r in range(0 if nativo else filas):
         for c in range(cols):
             y0, x0 = int(oy + r * g), int(ox + c * g)
-            px[r, c] = np.median(im[y0 + 2:int(y0 + g) - 2, x0 + 2:int(x0 + g) - 2].reshape(-1, 3), axis=0)
+            m = max(1, int(g * 0.22))
+            px[r, c] = np.median(im[y0 + m:int(y0 + g) - m, x0 + m:int(x0 + g) - m].reshape(-1, 3), axis=0)
     # fondo: celdas claras y sin color conectadas con el borde
     claro = (px.mean(2) > 225) & ((px.max(2) - px.min(2)) < 25)
     lab, _ = label(claro)
     borde = set(lab[0]) | set(lab[-1]) | set(lab[:, 0]) | set(lab[:, -1])
     fondo = np.isin(lab, [b for b in borde if b])
     sprite = np.zeros((filas, cols, 4), np.uint8)
-    sprite[..., :3] = px.astype(np.uint8)
+    sprite[..., :3] = np.nan_to_num(px).astype(np.uint8)
     sprite[..., 3] = np.where(fondo, 0, 255)
+    if nativo:
+        sprite = limpiar(sprite)
     ys, xs = np.where(sprite[..., 3] > 0)
     sprite = sprite[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
     sprite[sprite[..., 3] == 0] = 0
@@ -64,10 +106,48 @@ def extraer(ruta, nombre):
     # registro de tamaños (lo usa src/componentes/Personaje.tsx)
     reg_ruta = os.path.join(RAIZ, "public", "personaje", "sprites.json")
     reg = json.load(open(reg_ruta)) if os.path.exists(reg_ruta) else {}
-    reg[nombre] = [int(sprite.shape[1]), int(sprite.shape[0])]
+    # centro de los pies (para anclar poses que estiran un brazo) y punta derecha (para el láser)
+    alfa = sprite[..., 3] > 0
+    pies = alfa[int(sprite.shape[0] * 0.85):]
+    cx = float(np.mean(np.where(pies)[1])) if pies.any() else sprite.shape[1] / 2
+    filas_brazo = alfa[: int(sprite.shape[0] * 0.6)]
+    ys, xs = np.where(filas_brazo)
+    punta = [int(xs.max()), int(ys[xs.argmax()])] if len(xs) else [sprite.shape[1], 0]
+    reg[nombre] = [int(sprite.shape[1]), int(sprite.shape[0]), round(cx, 1), punta]
     json.dump(reg, open(reg_ruta, "w"), indent=1)
     print(f"{nombre}: rejilla {g:.2f} px → sprite {sprite.shape[1]} x {sprite.shape[0]}")
 
 
+def separar_hoja(ruta, columnas=4, filas=2):
+    """Corta una hoja de poses por los huecos blancos más cercanos a la cuadrícula ideal."""
+    im = np.asarray(Image.open(ruta).convert("RGB")).astype(float)
+    tinta = (im.mean(2) < 225) | ((im.max(2) - im.min(2)) > 25)
+    h, w = tinta.shape
+
+    def cortes(perfil, n, total):
+        out = [0]
+        for k in range(1, n):
+            ideal = int(total * k / n)
+            ventana = perfil[ideal - total // (3 * n): ideal + total // (3 * n)]
+            out.append(ideal - total // (3 * n) + int(np.argmin(ventana)))
+        return out + [total]
+
+    ys = cortes(tinta.sum(1), filas, h)
+    trozos = []
+    for r in range(filas):
+        banda = tinta[ys[r]:ys[r + 1]]
+        xs = cortes(banda.sum(0), columnas, w)
+        for c in range(columnas):
+            trozo = np.full((ys[r + 1] - ys[r] + 20, xs[c + 1] - xs[c] + 20, 3), 255.0)
+            trozo[10:-10, 10:-10] = im[ys[r]:ys[r + 1], xs[c]:xs[c + 1]]
+            trozos.append(trozo)
+    return trozos
+
+
 if __name__ == "__main__":
-    extraer(sys.argv[1], sys.argv[2])
+    if "--hoja" in sys.argv:
+        nombres = sys.argv[2].split(",")
+        for trozo, nombre in zip(separar_hoja(sys.argv[1]), nombres):
+            extraer(trozo, nombre, nativo=True)
+    else:
+        extraer(sys.argv[1], sys.argv[2])

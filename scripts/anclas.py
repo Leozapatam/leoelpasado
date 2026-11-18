@@ -21,7 +21,11 @@ def _ancla(dato, palabras):
     if not m:
         raise ValueError(f"Ancla mal escrita: {dato}")
     palabra, n, fin, desfase = m.groups()
-    hits = [p for p in palabras if _limpia(p["w"]) == _limpia(palabra)]
+    objetivo = _limpia(palabra)
+    if objetivo.endswith("*"):  # prefijo: "@trabaj*" sirve para trabaja, trabajó, trabajan…
+        hits = [p for p in palabras if _limpia(p["w"]).startswith(objetivo[:-1])]
+    else:
+        hits = [p for p in palabras if _limpia(p["w"]) == objetivo]
     if len(hits) < int(n or 1):
         raise ValueError(f"Ancla sin coincidencia en la voz: {dato}")
     p = hits[int(n or 1) - 1]
