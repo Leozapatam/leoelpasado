@@ -27,9 +27,16 @@ npm run estudio                                            # Remotion Studio par
 ```
 La hoja de contactos y el Studio **no necesitan audio**: si faltan `mezcla.wav` o `voz.wav`, el video se ve igual, solo que en silencio.
 
+## Dónde están las grabaciones de voz (no van en el repositorio)
+El repositorio es público, así que la voz de Leo **no se sube**. Las grabaciones están en el **Google Drive de Leo**:
+- **Originales:** `Mi unidad/Leo el pasado/` → `Piloto.m4a` (grabación 1) y `PILOTO2.m4a` (tramo de Walter Benjamin).
+- **Copia de trabajo:** `Mi unidad/Leo el pasado/plantilla/grabaciones/` → `piloto.m4a` y `piloto2.m4a` (los nombres que usa `cortes.json`).
+
+Para trabajar desde otro equipo o modelo: pídele a Leo acceso a esa carpeta de Drive y copia los dos archivos a `grabaciones/` con esos nombres en minúscula. Las grabaciones nuevas siguen la misma regla: el original en `Mi unidad/Leo el pasado/` y la copia en `plantilla/grabaciones/`.
+
 ## Producir el audio y el video completos
 
-Las grabaciones de voz de Leo **no están en el repositorio** (es público). Ponlas en `grabaciones/` (`piloto.m4a`, `piloto2.m4a`) y ejecuta:
+Con las grabaciones en `grabaciones/`, ejecuta:
 
 ```bash
 python scripts/editar_voz.py capitulo-0                          # tomas, limpieza IA, timbre, silencios (cortes.json)

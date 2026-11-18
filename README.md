@@ -26,6 +26,7 @@ node scripts/hoja.js <slug> 3,30,60 --guias                      # hoja de conta
 npm run render -- <slug>                                         # out/<slug>.mp4
 ```
 **Para agentes de IA (Antigravity, Claude, Cursor…): empieza por [AGENTS.md](AGENTS.md).**
+**Grabaciones de voz:** no están en el repositorio; están en el Google Drive de Leo, `Mi unidad/Leo el pasado/` (ver AGENTS.md).
 El episodio se describe en `public/episodios/<slug>/episodio.json` (escenas, fichas, hilos, mapas, documentos, tiempos en segundos de la voz).
 
 ## Documentación

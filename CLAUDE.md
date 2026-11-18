@@ -51,6 +51,7 @@ Cambia la plantilla (src/, scripts/) **solo si Leo pide algo nuevo**. Si lo hace
 Manual completo: `PLANTILLA.md`.
 
 ## Notas técnicas
+- **Grabaciones de voz:** no van en el repositorio (es público). Originales en el Google Drive de Leo, `Mi unidad/Leo el pasado/` (`Piloto.m4a`, `PILOTO2.m4a`); copia de trabajo en `plantilla/grabaciones/` (`piloto.m4a`, `piloto2.m4a`). Ver AGENTS.md.
 - La carpeta vive en Google Drive (`G:\Mi unidad\Leo el pasado`). **`node_modules` no se guarda en Drive** (son ~600 MB y miles de archivos): viven en `%USERPROFILE%\leoelpasado-deps\node_modules` (Drive no admite enlaces). Renderiza con `node scripts/render.js <slug>` y revisa con `node scripts/hoja.js <slug> <segundos> --guias`; ambos usan esa carpeta solos (ver PLANTILLA.md, «Instalación»).
 - Ruta larga de Windows: si Remotion falla con `ENOENT chrome-headless-shell`, mapea la carpeta a una unidad corta (`subst R: "<carpeta>"`) y trabaja desde `R:\`.
 - Python: `faster-whisper` necesita audio como arreglo numpy (ya resuelto en preparar_voz.py).
