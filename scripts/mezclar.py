@@ -76,6 +76,46 @@ def microfono_antiguo(voz, intensidad=1.0):
     return (v + fondo).astype(np.float32)
 
 
+def interferencias(v, palabras, cada=18.0, semilla=7):
+    """Interferencias notorias de vez en cuando, SIEMPRE en una pausa de la voz (nunca tapan una palabra).
+    Se alternan: ráfaga de estática, silbido de sintonía (como mover el dial) y caída de señal con chasquido."""
+    from scipy.signal import butter, sosfilt
+    rng = np.random.default_rng(semilla)
+    n = len(v)
+    rms = np.sqrt((v ** 2).mean()) + 1e-9
+    # pausas de al menos 0,45 s entre palabras
+    pausas = [(a["e"], b["s"]) for a, b in zip(palabras, palabras[1:]) if b["s"] - a["e"] >= 0.45]
+    elegidas, ultimo = [], 4.0
+    for a, b in pausas:
+        if a - ultimo >= cada * rng.uniform(0.8, 1.25):
+            elegidas.append((a, b)); ultimo = a
+    tipos = ["estatica", "sintonia", "caida"]
+    for k, (a, b) in enumerate(elegidas):
+        tipo = tipos[k % 3]
+        dur = min(b - a - 0.08, 0.9 if tipo != "caida" else 0.6)
+        i, m = int((a + 0.04) * SR), int(dur * SR)
+        if m <= 0 or i + m >= n:
+            continue
+        t = np.arange(m) / SR
+        env = np.sin(np.pi * np.arange(m) / m) ** 0.6
+        if tipo == "estatica":
+            x = sosfilt(butter(2, [400, 6500], "band", fs=SR, output="sos"), rng.standard_normal(m))
+            x *= (0.5 + 0.5 * np.abs(np.sin(2 * np.pi * rng.uniform(6, 14) * t)))  # la estática "late"
+            x *= rms * 1.6 * env / (np.sqrt((x ** 2).mean()) + 1e-9)
+        elif tipo == "sintonia":
+            f = 700 + 2200 * (t / dur) ** 1.5 + 120 * np.sin(2 * np.pi * 7 * t)
+            x = np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.6 + sosfilt(butter(2, [800, 5000], "band", fs=SR, output="sos"), rng.standard_normal(m)) * 0.25
+            x *= rms * 1.3 * env / (np.sqrt((x ** 2).mean()) + 1e-9)
+        else:  # caída: silencio de señal y un chasquido al volver
+            x = np.zeros(m)
+            j = int(m * 0.85)
+            x[j:j + 200] = rng.uniform(-1, 1, min(200, m - j)) * rms * 4
+            v[i:i + m] *= 0.25  # baja el fondo de transmisión: se "cae" la señal
+        v[i:i + m] += x[:, None]
+    print(f"interferencias: {len(elegidas)} (en pausas de la voz)")
+    return v
+
+
 def main():
     slug = sys.argv[1]
     car = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "episodios", slug)
@@ -89,6 +129,9 @@ def main():
     estilo = ep.get("voz", {}).get("estilo")
     if estilo == "microfono_antiguo":
         voz = microfono_antiguo(voz, ep.get("voz", {}).get("intensidad", 1.0))
+        if ep.get("voz", {}).get("interferencias", 0):
+            palabras = json.load(open(os.path.join(car, "palabras.json"), encoding="utf-8"))
+            voz = interferencias(voz, palabras, cada=ep["voz"]["interferencias"])
         print("voz: estilo micrófono antiguo")
     ir = S.reverb_ir()
     sala = np.stack([fftconvolve(voz[:, 0], ir[0])[: len(voz)], fftconvolve(voz[:, 1], ir[1])[: len(voz)]], 1)

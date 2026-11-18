@@ -727,6 +727,8 @@
     "final": "@saludo-0.4"
   },
   "voz": {
-    "estilo": "microfono_antiguo"
+    "estilo": "microfono_antiguo",
+    "intensidad": 1.0,
+    "interferencias": 18
   }
 }

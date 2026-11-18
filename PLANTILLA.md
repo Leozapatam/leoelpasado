@@ -160,6 +160,7 @@ python scripts/mezclar.py <slug>    # voz integrada + música + efectos -> mezcl
 - fondo de transmisión audible (siseo, crujidos de disco, zumbido eléctrico), unos 20 dB por debajo de la voz, también en las pausas.
 
 `intensidad`: 0.5 sutil · 1.0 radio clara (la del Capítulo 0) · 1.5 muy vieja.
+`"interferencias": 18`: una interferencia notoria cada ~18 s (0 = ninguna). Se alternan ráfaga de estática, silbido de sintonía y caída de señal con chasquido, y **siempre caen en una pausa de la voz** (usa `palabras.json`), así que nunca tapan una palabra.
 **Voz integrada:** pasa por la misma sala que la música y los efectos, con calidez suave; la música y los ambientes bajan cuando hablas; compresión de bus y -14 LUFS.
 Compone música noir original (sin derechos de autor) con golpes en los momentos de `musica.golpes`. La música baja sola cuando hablas, y la mezcla final queda a -14 LUFS.
 
