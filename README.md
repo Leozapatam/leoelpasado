@@ -18,12 +18,14 @@ Si la carpeta está en Google Drive u otra carpeta sincronizada, instala `node_m
 
 ## Hacer un episodio
 ```bash
-python scripts/editar_voz.py <slug> grabaciones/<audio>           # opcional: quitar tomas repetidas (cortes.json)
-python scripts/preparar_voz.py <slug> <audio> --preset s24       # voz limpia + palabras.json + boca.json
-python scripts/musica.py <slug>                                  # música original + mezcla
-npm run estudio                                                  # revisar en Remotion Studio
+python scripts/editar_voz.py <slug>                              # tomas, limpieza IA, timbre y silencios (cortes.json)
+python scripts/preparar_voz.py <slug> grabaciones/<slug>-editada.wav --preset lark   # voz + palabras.json
+python scripts/validar.py <slug>                                 # revisa el episodio antes de renderizar
+python scripts/musica.py <slug> && python scripts/efectos.py <slug> && python scripts/mezclar.py <slug>
+node scripts/hoja.js <slug> 3,30,60 --guias                      # hoja de contactos rápida
 npm run render -- <slug>                                         # out/<slug>.mp4
 ```
+**Para agentes de IA (Antigravity, Claude, Cursor…): empieza por [AGENTS.md](AGENTS.md).**
 El episodio se describe en `public/episodios/<slug>/episodio.json` (escenas, fichas, hilos, mapas, documentos, tiempos en segundos de la voz).
 
 ## Documentación
