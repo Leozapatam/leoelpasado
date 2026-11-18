@@ -30,25 +30,50 @@ def escribir(p, x):
         w.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
 
 
-def microfono_antiguo(voz):
-    """Estilo «micrófono antiguo» (cinta de los años 40): banda más angosta, presencia cálida,
-    saturación suave de válvula y un ruido de fondo muy tenue. El ruido pasa a ser estética, no defecto."""
+def microfono_antiguo(voz, intensidad=1.0):
+    """Estilo «transmisión antigua» (radio de los años 40): se tiene que NOTAR.
+    intensidad 0.5 = sutil · 1.0 = radio clara (por defecto) · 1.5 = muy vieja.
+      - banda de radio AM (250-4200 Hz) con presencia en 1,4 kHz
+      - saturación de válvula y leve oscilación de la cinta (wow)
+      - fondo de transmisión audible: siseo, crujidos de disco y zumbido eléctrico, también en las pausas"""
     from scipy.signal import butter, sosfilt, lfilter
-    sos = butter(2, [160, 6000], "band", fs=SR, output="sos")
-    v = sosfilt(sos, voz, axis=0)
-    # presencia cálida en 1,6 kHz (+3 dB) y un poco menos de "caja" en 400 Hz (-1,5 dB)
-    for fc, g, q in ((1600, 3.0, 0.9), (400, -1.5, 1.0)):
-        A = 10 ** (g / 40); w0 = 2 * np.pi * fc / SR; al = np.sin(w0) / (2 * q)
-        b = np.array([1 + al * A, -2 * np.cos(w0), 1 - al * A]); a = np.array([1 + al / A, -2 * np.cos(w0), 1 - al / A])
-        v = lfilter(b / a[0], a / a[0], v, axis=0)
-    pico = np.abs(v).max() + 1e-9
-    sat = np.tanh(v / pico * 2.2) * pico / np.tanh(2.2)
-    v = v * 0.6 + sat * 0.4
-    # ruido de válvula: rosa suave, filtrado, a unos -50 dB de la voz
     rng = np.random.default_rng(1940)
-    ruido = sosfilt(butter(1, [300, 5000], "band", fs=SR, output="sos"), rng.standard_normal(v.shape), axis=0)
-    ruido *= np.sqrt((v ** 2).mean()) * 10 ** (-50 / 20) / (np.sqrt((ruido ** 2).mean()) + 1e-9)
-    return (v + ruido).astype(np.float32)
+    n = len(voz)
+    k = float(intensidad)
+    # 1. banda de radio
+    lo, hi = 180 + 70 * k, 6000 - 1800 * k
+    v = sosfilt(butter(3, [lo, hi], "band", fs=SR, output="sos"), voz, axis=0)
+    for fc, g, q in ((1400, 3.0 + 1.5 * k, 0.8), (400, -2.0, 1.0)):
+        A = 10 ** (g / 40); w0 = 2 * np.pi * fc / SR; al = np.sin(w0) / (2 * q)
+        bb = np.array([1 + al * A, -2 * np.cos(w0), 1 - al * A]); aa = np.array([1 + al / A, -2 * np.cos(w0), 1 - al / A])
+        v = lfilter(bb / aa[0], aa / aa[0], v, axis=0)
+    # 2. saturación de válvula
+    pico = np.abs(v).max() + 1e-9
+    drive = 2.0 + 2.0 * k
+    sat = np.tanh(v / pico * drive) * pico / np.tanh(drive)
+    mezcla = min(0.85, 0.45 + 0.25 * k)
+    v = v * (1 - mezcla) + sat * mezcla
+    # 3. wow: la cinta gira un poco irregular (retardo variable de ±1 ms a 0,6 Hz)
+    t = np.arange(n) / SR
+    retardo = (0.0012 * k) * (0.5 + 0.5 * np.sin(2 * np.pi * 0.6 * t + 0.3 * np.sin(2 * np.pi * 0.13 * t))) * SR
+    idx = np.clip(np.arange(n) - retardo, 0, n - 1)
+    i0 = idx.astype(int); fr = (idx - i0)[:, None]
+    v = v[i0] * (1 - fr) + v[np.minimum(i0 + 1, n - 1)] * fr
+    # 4. fondo de transmisión (relativo a la voz)
+    rms = np.sqrt((v ** 2).mean()) + 1e-9
+    siseo = sosfilt(butter(2, [500, 7000], "band", fs=SR, output="sos"), rng.standard_normal(n))
+    siseo *= rms * 10 ** ((-30 + 6 * k) / 20) / (np.sqrt((siseo ** 2).mean()) + 1e-9)
+    # crujidos de disco: clics cortos al azar (~6 por segundo), filtrados
+    clics = np.zeros(n)
+    pos = rng.integers(0, n, int(n / SR * 6 * k))
+    clics[pos] = rng.uniform(-1, 1, len(pos)) * rng.uniform(0.3, 1, len(pos)) ** 3
+    clics = sosfilt(butter(2, [800, 5000], "band", fs=SR, output="sos"), clics)
+    clics *= rms * 10 ** ((-18 + 4 * k) / 20) / (np.abs(clics).max() + 1e-9)
+    # zumbido eléctrico (60 Hz y armónicos), suave y con leve vaivén
+    zumbido = sum(np.sin(2 * np.pi * 60 * h * t) / h for h in (1, 2, 3)) * (0.8 + 0.2 * np.sin(2 * np.pi * 0.2 * t))
+    zumbido *= rms * 10 ** ((-38 + 4 * k) / 20) / (np.sqrt((zumbido ** 2).mean()) + 1e-9)
+    fondo = (siseo + clics + zumbido)[:, None]
+    return (v + fondo).astype(np.float32)
 
 
 def main():
@@ -63,7 +88,7 @@ def main():
         voz = np.repeat(voz, 2, 1)
     estilo = ep.get("voz", {}).get("estilo")
     if estilo == "microfono_antiguo":
-        voz = microfono_antiguo(voz)
+        voz = microfono_antiguo(voz, ep.get("voz", {}).get("intensidad", 1.0))
         print("voz: estilo micrófono antiguo")
     ir = S.reverb_ir()
     sala = np.stack([fftconvolve(voz[:, 0], ir[0])[: len(voz)], fftconvolve(voz[:, 1], ir[1])[: len(voz)]], 1)

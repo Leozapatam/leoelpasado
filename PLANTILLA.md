@@ -154,7 +154,12 @@ python scripts/mezclar.py <slug>    # voz integrada + música + efectos -> mezcl
 
 **Ambientes por escena:** tablero → sala de archivo · escritorio → lámpara y reloj · mapa → viento suave.
 **A mano**, si el relato lo pide: `"efectos": [{"t": "@aplaudan", "sonido": "aplausos", "vol": 0.4}]` (también `murmullo`, `campanita`, `obturador`…). La biblioteca está en `scripts/sonidos.py`; `python scripts/sonidos.py` la exporta a `out/sonidos/` para escucharla.
-**Estilo de voz opcional:** `"voz": {"estilo": "microfono_antiguo"}` en `episodio.json` da el sonido de micrófono de cinta de los años 40 (banda más angosta, presencia cálida, saturación suave y un ruido de válvula muy tenue).
+**Estilo de voz:** `"voz": {"estilo": "microfono_antiguo", "intensidad": 1.0}` en `episodio.json` da el sonido de **transmisión de radio antigua**, y se tiene que notar:
+- banda de radio AM (250–4.200 Hz) con presencia en 1,4 kHz;
+- saturación de válvula y leve oscilación de cinta (*wow*);
+- fondo de transmisión audible (siseo, crujidos de disco, zumbido eléctrico), unos 20 dB por debajo de la voz, también en las pausas.
+
+`intensidad`: 0.5 sutil · 1.0 radio clara (la del Capítulo 0) · 1.5 muy vieja.
 **Voz integrada:** pasa por la misma sala que la música y los efectos, con calidez suave; la música y los ambientes bajan cuando hablas; compresión de bus y -14 LUFS.
 Compone música noir original (sin derechos de autor) con golpes en los momentos de `musica.golpes`. La música baja sola cuando hablas, y la mezcla final queda a -14 LUFS.
 

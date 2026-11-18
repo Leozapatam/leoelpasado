@@ -18,7 +18,7 @@ No renderices ni construyas escenas antes de que guion y storyboard estén aprob
    - **Silencios** de más de 0,8 s se acortan a 0,5 s (medidos contra el piso de ruido real).
 3. **Voz** (`preparar_voz.py --preset lark`): color de micrófono de solapa, compresión suave, **desesado adaptativo** (solo donde la «s» sobresale), −16 LUFS. Glosario para nombres propios.
 4. **Música, efectos y mezcla** (`musica.py`, `efectos.py`, `mezclar.py`): todo lo que pasa en pantalla suena; ambientes por escena; voz integrada en la misma sala; −14 LUFS.
-5. **Metas medidas** (`medir_voz.py`): ruido ≥ 50 dB bajo la voz, eses pico ≤ −15 dB.
+5. **Metas medidas** (`medir_voz.py`): voz limpia con ruido ≥ 50 dB bajo la voz y eses pico ≤ −15 dB. Después, en la mezcla, el **estilo de transmisión antigua** (`voz.estilo`) añade a propósito un fondo audible de unos 20 dB: es estética, no defecto. Ese es el sonido de la marca.
 6. **Entregar el audio completo y esperar la aprobación de Leo** antes de construir o renderizar el video.
 
 ## Estilo del guion
