@@ -203,12 +203,12 @@ export const Tablero: React.FC<{ ep: Episodio; frame: number; fps: number }> = (
     <AbsoluteFill style={{ background: C.tinta, overflow: "hidden" }}>
       <div style={{ position: "absolute", transformOrigin: "0 0", transform: `translate(${540 - cam.x * cam.z}px, ${960 - cam.y * cam.z}px) scale(${cam.z})` }}>
         <div style={{ position: "absolute", width: 1080, height: 1920 }}>
-          {/* corcho en mosaico 2x2 (espejado para que no se note la unión): x -660..4140, y -740..6060 */}
-          {[0, 1].flatMap((i) => [0, 1].map((j) => (
+          {/* corcho en mosaico 4x3 (espejado para que no se note la unión): x -3060..6540, y -4140..6060.
+              Así ningún encuadre, ni el "todo" más alejado, llega al borde. */}
+          {[-1, 0, 1, 2].flatMap((i) => [-1, 0, 1].map((j) => (
             <Textura key={`${i}${j}`} src="corcho.jpg"
-              style={{ left: -660 + i * 2400, top: -740 + j * 3400, width: 2400, height: 3400, transform: `scale(${i ? -1 : 1}, ${j ? -1 : 1})` }} />
+              style={{ left: -662 + i * 2400, top: -742 + j * 3400, width: 2404, height: 3404, transform: `scale(${i % 2 ? -1 : 1}, ${j % 2 ? -1 : 1})` }} />
           )))}
-          <div style={{ position: "absolute", left: -660, top: -740, width: 4800, height: 6800, boxShadow: "inset 0 0 0 60px #2b1a0e, inset 0 0 0 66px #1a0f07, inset 0 0 80px 70px rgba(0,0,0,.55)" }} />
           <svg width="1080" height="1920" style={{ position: "absolute", inset: 0, overflow: "visible" }}>
             {ep.tablero.hilos.map(([a, b, t]) => (porId[a] && porId[b] ? <Hilo key={a + b} a={porId[a]} b={porId[b]} t={t} frame={frame} /> : null))}
           </svg>
