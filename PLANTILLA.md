@@ -55,7 +55,13 @@ Para revisar un fotograma con las zonas pintadas en azul:
 
 Encima de todo van el **gancho** (pregunta tecleada al inicio), los **sellos** de tinta, el **narrador**, los **subtítulos** y el grano de película.
 
-### El narrador: Profe Leo en pixel art
+### Personajes (Profe Leo y figuras históricas)
+- **Sin boca animada: poses.** En `episodio.json`, `"narrador": {"poses": [{"t": "@Benjamin", "pose": "senala"}, …]}`. Si existe `public/personaje/leo-<pose>.png` se usa; si no, el sprite actual.
+- **Respiración de un píxel** para todos: el torso sube un píxel del dibujo cada 1,2 s y vuelve.
+- **Figuras históricas:** imagen pixel art de cuerpo entero sobre fondo blanco → `python scripts/sprite.py <imagen> <nombre>` → `"personajes": [{"sprite": "benjamin", "nombre": "Walter Benjamin", "desde": "@Benjamin", "hasta": "@Entonces"}]`. Salen con placa de nombre y la marca ILUSTRACIÓN.
+- **Prompts** para generar las poses de Profe Leo y nuevos personajes con el mismo estilo: `personaje/PROMPTS.md`.
+
+### El narrador: Profe Leo en pixel art (versión anterior, referencia)
 - **Cuerpo entero** (40×63 píxeles: camiseta negra, jean, botas), con expresión seria (cejas rectas). Dos poses: `normal` y `senala` (brazo extendido con el láser, usada en la entrada).
 - Abajo a la izquierda, justo encima de la zona que tapa la app, durante todo el video. En el cierre aparece grande, en el centro.
 - **Habla con tu voz**: la boca se abre según cada sílaba (cerrada, media o abierta), los ojos parpadean y todo el cuerpo se mueve **como una sola pieza** (respira, se balancea apenas y da un pequeño impulso en las sílabas fuertes). La cabeza no se separa del cuerpo: el cuello despegado se veía mal.
@@ -148,7 +154,10 @@ python scripts/mezclar.py <slug>    # voz integrada + música + efectos -> mezcl
 **Voz integrada:** pasa por la misma sala que la música y los efectos, con calidez suave; la música y los ambientes bajan cuando hablas; compresión de bus y -14 LUFS.
 Compone música noir original (sin derechos de autor) con golpes en los momentos de `musica.golpes`. La música baja sola cuando hablas, y la mezcla final queda a -14 LUFS.
 
-### Paso 5: revisar y renderizar
+### Paso 5: validar, revisar y renderizar
+```bash
+python scripts/validar.py <slug>     # anclas, rangos, hilos, imágenes, palabras repetidas sin #n
+```
 Hoja de contactos (varios momentos en una sola pasada, con las zonas de la app en azul):
 ```bash
 node scripts/hoja.js <slug> 3,25,58,97,160 --guias

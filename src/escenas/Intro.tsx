@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, Easing, interpolate } from "remotion";
 import { C, SERIF, TYPE, clamp } from "../marca";
 import { Foco, Grano, Textura } from "../componentes/Basicos";
-import { Narrador } from "../componentes/Narrador";
+import { Personaje, spriteLeo } from "../componentes/Personaje";
 
 // Marco en la pared: misma proporción que el video (9:16), así el zoom termina
 // exactamente en la primera escena real.
@@ -63,7 +63,7 @@ export const Intro: React.FC<{ frame: number; fps: number; duracion: number; des
             )}
           </svg>
         )}
-        <Narrador boca={[]} frame={frame} fps={fps} escala={ES} x={PX} y={PY} pose={senala ? "senala" : "normal"} habla={false} />
+        <Personaje sprite={spriteLeo(senala ? "senala" : "normal")} frame={frame} fps={fps} alto={63 * ES} x={PX + 20 * ES} y={PY} />
         {/* placa con el nombre */}
         <div style={{ position: "absolute", left: 50, top: 800, opacity: interpolate(frame, [6, 14], [0, 1], clamp) }}>
           <div style={{ fontFamily: SERIF, fontWeight: 900, fontSize: 64, color: C.hueso, lineHeight: 1 }}>Profe Leo</div>

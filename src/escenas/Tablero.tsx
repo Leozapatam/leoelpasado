@@ -71,7 +71,7 @@ const Cuerpo: React.FC<{ f: Ficha; hub: boolean; frame: number; brilla: number }
   if (f.tipo === "etiqueta") {
     return (
       <div style={{ width: w, height: h, ...papel, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 14px", boxSizing: "border-box" }}>
-        <span style={{ fontFamily: SERIF, fontWeight: 900, fontSize: 34, letterSpacing: 2, color: C.texto }}>{f.texto}</span>
+        <span style={{ fontFamily: SERIF, fontWeight: 900, fontSize: (f.texto ?? "").length > 16 ? 26 : 34, letterSpacing: 1.5, color: C.texto, whiteSpace: "nowrap" }}>{f.texto}</span>
       </div>
     );
   }

@@ -9,6 +9,18 @@ Esta carpeta es una **plantilla reutilizable**. Todo lo que se construyó (ident
 3. Solo entonces se construye `episodio.json` y se renderiza.
 No renderices ni construyas escenas antes de que guion y storyboard estén aprobados.
 
+## Protocolo de audio (aprobado por Leo; no cambiarlo por episodio)
+1. **Grabación**: S24 Ultra, Grabadora de voz en calidad alta, a 15–20 cm de la boca. Si Leo repite una frase, **la última toma es la buena**.
+2. **Edición** (`editar_voz.py` + `cortes.json`):
+   - Transcribir y elegir tomas. Para quitar una sola palabra: `"exacto": true`, cortando por energía (Whisper falla por décimas en palabras cortas; transcribir fragmentos sueltos para confirmar).
+   - Limpieza IA de cada grabación con **DeepFilterNet** (`-D -a 35`) antes de todo lo demás.
+   - Grabaciones de sesiones distintas: **timbre igualado por octavas** (a menos de 1 dB) y **fundido cruzado de 120 ms** en la costura.
+   - **Silencios** de más de 0,8 s se acortan a 0,5 s (medidos contra el piso de ruido real).
+3. **Voz** (`preparar_voz.py --preset lark`): color de micrófono de solapa, compresión suave, **desesado adaptativo** (solo donde la «s» sobresale), −16 LUFS. Glosario para nombres propios.
+4. **Música, efectos y mezcla** (`musica.py`, `efectos.py`, `mezclar.py`): todo lo que pasa en pantalla suena; ambientes por escena; voz integrada en la misma sala; −14 LUFS.
+5. **Metas medidas** (`medir_voz.py`): ruido ≥ 50 dB bajo la voz, eses pico ≤ −15 dB.
+6. **Entregar el audio completo y esperar la aprobación de Leo** antes de construir o renderizar el video.
+
 ## Estilo del guion
 Humano, casual, de conversación. Que lo entienda un niño, un anciano y un académico. **Sin dos puntos y sin guiones** en el texto que se lee. Frases cortas. Las citas, en versión hablada; el original va en pantalla y en la descripción.
 
@@ -24,7 +36,9 @@ Cambia la plantilla (src/, scripts/) **solo si Leo pide algo nuevo**. Si lo hace
 
 ## Reglas que Leo ya decidió
 - Estilo noir de archivo: tinta, papel, **rojo hilo como único acento** (src/marca.ts). Regla n.º 1: **ningún hilo sin fuente**.
-- El narrador es **Profe Leo en pixel art, cuerpo entero, expresión seria** (public/personaje/), animado con la voz de Leo. Se mueve como una sola pieza (nunca separar cabeza y cuerpo). Movimiento sutil; se irá sofisticando poco a poco.
+- El narrador es **Profe Leo en pixel art, cuerpo entero, expresión seria**. **No mueve la boca: cambia de pose** (`narrador.poses` en episodio.json: normal, habla, senala, piensa, lupa, documento, libro, brazos, sorpresa, saluda…). Todos los personajes **respiran un píxel** (el torso sube un píxel y vuelve). Los sprites `leo-<pose>.png` se generan con `personaje/PROMPTS.md`; mientras no existan se usan los actuales.
+- **Figuras históricas** en pixel art (mismo estilo, fondo blanco) con `scripts/sprite.py` y la lista `personajes` del episodio. Llevan placa con su nombre y la marca ILUSTRACIÓN.
+- **Tiempos anclados a palabras** (`"@Bloch"`, `"@Decía#2"`). Antes de renderizar: `python scripts/validar.py <slug>` (avisa si una palabra se repite y falta el #n).
 - Todo video empieza con la **entrada** (`intro`, 3 s: Profe Leo señala el marco y la cámara entra a la primera escena) y termina con el **eslogan** «Profe Leo» y debajo «@leoelpasado», nada más.
 - Episodio en curso: `capitulo-0` (presentación del canal). Al recibir la voz: preparar_voz.py → reajustar tiempos del episodio.json a palabras.json → musica.py → render.
 - **Zona segura** TikTok/IG/FB (SEGURA en marca.ts): nada importante en los 250 px de arriba, los 480 de abajo ni los 160 de la derecha. Los subtítulos van como diálogo **a la altura de la cabeza del narrador** (SEGURA.abajo + 260), **nunca abajo del todo**: ahí se confunden con la descripción del post. El narrador se queda abajo a la izquierda.

@@ -3,7 +3,7 @@ import { AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideo
 import { C, SEGURA, SERIF, T, TYPE, clamp } from "./marca";
 import { Grano, Sello, entrada } from "./componentes/Basicos";
 import { Subtitulos, agrupar } from "./componentes/Subtitulos";
-import { Narrador } from "./componentes/Narrador";
+import { CENTRO_LEO, Personaje, poseEn, spriteLeo } from "./componentes/Personaje";
 import { Tablero } from "./escenas/Tablero";
 import { Mapa } from "./escenas/Mapa";
 import { Documento } from "./escenas/Documento";
@@ -43,7 +43,7 @@ const Cierre: React.FC<{ c: Ep["cierre"]; desde: number; frame: number; fps: num
   return (
     <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 40%, #1d1610, #070605 75%)" }}>
       {/* el cuerpo ocupa las columnas 3-24 del lienzo: se centra esa parte */}
-      <Narrador boca={boca} frame={frame} fps={fps} escala={ES} x={540 - 13.5 * ES} y={1060} entra={T(desde)} />
+      <Personaje sprite={spriteLeo("saluda")} frame={frame} fps={fps} alto={63 * ES} x={540 + CENTRO_LEO(spriteLeo("saluda"), ES)} y={1060} entra={T(desde)} sombra />
       <div style={{ position: "absolute", left: 0, right: 0, top: 1110, textAlign: "center", opacity: o }}>
         <div style={{ fontFamily: SERIF, fontWeight: 900, fontSize: 104, color: C.hueso, lineHeight: 1 }}>{c.titulo}</div>
         <div style={{ fontFamily: TYPE, fontSize: 40, color: C.rojo, letterSpacing: 6, marginTop: 18 }}>{c.subtitulo}</div>
@@ -63,6 +63,7 @@ export const Episodio: React.FC<EpisodioProps> = ({ slug, ep, palabras, boca, gu
   const off = T(ep.intro?.duracion ?? 0);
   const frame = f - off;
   const cierre = ep.escenas.find((e) => e.tipo === "cierre");
+  const pose = poseEn((ep.narrador?.poses ?? []).map((p) => ({ f: T(p.t), pose: p.pose })), frame);
 
   const escenas = (fr: number) =>
     ep.escenas.map((e, i) => {
@@ -89,9 +90,13 @@ export const Episodio: React.FC<EpisodioProps> = ({ slug, ep, palabras, boca, gu
           {ep.sellos.map((s, i) => (
             <Sello key={i} texto={s.texto} frame={frame} fps={fps} entra={T(s.t)} sale={T(s.hasta)} x={s.x} y={s.y} giro={s.giro} />
           ))}
+          {(ep.personajes ?? []).map((p, i) => (
+            <Personaje key={i} sprite={p.sprite} nombre={p.nombre} frame={frame} fps={fps} alto={p.alto ?? 430} x={p.x ?? 770} y={p.y ?? 1000}
+              entra={T(p.desde)} sale={T(p.hasta)} fase={i * 17} />
+          ))}
           <Gancho g={ep.gancho} frame={frame} />
           {(!cierre || frame < T(cierre.desde)) && (
-            <Narrador boca={boca ?? []} frame={frame} fps={fps} x={SEGURA.izquierda - 3 * 6} y={1920 - SEGURA.abajo - 10} entra={4} />
+            <Personaje sprite={spriteLeo(pose)} frame={frame} fps={fps} alto={378} x={SEGURA.izquierda + 63 + CENTRO_LEO(spriteLeo(pose), 6)} y={1920 - SEGURA.abajo - 10} entra={4} />
           )}
           <Subtitulos grupos={grupos} resaltar={ep.subtitulos.resaltar} frame={frame}
             ocultar={(t) => t < ep.gancho.hasta || (cierre ? t >= cierre.desde : false)} />

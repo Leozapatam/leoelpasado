@@ -67,6 +67,36 @@ def aplicar_glosario(palabras, glosario):
     return palabras
 
 
+def desesar(ruta, umbral_db=-8.0, max_db=8.0):
+    """Desesado adaptativo: solo donde la «s» sobresale. Mide en cada instante cuánto pesan los agudos
+    (4,5-11 kHz) frente a la voz (300-4000 Hz); si pasan del umbral, baja solo esos agudos lo justo."""
+    from scipy.signal import stft, istft
+    with wave.open(ruta) as wf:
+        sr, ch = wf.getframerate(), wf.getnchannels()
+        x = np.frombuffer(wf.readframes(wf.getnframes()), np.int16).astype(np.float32).reshape(-1, ch) / 32768
+    f, _, Z = stft(x.T, fs=sr, nperseg=1024, noverlap=768)
+    alto = (f >= 4500) & (f <= 11000)
+    medio = (f >= 300) & (f <= 4000)
+    P = (np.abs(Z) ** 2).mean(0)  # potencia promedio de los canales
+    ratio = 10 * np.log10(P[alto].sum(0) + 1e-12) - 10 * np.log10(P[medio].sum(0) + 1e-12)
+    nivel = 10 * np.log10(P.sum(0) + 1e-12)
+    con_voz = nivel > np.percentile(nivel, 40)  # solo donde hay voz (en las pausas no se toca nada)
+    exceso = np.where(con_voz, np.clip(ratio - umbral_db, 0, max_db), 0)
+    # ataque rápido, relajación suave (no "corta" las palabras)
+    suave = np.zeros_like(exceso)
+    for i in range(len(exceso)):
+        prev = suave[i - 1] if i else 0
+        suave[i] = exceso[i] if exceso[i] > prev else prev * 0.7 + exceso[i] * 0.3
+    g = 10 ** (-suave / 20)
+    Z[:, alto, :] *= g[None, None, :]
+    _, y = istft(Z, fs=sr, nperseg=1024, noverlap=768)
+    y = y.T[: len(x)]
+    with wave.open(ruta, "w") as wf:
+        wf.setnchannels(ch); wf.setsampwidth(2); wf.setframerate(sr)
+        wf.writeframes((np.clip(y, -1, 1) * 32767).astype(np.int16).tobytes())
+    print(f"desesado: {(suave > 0.5).mean() * 100:.1f} % del tiempo con eses marcadas, hasta -{suave.max():.1f} dB")
+
+
 def boca(voz16k, destino, fps=30):
     """Lipsync tipo "PNGtuber": el volumen de la voz en cada fotograma decide la boca."""
     with wave.open(voz16k) as wf:
@@ -120,6 +150,7 @@ def main():
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", voz, "-ac", "1", "-ar", "16000", tmp], check=True)
         return boca(tmp, dest)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a.entrada, "-vn", "-af", PRESETS[a.preset], "-ar", "48000", "-ac", "2", voz], check=True)
+    desesar(voz)
     print("voz procesada ->", voz)
 
     # transcripción (16 kHz mono)
