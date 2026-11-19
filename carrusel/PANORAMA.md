@@ -133,3 +133,15 @@ Prototipo: `node carrusel/panorama/aula.cjs` → `out/aula-leticia/`. Pedido de 
 - **Tiza**: fechas grandes, frases cortas y dibujos simples (el mapa de Colombia con la punta marcada, olas del río, el signo de pregunta). El efecto de tiza es un filtro de ruido sobre el trazo.
 - **El aula** (pared, zócalo, tablero con manchas de borrador, bandeja con tizas y borradores, piso de tablas) se dibuja en pixel art a 1/4 de resolución, del mismo tamaño de píxel que Profe Leo.
 - **Notas**: la última lámina pega la hoja de notas Chicago sobre el tablero y el hilo termina en ella. Profe Leo sostiene el hilo.
+
+---
+
+## 12. Aula moderna con tablero blanco (19/11/2026)
+
+Prototipo: `node carrusel/panorama/aula-blanca.cjs` → `out/aula-blanca-leticia/`. Ajustes pedidos por Leo sobre el aula de tiza:
+
+- **Televisor** en la pared, encima del tablero, uno por lámina. En la pantalla va el título (texto claro sobre fondo oscuro, etiqueta en rojo claro).
+- **Tablero blanco** continuo con marco de aluminio, reflejos suaves y una bandeja con marcadores de colores y borradores.
+- **Marcador**: textos y dibujos en marcador negro (fuente Permanent Marker, trazo con un leve temblor de mano). Las frases de apoyo van en marcador azul y la marca de la punta en rojo.
+- **Piso de baldosa** en una franja delgada, con juntas inclinadas para dar profundidad.
+- Se mantienen el hilo rojo entre imanes, los números de nota en círculo, la hoja con el párrafo y la hoja de notas Chicago en la última lámina.
