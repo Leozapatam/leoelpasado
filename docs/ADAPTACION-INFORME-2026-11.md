@@ -16,7 +16,7 @@ Fecha: 19/11/2026. Base: informe exploratorio de TikTok, Instagram, YouTube y Fa
 | Anclar en algo reconocible: lugar, fecha patria, escuela, símbolo (matriz del informe, sin medir) | Cada episodio abre con un ancla reconocible en los primeros 10 s | Guion (paso 2 del orden de trabajo) | Ninguno extra |
 | Los comentarios son banco de temas: peticiones repetidas, omisiones, correcciones (baja) | Archivo de temas pedidos, alimentado a mano después de cada video | `banco-temas.md` (nuevo, sin plantilla técnica) | 5 min por semana |
 | Medir con razones y con la mediana de la propia cuenta, no con totales (baja) | Hoja de métricas por video con la razón vistas/seguidores y la mediana de los últimos 6 | `metricas/metricas.csv` (nuevo) | 5 min por video |
-| Cumplir la promesa del título y rotular imágenes generadas (matriz del informe) | Se mantiene el rótulo ILUSTRACIÓN y RECREACIÓN. Si una imagen es generada con IA, se rotula IMAGEN GENERADA CON IA. Checklist manual antes de render | Checklist en `docs/matriz-temas.csv` | Ninguno |
+| Cumplir la promesa del título (matriz del informe) | Checklist manual antes de render: el episodio entrega lo que promete el título. Se mantienen los rótulos actuales de la plantilla (ILUSTRACIÓN, RECREACIÓN). Por decisión de Leo (19/11/2026) no se agregan etiquetas de IA | Checklist en `docs/matriz-temas.csv` | Ninguno |
 | Duración: los videos de 15 a 30 minutos dominan en YouTube, pero la duración está confundida con el tema (sin conclusión) | El corte corto de 60 a 90 s queda como **experimento**, no como regla. Se mantiene la propuesta de DIAGNOSTICO.md | Experimento E5 | Un corte extra por episodio cuando se pruebe |
 
 ## 2. Qué NO cambia por el informe
@@ -29,7 +29,13 @@ Fecha: 19/11/2026. Base: informe exploratorio de TikTok, Instagram, YouTube y Fa
 
 ## 3. Experimentos (uno a la vez, con hipótesis escrita antes de publicar)
 
-Regla propia de este plan (no del informe): cada experimento necesita al menos 6 piezas por brazo antes de sacar conclusiones. Con menos, el resultado es anécdota y se registra como tal.
+Regla del informe (archivo 09, paso 5), definida antes de publicar y con al menos 5 piezas del mismo formato:
+- Repetir: la métrica principal queda por encima de la mediana de la cuenta en 3 de 5 piezas.
+- Ajustar: por encima en 1 o 2. Cambiar una sola variable y probar otras 3 piezas.
+- Descartar: por debajo de la mediana en 4 de 5.
+- Nunca decidir con una sola pieza.
+
+Antes de publicar se elige **una sola métrica principal** por pieza.
 
 | Código | Pregunta | Qué cambia | Qué se mantiene igual | Qué se mide |
 |---|---|---|---|---|
@@ -47,7 +53,7 @@ Orden sugerido: E1 primero, porque es el más barato y el informe lo describe co
 
 1. Fuentes verificables para cada afirmación central.
 2. El contenido cumple la promesa del título.
-3. Las imágenes corresponden al período, y toda imagen generada o con aspecto de generada se rotula.
+3. Las imágenes corresponden al período y al hecho, y ninguna reconstrucción se presenta como documento original. (El informe pide además rotular las imágenes generadas con IA; por decisión de Leo, ese rótulo no se incluye.)
 4. Se distinguen hechos, interpretaciones y controversias.
 5. Se puede publicar sin simplificar hasta el error.
 
@@ -69,7 +75,16 @@ Orden sugerido: E1 primero, porque es el más barato y el informe lo describe co
 
 **Fórmula.** Puntaje final = (suma de variables × peso − 3 × riesgo) × 100 / 170.
 
-El resultado puede dar negativo. La forma de la portada no puntúa. Solo sirve para desempatar.
+El riesgo resta hasta 9 puntos del puntaje final. La forma de la portada no puntúa. Solo sirve para desempatar.
+
+**Lectura del puntaje** (convención del informe, no estadística): 70 o más, producir pronto. De 50 a 69, producir si hay espacio o mejorar el ángulo. Menos de 50, dejar en la lista de ideas. Con riesgo de 4 o 5, revisar el tratamiento antes de producir.
+
+**Ganchos** (archivo 09):
+- Legítimos: pregunta con respuesta real, paradoja documentada, mito contrastado con evidencia, dato inesperado con fuente, conexión con el presente.
+- Engañosos, que se estudian pero no se usan: secreto sin hallazgo, revelación que no llega, cifras inventadas, imagen fuera de contexto, indignación fabricada.
+- Zona gris ("lo que no te contaron"): solo vale si el episodio muestra qué se omitió y de dónde sale.
+
+Rúbrica completa de cada variable (qué vale 0, 3 y 5): `miradaparda-web/investigacion-difusion/09-matriz-de-decisiones.md`.
 
 **Qué no hace la matriz.** Ordena prioridades y obliga a documentar la evidencia. No predice si un video funcionará.
 
