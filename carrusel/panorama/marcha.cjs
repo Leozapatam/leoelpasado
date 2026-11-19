@@ -87,6 +87,24 @@ const filtro = `<defs><filter id="mano"><feTurbulence type="fractalNoise" baseFr
 const ETQ = "BOGOTÁ · 19 NOV 2026";
 const TIT = "¿Por qué Colombia marcha el 19 de noviembre?";
 
+// ---------- objetos del tema en pixel art (se amplían x6) ----------
+const BANDEJA = 1236;
+const objetos = `
+(()=>{const dib=(id,w,h,f)=>{const c=document.getElementById(id); c.width=w; c.height=h; const g=c.getContext('2d'); f((x,y,a,b,col)=>{g.fillStyle=col; g.fillRect(x,y,a,b);});};
+// cacerola de aluminio con cuchara de palo
+dib('cacerola',24,14,(r)=>{
+  r(1,6,4,2,'#2b2b30'); r(2,7,2,1,'#6e737a');
+  r(5,4,16,10,'#2b2b30'); r(6,5,14,8,'#9aa0a6'); r(6,5,14,1,'#c9ced3'); r(7,6,2,6,'#d6dade'); r(17,6,3,7,'#7a8086');
+  r(4,3,18,2,'#2b2b30'); r(5,3,16,1,'#c9ced3');
+  for(let i=0;i<9;i++) r(11+i,3-Math.floor(i/3),2,1,'#2b2b30'); for(let i=0;i<8;i++) r(12+i,3-Math.floor(i/3),1,1,'#b07a46');
+  r(20,0,3,2,'#2b2b30'); r(21,0,1,1,'#c9915a');});
+// megáfono blanco con banda roja
+dib('megafono',26,16,(r)=>{
+  r(1,5,5,6,'#2b2b30'); r(2,6,3,4,'#e8e2d0');
+  for(let x=6;x<24;x++){const a=Math.round((x-6)*0.33); r(x,5-a,1,6+2*a,'#2b2b30'); r(x,6-a,1,4+2*a,x>18&&x<21?'#c1121f':'#f2eee4'); r(x,6-a,1,1,'#ffffff');}
+  r(24,0,2,16,'#2b2b30'); r(24,1,1,14,'#9aa0a6');
+  r(10,10,3,6,'#2b2b30'); r(11,11,1,4,'#55565c');});})();`;
+
 // ---------- lámina 1: primer plano del televisor ----------
 const portada = `${HEAD}
 <div style="position:absolute;inset:0;transform:translateY(170px) scale(2);transform-origin:540px 170px">
@@ -97,9 +115,25 @@ const portada = `${HEAD}
 ${luz}
 <!-- en el tablero, que asoma abajo: una sola línea que invita a deslizar -->
 <svg class="capa" width="${W}" height="${H}">${filtro}<g filter="url(#mano)">
-  ${mtx(70, 840, "No es la primera vez.", 62)}
-  ${mtx(70, 924, "Hoy te cuento por qué", 46, C.azul)}${mtx(70, 982, "se sale a la calle.", 46, C.azul)}
-  ${flecha(820, 950, 980, 950)}</g></svg>
+  ${mtx(60, 760, "No es la primera vez.", 58)}
+  ${mtx(60, 836, "Hoy te cuento por qué", 44, C.azul)}${mtx(60, 890, "se sale a la calle.", 44, C.azul)}
+  ${flecha(60, 960, 200, 960)}</g></svg>
+<!-- firma como rótulo de televisión -->
+<div style="position:absolute;left:60px;top:1040px;display:flex;align-items:stretch;gap:14px">
+  <div style="width:8px;background:${C.rojo}"></div>
+  <div><div style="font:900 50px/1 'Playfair Display';color:${M}">Profe Leo</div>
+    <div style="font:26px 'Special Elite';color:${C.gris};margin-top:8px;letter-spacing:1px">@leoelpasado</div></div></div>
+<!-- bandeja del tablero con dos objetos del tema: cacerola (cacerolazo de 2019) y megáfono -->
+<div style="position:absolute;left:0;right:0;top:${BANDEJA}px;height:14px;background:linear-gradient(#c4c9ce,#a3a8ad 60%,#868b90)"></div>
+<div style="position:absolute;left:0;right:0;top:${BANDEJA + 14}px;height:22px;background:linear-gradient(rgba(0,0,0,.18),transparent)"></div>
+<canvas id="cacerola" style="position:absolute;left:60px;top:${BANDEJA - 14 * 6}px;width:${24 * 6}px;height:${14 * 6}px;image-rendering:pixelated;filter:drop-shadow(4px 5px 3px rgba(0,0,0,.3))"></canvas>
+<canvas id="megafono" style="position:absolute;left:240px;top:${BANDEJA - 16 * 6}px;width:${26 * 6}px;height:${16 * 6}px;image-rendering:pixelated;filter:drop-shadow(4px 5px 3px rgba(0,0,0,.3))"></canvas>
+<script>${objetos}</script>
+<!-- Profe Leo cortado abajo, mirando hacia el texto; escala entera x3 -->
+<img src="${spr("leo-habla")}" style="position:absolute;left:${830 - 165 * 1.5}px;top:740px;height:${266 * 3}px;transform:scaleX(-1);image-rendering:pixelated;filter:drop-shadow(-14px 12px 18px rgba(30,24,28,.28))">
+<div style="position:absolute;left:${830 - 165 * 1.5}px;top:740px;width:${165 * 3}px;height:${266 * 3}px;transform:scaleX(-1);background:linear-gradient(90deg, rgba(255,200,150,.16), transparent 55%);mix-blend-mode:soft-light;
+  -webkit-mask-image:url('${spr("leo-habla")}');-webkit-mask-size:100% 100%"></div>
+<div class="capa" style="background:linear-gradient(to bottom, transparent 85%, rgba(20,18,24,.22))"></div>
 <div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">PILOTO · BOCETO 1/6</div>
 </body></html>`;
 
