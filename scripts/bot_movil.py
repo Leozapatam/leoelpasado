@@ -200,13 +200,57 @@ class LeoBot:
         except Exception as e:
             self.enviar_mensaje(chat_id, f"⚠️ Audio guardado en `grabaciones/{nombre_archivo}`, pero falló la transcripción: {e}")
 
-    def procesar_nota_texto(self, chat_id, texto):
-        destino = RAIZ / "public" / "episodios" / self.slug / "notas_movil.md"
-        destino.parent.mkdir(parents=True, exist_ok=True)
-        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        with open(destino, "a", encoding="utf-8") as f:
-            f.write(f"\n\n### Nota [{timestamp}]\n{texto}\n")
-        self.enviar_mensaje(chat_id, f"💾 Guardado en las notas de `{self.slug}`.")
+    def procesar_con_antigravity(self, chat_id, texto_usuario):
+        conv_id = self.config.get("conversation_id", "467aba25-03f7-4f22-b440-c9e1a7e531ef")
+        transcript_path = RAIZ.parent / "brain" / conv_id / ".system_generated" / "logs" / "transcript.jsonl"
+        
+        # Guardar la cantidad de líneas actuales del transcript
+        lineas_iniciales = 0
+        if transcript_path.exists():
+            with open(transcript_path, "r", encoding="utf-8") as f:
+                lineas_iniciales = sum(1 for _ in f)
+
+        self.enviar_mensaje(chat_id, "🧠 *Antigravity pensando...*")
+        
+        # Enviar mensaje al agente
+        cmd_send = ["agentapi", "send-message", conv_id, f"[Leo desde Telegram]: {texto_usuario}"]
+        res = subprocess.run(cmd_send, capture_output=True, text=True, shell=True)
+        if res.returncode != 0:
+            self.enviar_mensaje(chat_id, f"⚠️ Error al conectar con Antigravity: {res.stderr}")
+            return
+
+        # Esperar respuesta en transcript.jsonl (hasta 120 segundos)
+        t_inicio = time.time()
+        ultimo_texto = None
+        while time.time() - t_inicio < 120:
+            time.sleep(2)
+            if not transcript_path.exists():
+                continue
+            with open(transcript_path, "r", encoding="utf-8") as f:
+                lineas = [l.strip() for l in f if l.strip()]
+            
+            if len(lineas) > lineas_iniciales:
+                # Revisar las nuevas líneas desde lineas_iniciales
+                nuevas = lineas[lineas_iniciales:]
+                for linea in reversed(nuevas):
+                    try:
+                        obj = json.loads(linea)
+                        # Buscamos un PLANNER_RESPONSE con contenido de texto final (sin llamadas a herramientas pendientes)
+                        if obj.get("source") == "MODEL" and obj.get("type") == "PLANNER_RESPONSE" and obj.get("status") == "DONE":
+                            tool_calls = obj.get("tool_calls", [])
+                            content = obj.get("content", "").strip()
+                            if content and not tool_calls:
+                                ultimo_texto = content
+                                break
+                    except Exception:
+                        pass
+                if ultimo_texto:
+                    break
+
+        if ultimo_texto:
+            self.enviar_mensaje(chat_id, ultimo_texto)
+        else:
+            self.enviar_mensaje(chat_id, "⏳ Antigravity recibió tu mensaje y está ejecutando herramientas en segundo plano en tu PC.")
 
     def iniciar(self):
         print(f"🤖 Bot de @leoelpasado activo. Escuchando en Telegram...")
@@ -240,7 +284,7 @@ class LeoBot:
                         if texto.startswith("/"):
                             self.procesar_comando(chat_id, texto)
                         else:
-                            self.procesar_nota_texto(chat_id, texto)
+                            self.procesar_con_antigravity(chat_id, texto)
 
                     elif "voice" in msg:
                         file_id = msg["voice"]["file_id"]
