@@ -13,9 +13,9 @@ const OUT = path.join(RAIZ, "out", "muestra");
 fs.mkdirSync(OUT, { recursive: true });
 const url = (p) => "file:///" + path.join(RAIZ, p).replace(/\\/g, "/");
 const W = 1080, H = 1350, PX = 4;
-const TAB = { arriba: 320, abajo: 800 }; // tablero de altura normal, un poco más abajo
+const TAB = { arriba: 328, abajo: 808 }; // tablero de altura normal, un poco más abajo
 const PISO = 960;
-const HILO_Y = 460; // altura a la que el hilo cruza las costuras en todo el carrusel
+const HILO_Y = 468; // altura a la que el hilo cruza las costuras en todo el carrusel
 const C = { texto: "#1b1612", rojo: "#c1121f", rojoOsc: "#7d0a13", rojoClaro: "#ff4d57", hueso: "#f4ead5", marcador: "#1d1d1f", azul: "#2456a6" };
 
 // ---------- salón (pixel art a 1/4) ----------
@@ -29,12 +29,12 @@ const P=${PISO / PX};
 banda(0,60,'#cfcdc5','#d9d7cf'); banda(60,P,'#d9d7cf','#e4e2da');
 g.fillStyle='#b4afa3'; g.fillRect(0,P-3,LW,3); g.fillStyle='#958f82'; g.fillRect(0,P-1,LW,1);
 // televisor colgado del techo
-{const x0=46, y0=10, w=178, h=52;
+{const x0=70, y0=6, w=130, h=73; // 16:9 (520 x 292 px reales)
   for(let i=1;i<=6;i++){g.fillStyle='rgba(20,20,25,.05)'; g.fillRect(x0+2+i,y0+3+i,w,h);}
   for(const bx of [x0+44,x0+w-46]){g.fillStyle='#55565c'; g.fillRect(bx,0,2,y0); g.fillStyle='rgba(20,20,25,.12)'; g.fillRect(bx+3,0,2,y0+2);}
   g.fillStyle='#4a4b52'; g.fillRect(x0,y0,w,h); g.fillStyle='#1c1c21'; g.fillRect(x0+1,y0+1,w-2,h-2);
   g.fillStyle='#0b0c0f'; g.fillRect(x0+3,y0+3,w-6,h-8);
-  g.fillStyle='rgba(255,255,255,.035)'; for(let i=0;i<30;i++){g.fillRect(x0+110+i,y0+3,1,Math.min(h-8,i*2+3));}
+  g.fillStyle='rgba(255,255,255,.035)'; for(let i=0;i<24;i++){g.fillRect(x0+80+i,y0+3,1,Math.min(h-8,i*2+3));}
   g.fillStyle='#c9cbd0'; g.fillRect(x0+w/2-5,y0+h-4,10,1); g.fillStyle='#e0303a'; g.fillRect(x0+w-8,y0+h-4,2,1);}
 // tablero blanco
 const T0=${TAB.arriba / PX}, T1=${TAB.abajo / PX};
@@ -48,11 +48,14 @@ g.fillStyle='#ececec'; g.fillRect(60,T1+1,9,2); g.fillStyle='#1d1d1f'; g.fillRec
 g.fillStyle='#ececec'; g.fillRect(150,T1+1,9,2); g.fillStyle='#c1121f'; g.fillRect(159,T1+1,3,2);
 g.fillStyle='#2d2f36'; g.fillRect(118,T1,11,3);
 // piso de baldosa con profundidad
-let y=P, alto=5, fila=0;
-while(y<LH){for(let yy=y;yy<Math.min(LH,y+alto);yy++){const off=(yy-P)*0.55;
-  for(let x=0;x<LW;x++){const ancho=22+fila*3; const junta=((x+off+fila*7)%ancho<1)||yy===y;
-    const tono=(((x+off+fila*7)/ancho|0)+fila)%2?'#e2dfd7':'#d3cfc5'; g.fillStyle=junta?'#a6a194':tono; g.fillRect(x,yy,1,1);}}
-  y+=alto; alto=Math.round(alto*1.35)+1; fila++;}
+// vista frontal, igual que la pared: juntas verticales paralelas y filas que crecen hacia el frente
+let y=P, alto=4, fila=0; const ancho=27;
+while(y<LH){for(let yy=y;yy<Math.min(LH,y+alto);yy++){
+  for(let x=0;x<LW;x++){const junta=(x%ancho===0)||yy===y;
+    const tono=((x/ancho|0)+fila)%2?'#e2dfd7':'#d6d2c8'; g.fillStyle=junta?'#aaa598':tono; g.fillRect(x,yy,1,1);}}
+  // brillo de baldosa: una línea clara bajo cada junta horizontal
+  g.fillStyle='rgba(255,255,255,.35)'; g.fillRect(0,y+1,LW,1);
+  y+=alto; alto=Math.round(alto*1.32)+1; fila++;}
 g.fillStyle='rgba(0,0,0,.10)'; g.fillRect(0,P,LW,3);
 `;
 
@@ -96,19 +99,19 @@ canvas{position:absolute;left:0;top:0;width:${W}px;height:${Math.ceil(H / PX) * 
 <canvas id="aula"></canvas><script>${dibujo}</script>
 
 <!-- brillo frío del televisor sobre la pared, justo debajo de la pantalla -->
-<div class="capa" style="background:radial-gradient(ellipse 340px 70px at 540px 262px, rgba(150,180,230,.20), transparent 75%)"></div>
+<div class="capa" style="background:radial-gradient(ellipse 260px 60px at 540px 322px, rgba(150,180,230,.20), transparent 75%)"></div>
 
 <!-- pantalla del televisor -->
-<div style="position:absolute;left:196px;top:52px;width:688px;height:180px;display:flex;flex-direction:column;justify-content:center;padding:0 34px">
-  <div style="font:20px 'Special Elite';color:${C.rojoClaro};letter-spacing:4px">LIMA · 1922</div>
-  <div style="font:900 62px 'Playfair Display';line-height:1.04;color:${C.hueso};margin-top:6px">Un acuerdo escrito${sup(1)}</div></div>
+<div style="position:absolute;left:292px;top:36px;width:496px;height:260px;display:flex;flex-direction:column;justify-content:center;padding:0 30px">
+  <div style="font:17px 'Special Elite';color:${C.rojoClaro};letter-spacing:3px">LIMA · 1922</div>
+  <div style="font:900 50px 'Playfair Display';line-height:1.04;color:${C.hueso};margin-top:6px">Un acuerdo escrito${sup(1)}</div></div>
 
 <!-- marcador e hilo en el tablero -->
 <svg class="capa" width="${W}" height="${H}">
   <defs><filter id="mano"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="9" result="r"/><feDisplacementMap in="SourceGraphic" in2="r" scale="3"/></filter>
     <filter id="b"><feGaussianBlur stdDeviation="3"/></filter>
     <radialGradient id="iman" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ff6b74"/><stop offset=".55" stop-color="${C.rojo}"/><stop offset="1" stop-color="#5e070e"/></radialGradient></defs>
-  <g filter="url(#mano)">${mtx(600, 535, "1922", 90)}${mtx(606, 575, "Lima · un tratado", 30, C.azul)}
+  <g filter="url(#mano)">${mtx(600, 543, "1922", 90)}${mtx(606, 583, "Lima · un tratado", 30, C.azul)}
     <circle cx="574" cy="${HILO_Y - 120}" r="21" fill="none" stroke="${C.marcador}" stroke-width="4"/></g>
   <text x="574" y="${HILO_Y - 110}" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="27" fill="${C.marcador}">1</text>
   <path d="${hilo}" stroke="#000" stroke-opacity=".22" stroke-width="6" fill="none" transform="translate(4,8)" filter="url(#b)"/>
@@ -116,7 +119,7 @@ canvas{position:absolute;left:0;top:0;width:${W}px;height:${Math.ceil(H / PX) * 
   <path d="${hilo}" stroke="#ff7a82" stroke-width="1.3" stroke-dasharray="2 5" fill="none"/>
   ${pts.slice(1, 4).map(iman).join("")}
 </svg>
-<div style="position:absolute;left:395px;top:596px;width:655px;color:${C.marcador};font:400 31px/1.18 'Patrick Hand',cursive">
+<div style="position:absolute;left:395px;top:604px;width:655px;color:${C.marcador};font:400 31px/1.18 'Patrick Hand',cursive">
   En 1922, Colombia y Perú firmaron un tratado en Lima. Un tratado es un acuerdo escrito entre países. Allí dijeron por dónde pasaba la frontera. Perú le dejó a Colombia la punta que llega al Amazonas.</div>
 
 <!-- enchufe (sprite) -->
