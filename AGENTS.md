@@ -1,7 +1,7 @@
 # Instrucciones para agentes de código (Antigravity, Claude Code, Cursor, Codex…)
 
 Las reglas completas están en **[CLAUDE.md](CLAUDE.md)** y valen para cualquier agente. Léelas antes de tocar nada.
-Manual para humanos: [PLANTILLA.md](PLANTILLA.md) · Qué funciona y qué falta: [DIAGNOSTICO.md](DIAGNOSTICO.md) · Personajes: [personaje/PROMPTS.md](personaje/PROMPTS.md).
+Manual para humanos: [PLANTILLA.md](PLANTILLA.md) · Qué funciona y qué falta: [DIAGNOSTICO.md](DIAGNOSTICO.md) · Ahorro de tokens: [PROTOCOLO_TOKENS.md](PROTOCOLO_TOKENS.md) · Personajes: [personaje/PROMPTS.md](personaje/PROMPTS.md).
 
 **En una línea:** esto es una fábrica de reels de divulgación histórica para @leoelpasado (Profe Leo). Un episodio nuevo **no se rediseña**: se sigue el orden guion → audio → storyboard en texto → aprobación de Leo → `episodio.json` → render.
 

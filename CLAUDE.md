@@ -1,7 +1,7 @@
 # @leoelpasado · fábrica de videos (léeme primero)
 
 ## Intención (no negociable)
-Esta carpeta es una **plantilla reutilizable**. Todo lo que se construyó (identidad, escenarios, narrador, subtítulos, voz, música, mezcla) existe para que **cada episodio nuevo cueste pocos tokens**: no se rediseña, se rellenan datos.
+Esta carpeta es una **plantilla reutilizable**. Todo lo que se construyó (identidad, escenarios, narrador, subtítulos, voz, música, mezcla) existe para que **cada episodio nuevo cueste pocos tokens**: no se rediseña, se rellenan datos. Consultar [PROTOCOLO_TOKENS.md](PROTOCOLO_TOKENS.md) para el protocolo de ahorro de tokens sin pérdida de calidad.
 
 ## Orden de trabajo (para no gastar tokens en vano)
 1. **Guion** en `guion.md` → Leo lo aprueba.
