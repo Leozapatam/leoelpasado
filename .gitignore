@@ -19,3 +19,7 @@ desktop.ini
 
 # bocetos: el HTML se regenera con bocetos.cjs y lleva rutas locales del equipo
 carrusel/exploracion/*.html
+
+# bot y credenciales locales
+bot_config.json
+.env
