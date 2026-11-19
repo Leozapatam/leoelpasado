@@ -195,3 +195,12 @@ Reglas:
 - **El rojo es solo del hilo y de los números de nota.** El azul es el único acento del marcador; el amarillo solo resalta la palabra clave.
 - **Nada del sketchnote toca el hilo** ni queda detrás de la cabeza de Profe Leo.
 - **El párrafo no desaparece**: se reparte en frases cortas bajo cada ícono, para que cualquiera lo entienda aunque no lea los dibujos.
+
+## 15. Formato «Una clase» (19/11/2026)
+
+Nombre del formato de carrusel con aula: cada carrusel es **una clase** completa de Profe Leo.
+
+- **Los mismos estudiantes en todas las láminas**, en el mismo puesto (`pub-rizos`, `pub-cola`, `pub-gorra`). Es la misma clase de principio a fin; no se cambian cabezas entre láminas.
+- **Sin hilo rojo (prueba)**: en este formato el hilo no aportaba sentido. Queda apagado con `CON_HILO = false` en `panorama/carrusel.cjs`; el número de nota se mantiene en el tablero.
+- **Letra más grande**: las frases pasan de 29 a 33 px y el contenido del tablero sube 40 px para aprovechar el espacio que dejó el hilo. Las frases de una misma columna se apilan solas para no montarse.
+- Lámina final: Profe Leo se despide (`leo-saluda`) junto a la hoja de fuentes.

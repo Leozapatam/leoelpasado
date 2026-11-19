@@ -74,7 +74,9 @@ const M = C.marcador;
 const trazo = `fill="none" stroke="${M}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"`;
 const trazoAzul = `fill="none" stroke="${C.azul}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"`;
 const mtx = (x, y, t, tam, color = M, extra = "") => `<text x="${x}" y="${y}" font-family="Permanent Marker" font-size="${tam}" fill="${color}" ${extra}>${t}</text>`;
-const cinta = (t) => `<path d="M40,352 L322,352 L306,376 L322,400 L40,400 L56,376 Z" fill="#dce7f7" stroke="${M}" stroke-width="4" stroke-linejoin="round"/>${mtx(181, 390, t, 34, M, 'text-anchor="middle"')}`;
+// el contenido del tablero sube 40 px (ya no hay hilo arriba); la cinta se queda en su sitio
+const SUBE = 40;
+const cinta = (t) => `<g transform="translate(0,${SUBE})"><path d="M40,352 L322,352 L306,376 L322,400 L40,400 L56,376 Z" fill="#dce7f7" stroke="${M}" stroke-width="4" stroke-linejoin="round"/>${mtx(181, 390, t, 34, M, 'text-anchor="middle"')}</g>`;
 const flecha = (x1, y1, x2, y2) => `<path d="M${x1},${y1} Q${(x1 + x2) / 2},${Math.min(y1, y2) - 18} ${x2},${y2}" ${trazo}/>
   <path d="M${x2 - 14},${y2 - 10} L${x2},${y2} L${x2 - 15},${y2 + 8}" ${trazo}/>`;
 const resaltado = (x, y, t, tam) => `<rect x="${x - 4}" y="${y - tam * 0.8}" width="${t.length * tam * 0.62 + 8}" height="${tam}" fill="rgba(255,226,80,.6)" transform="rotate(-1.5 ${x} ${y})"/>${mtx(x, y, t, tam)}`;
@@ -104,7 +106,8 @@ const mapa = (id, caja, colorTrap = C.azul) => {
   return { punta: p, svg: `<path d="${d}" ${trazo} stroke-width="3.5"/><clipPath id="${id}"><rect x="0" y="${yT}" width="${W}" height="400"/></clipPath>
     <path d="${d}" fill="${colorTrap}" opacity=".55" clip-path="url(#${id})"/>` };
 };
-const frase = (x, y, w, t) => `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;color:${M};font:400 29px/1.16 'Patrick Hand',cursive">${t}</div>`;
+// letra más grande (antes 29 px); varias frases de una columna se apilan solas para que nunca se monten
+const frase = (x, y, w, ...t) => `<div style="position:absolute;left:${x}px;top:${y - SUBE}px;width:${w}px;color:${M};font:400 33px/1.12 'Patrick Hand',cursive">${t.map((p) => `<p style="margin-bottom:10px">${p}</p>`).join("")}</div>`;
 const sup = (n) => `<sup style="font:700 .6em 'Playfair Display';color:${C.rojoClaro};margin-left:3px">${n}</sup>`;
 
 const m1 = mapa("trap1", [[390, 470], [640, 792]]);
@@ -123,11 +126,10 @@ const L = [
       ${flecha(320, 600, 382, 640)}
       ${resaltado(690, 528, "TRAPECIO", 38)}${resaltado(690, 574, "AMAZÓNICO", 38)}`,
     frases: frase(40, 490, 280, "Mira el sur de Colombia en el mapa del tablero.") +
-      frase(690, 602, 350, "Hay una punta delgada que baja hasta el río Amazonas. Se llama el trapecio amazónico.") +
-      frase(690, 716, 350, "No siempre fue colombiana."),
+      frase(690, 602, 360, "Hay una punta delgada que baja hasta el río Amazonas. Se llama el trapecio amazónico.", "No siempre fue colombiana."),
   },
   { // 2. EL TRATADO (la muestra aprobada)
-    etq: "LIMA · 1922", tit: `Un acuerdo escrito${sup(1)}`, leo: "leo-habla", egg: "obj-mapa-enrollado", pub: "pub-apuntes", n: 1, carrete: true,
+    etq: "LIMA · 1922", tit: `Un acuerdo escrito${sup(1)}`, leo: "leo-habla", egg: "obj-mapa-enrollado", pub: "pub-apuntes", n: 1,
     nodos: [[540, HILO_Y - 90]],
     sketch: `${cinta("1922 · LIMA")}
       ${persona(110, 502, 182, 540)}${persona(258, 502, 188, 540)}
@@ -201,14 +203,14 @@ const L = [
       frase(770, 640, 290, "Los pueblos indígenas del Amazonas vivían en este río mucho antes de cualquier tratado."),
   },
   { // 6. FUENTES
-    etq: "NINGÚN HILO SIN FUENTE", tit: "Notas", leo: "leo-mapa-hilo", egg: "obj-egg-maleta", pub: "pub-aplaude",
+    etq: "CADA DATO CON SU FUENTE", tit: "Notas", leo: "leo-saluda", egg: "obj-egg-maleta", pub: "pub-aplaude",
     nodos: [[700, HILO_Y + 10]],
     sketch: `${cinta("FUENTES")}`,
-    frases: frase(40, 510, 290, "Cada número tiene aquí su fuente. Puedes revisarla tú mismo.") +
-      `<div style="position:absolute;left:40px;top:632px;color:${M}"><div style="font:900 34px 'Playfair Display'">Profe Leo</div>
-        <div style="font:20px 'Special Elite';color:${C.gris}">@leoelpasado</div></div>
-      <div style="position:absolute;left:390px;top:486px;width:650px;height:306px;background:#fdfcf8;padding:30px 28px 0;box-shadow:0 5px 9px rgba(0,0,0,.22);color:${C.texto};transform:rotate(-.6deg)">
-        <ol style="padding-left:26px;font:17px/1.34 'Special Elite'">
+    frases: frase(40, 490, 300, "Cada número tiene aquí su fuente. Puedes revisarla tú mismo.") +
+      `<div style="position:absolute;left:40px;top:604px;color:${M}"><div style="font:900 36px 'Playfair Display'">Profe Leo</div>
+        <div style="font:22px 'Special Elite';color:${C.gris}">@leoelpasado</div></div>
+      <div style="position:absolute;left:380px;top:430px;width:670px;background:#fdfcf8;padding:22px 24px 16px;box-shadow:0 5px 9px rgba(0,0,0,.22);color:${C.texto};transform:rotate(-.6deg)">
+        <ol style="padding-left:28px;font:20px/1.3 'Special Elite'">
           <li style="margin-bottom:9px">«Tratado de límites y navegación fluvial entre Colombia y Perú», Lima, [día] de [marzo o julio] de 1922, en [colección], [vol.], [p.].</li>
           <li style="margin-bottom:9px">[Nombre Apellido], <i>[Título del libro]</i> ([Ciudad]: [Editorial], [año]), [p.].</li>
           <li style="margin-bottom:9px">[Nombre Apellido], «[Título del artículo]», <i>[Revista]</i> [vol.], n.º [n] ([año]): [p.].</li>
@@ -240,8 +242,10 @@ const leo = (pose, k) => {
     -webkit-mask-image:url('${spr(pose)}');-webkit-mask-size:auto 100%;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat"></div>`;
 };
 const pub = (n, cx, top) => `<img src="${spr(n)}" style="position:absolute;left:${cx}px;top:${top}px;height:${REG[`v2/${n}`][1] * 1.4}px;transform:translateX(-50%);image-rendering:pixelated;filter:brightness(.72) saturate(.85) drop-shadow(0 -6px 14px rgba(0,0,0,.25))">`;
-// público en las costuras (compartido entre dos láminas) y uno en el centro de cada lámina, que reacciona al tema
-const COSTURAS = ["pub-rizos", "pub-gorra", "pub-cola", "pub-corto", "pub-trenzas", "pub-gafas", "pub-rapado"];
+// formato «Una clase»: los mismos estudiantes, en el mismo puesto, en todas las láminas (es la misma clase de principio a fin)
+const CLASE = [["pub-rizos", 70, 1150], ["pub-cola", 590, 1125], ["pub-gorra", 1010, 1160]];
+// el hilo rojo queda apagado en este formato (prueba del 19/11/2026); se puede volver a encender
+const CON_HILO = false;
 
 const ventana = (izq, fuerza) => `<div class="capa" style="background:repeating-linear-gradient(${izq ? 118 : 62}deg, rgba(255,240,205,0) 0 70px, rgba(255,240,205,${fuerza}) 70px 150px, rgba(255,240,205,0) 150px 260px);
   -webkit-mask-image:linear-gradient(${izq ? 90 : 270}deg, #000 0%, rgba(0,0,0,.6) 40%, transparent 75%)"></div>
@@ -253,7 +257,7 @@ const lamina = (l, k) => `<div style="position:absolute;left:${k * W}px;top:0;wi
   <div style="position:absolute;left:292px;top:36px;width:496px;height:260px;display:flex;flex-direction:column;justify-content:center;padding:0 30px">
     <div style="font:17px 'Special Elite';color:${C.rojoClaro};letter-spacing:3px">${l.etq}</div>
     <div style="font:900 ${l.tit.length > 30 ? 40 : 50}px 'Playfair Display';line-height:1.04;color:${C.hueso};margin-top:6px">${l.tit}</div></div>
-  <svg class="capa" width="${W}" height="${H}"><g filter="url(#mano)">${l.sketch}${l.n ? nota(l.n) : ""}</g>${l.n ? notaNum(l.n) : ""}</svg>
+  <svg class="capa" width="${W}" height="${H}"><g filter="url(#mano)"><g transform="translate(0,-${SUBE})">${l.sketch}</g>${l.n ? nota(l.n) : ""}</g>${l.n ? notaNum(l.n) : ""}</svg>
   ${l.frases}
   ${l.carrete ? `<img src="${spr("obj-hilo")}" style="position:absolute;left:640px;top:${TAB.abajo - 62}px;height:78px;image-rendering:pixelated;filter:drop-shadow(3px 4px 2px rgba(0,0,0,.3))">` : ""}
   <img src="${spr(l.egg)}" style="position:absolute;left:880px;top:${PISO - 92}px;height:120px;transform:rotate(${k < 3 ? -8 : 8}deg);image-rendering:pixelated;filter:drop-shadow(${k < 3 ? 6 : -6}px 6px 4px rgba(0,0,0,.25))">
@@ -264,7 +268,7 @@ const capasPost = (l, k) => `<div style="position:absolute;left:${k * W}px;top:0
   <div class="capa" style="background:radial-gradient(ellipse 80% 55% at 50% 45%, rgba(255,246,225,.16), transparent 70%),
     linear-gradient(to bottom, rgba(20,18,24,.18), transparent 18%, transparent 78%, rgba(20,18,24,.28))"></div>
   ${leo(l.leo, k)}
-  ${pub(l.pub, 610, 1110)}
+  ${CLASE.map(([n, cx, top]) => pub(n, cx, top)).join("")}
 </div>`;
 
 const pagina = (guias) => `<!doctype html><html lang="es"><head><meta charset="utf-8">
@@ -278,14 +282,13 @@ canvas{position:absolute;left:0;top:0;width:${ANCHO}px;height:${Math.ceil(H / PX
   <filter id="b"><feGaussianBlur stdDeviation="3"/></filter>
   <radialGradient id="iman" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ff6b74"/><stop offset=".55" stop-color="${C.rojo}"/><stop offset="1" stop-color="#5e070e"/></radialGradient></defs></svg>
 ${L.map(lamina).join("")}
-<svg style="position:absolute;left:0;top:0" width="${ANCHO}" height="${H}">
+${CON_HILO ? `<svg style="position:absolute;left:0;top:0" width="${ANCHO}" height="${H}">
   <path d="${hilo}" stroke="#000" stroke-opacity=".22" stroke-width="6" fill="none" transform="translate(4,8)" filter="url(#b)"/>
   <path d="${hilo}" stroke="${C.rojoOsc}" stroke-width="6" fill="none"/><path d="${hilo}" stroke="${C.rojo}" stroke-width="3.5" fill="none"/>
   <path d="${hilo}" stroke="#ff7a82" stroke-width="1.3" stroke-dasharray="2 5" fill="none"/>
   ${L.flatMap((l, k) => l.nodos.map(([x, y]) => iman([k * W + x, y]))).join("")}
-</svg>
+</svg>` : ""}
 ${L.map(capasPost).join("")}
-${COSTURAS.map((n, k) => pub(n, k * W, k % 2 ? 1160 : 1150)).join("")}
 ${guias ? [1, 2, 3, 4, 5].map((k) => `<div style="position:absolute;left:${k * W - 1}px;top:0;width:2px;height:${H}px;background:rgba(0,120,255,.8)"></div>`).join("") : ""}
 ${[...Array(N)].map((_, k) => `<div style="position:absolute;left:${k * W + W - 190}px;top:8px;font:16px 'Special Elite';color:#8a857a">BOCETO · ${k + 1}/${N}</div>`).join("")}
 </body></html>`;
