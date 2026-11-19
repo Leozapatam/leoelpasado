@@ -147,3 +147,6 @@ Prototipo: `node carrusel/panorama/aula-blanca.cjs` → `out/aula-blanca-leticia
 - Se mantienen el hilo rojo entre imanes, los números de nota en círculo, la hoja con el párrafo y la hoja de notas Chicago en la última lámina.
 
 Ajuste del mismo día: el tablero blanco baja a la altura de Profe Leo (de 470 a 1240 px), y el párrafo se escribe en el tablero con letra de mano clara (Patrick Hand), como si Profe Leo lo hubiera copiado. Arriba, el televisor muestra el marco completo: canto, pantalla, soporte de pared, marca y luz de encendido.
+
+Segundo ajuste del mismo día: el tablero sube un poco (450 a 1080 px) y su borde de abajo queda a la cadera de Profe Leo, que ahora mide 420 px y está de pie sobre el piso, delante del tablero. El televisor cuelga del techo con dos tubos y proyecta una sombra suave en la pared.
+Pendiente de proporción: el píxel de Profe Leo (unos 6,5 px) ya es más grueso que el del aula (4 px). Para unificar, el aula debería dibujarse con píxel de 6 o 7.
