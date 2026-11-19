@@ -204,3 +204,5 @@ Nombre del formato de carrusel con aula: cada carrusel es **una clase** completa
 - **Sin hilo rojo (prueba)**: en este formato el hilo no aportaba sentido. Queda apagado con `CON_HILO = false` en `panorama/carrusel.cjs`; el número de nota se mantiene en el tablero.
 - **Letra más grande**: las frases pasan de 29 a 33 px y el contenido del tablero sube 40 px para aprovechar el espacio que dejó el hilo. Las frases de una misma columna se apilan solas para no montarse.
 - Lámina final: Profe Leo se despide (`leo-saluda`) junto a la hoja de fuentes.
+- **Escena acercada (prueba)** en `panorama/una-clase.cjs`: el salón, el televisor y Profe Leo se amplían 1,15× desde arriba; el tablero gana tamaño y el piso casi desaparece. El contenido del tablero se reubica sin ampliarse (para no salirse por los lados) y la letra sube a 37 px. El público baja: se ven menos las cabezas, pero siguen siendo los mismos tres.
+- **Mapas con indicativos** (lámina de ejemplo): sombreado con leyenda, flecha de recorrido, pines numerados, escala real (1000 km sobre el ecuador, misma proyección) y norte. Regla: todo indicativo lleva su leyenda.

@@ -107,7 +107,7 @@ const mapa = (id, caja, colorTrap = C.azul) => {
     <path d="${d}" fill="${colorTrap}" opacity=".55" clip-path="url(#${id})"/>` };
 };
 // letra más grande (antes 29 px); varias frases de una columna se apilan solas para que nunca se monten
-const frase = (x, y, w, ...t) => `<div style="position:absolute;left:${x}px;top:${y - SUBE}px;width:${w}px;color:${M};font:400 33px/1.12 'Patrick Hand',cursive">${t.map((p) => `<p style="margin-bottom:10px">${p}</p>`).join("")}</div>`;
+const frase = (x, y, w, ...t) => `<div class="frase" style="position:absolute;left:${x}px;top:${y - SUBE}px;width:${w}px;color:${M};font:400 33px/1.12 'Patrick Hand',cursive">${t.map((p) => `<p style="margin-bottom:10px">${p}</p>`).join("")}</div>`;
 const sup = (n) => `<sup style="font:700 .6em 'Playfair Display';color:${C.rojoClaro};margin-left:3px">${n}</sup>`;
 
 const m1 = mapa("trap1", [[390, 470], [640, 792]]);
@@ -294,13 +294,16 @@ ${[...Array(N)].map((_, k) => `<div style="position:absolute;left:${k * W + W - 
 </body></html>`;
 
 const chrome = ["C:/Program Files/Google/Chrome/Application/chrome.exe", "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"].find((p) => fs.existsSync(p));
-for (const [guias, nombre] of [[true, "panorama-con-guias.png"], [false, "panorama.png"]]) {
+// piezas que reutiliza una-clase.cjs (lámina acercada y lámina de mapas)
+module.exports = { RAIZ, W, H, N, PX, TAB, PISO, HILO_Y, SUBE, C, REG, url, spr, dibujo, L, leo, pub, CLASE, chrome,
+  trazo, trazoAzul, mtx, cinta, flecha, resaltado, persona, personita, nota, notaNum, frase, sup };
+if (require.main === module) for (const [guias, nombre] of [[true, "panorama-con-guias.png"], [false, "panorama.png"]]) {
   const f = path.join(OUT, guias ? "guias.html" : "final.html");
   fs.writeFileSync(f, pagina(guias));
   execFileSync(chrome, ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--allow-file-access-from-files", "--virtual-time-budget=12000",
     `--window-size=${ANCHO},${H}`, `--screenshot=${path.join(OUT, nombre)}`, "file:///" + f.replace(/\\/g, "/")], { stdio: "ignore" });
 }
-execFileSync("python", ["-c", `
+if (require.main === module) execFileSync("python", ["-c", `
 from PIL import Image
 p=Image.open(r'${path.join(OUT, "panorama.png")}').convert('RGB')
 for k in range(${N}): p.crop((k*${W},0,(k+1)*${W},${H})).save(r'${OUT}'+f'/lamina-{k+1}.png')
@@ -309,4 +312,4 @@ g=Image.open(r'${path.join(OUT, "panorama-con-guias.png")}'); g.resize((g.width/
 S=Image.new('RGB',(3*${W}+40,2*${H}+20),(30,30,30))
 for k in range(${N}): S.paste(p.crop((k*${W},0,(k+1)*${W},${H})),((k%3)*(${W}+20),(k//3)*(${H}+20)))
 S.resize((S.width//2,S.height//2)).save(r'${OUT}/contacto.png')`]);
-console.log("listo:", OUT);
+if (require.main === module) console.log("listo:", OUT);
