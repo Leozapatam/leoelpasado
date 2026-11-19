@@ -150,3 +150,21 @@ Ajuste del mismo día: el tablero blanco baja a la altura de Profe Leo (de 470 a
 
 Segundo ajuste del mismo día: el tablero sube un poco (450 a 1080 px) y su borde de abajo queda a la cadera de Profe Leo, que ahora mide 420 px y está de pie sobre el piso, delante del tablero. El televisor cuelga del techo con dos tubos y proyecta una sombra suave en la pared.
 Pendiente de proporción: el píxel de Profe Leo (unos 6,5 px) ya es más grueso que el del aula (4 px). Para unificar, el aula debería dibujarse con píxel de 6 o 7.
+
+---
+
+## 13. Escena aprobada en muestra y reglas de detalle (19/11/2026)
+
+Muestra: `node carrusel/panorama/muestra.cjs` → `out/muestra/lamina.png` (una sola lámina, para ahorrar antes de aprobar).
+
+Escena: pared al fondo con degradado de luz (aprobado por Leo), televisor colgado del techo con sombra y brillo frío, tablero blanco de altura normal, Profe Leo al frente hablándole al público, piso de baldosa con profundidad.
+
+Reglas de detalle decididas por Leo:
+1. **Luz de ventana coherente**: en la lámina 1 entra por la izquierda y en la última por la derecha. En las del medio, suave.
+2. **Brillo del televisor** sobre la pared: sí.
+3. **Público que reacciona** según el tema y la lámina (levantar la mano en la pregunta, tomar apuntes, etc.). Puede incluir personas de la vida pública cuando el tema trate sus críticas: siempre como ILUSTRACIÓN, con las pruebas de simetría y del nombre propio (nunca poniéndoles palabras que no dijeron).
+4. **Easter eggs**: un objeto por lámina relacionado con el tema (en la muestra, el pergamino enrollado por el tratado de 1922).
+5. **Reflejo muy suave** de Profe Leo en la baldosa.
+6. **Enchufe sí, reloj no** (satura y la hora es un problema).
+7. **El carrete de hilo rojo siempre abajo, en la bandeja**, como si Profe Leo lo hubiera dejado ahí.
+8. **Público en pixel art con detalle**: pelo, orejas, cuello, camisetas, gorra, cola de caballo, borde de luz.
