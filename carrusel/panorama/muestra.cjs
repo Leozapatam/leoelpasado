@@ -88,7 +88,8 @@ const pts = [[0, HILO_Y], [90, HILO_Y], [540, HILO_Y - 90], [990, HILO_Y], [1080
 const tramo = ([x1, y1], [x2, y2]) => `M${x1},${y1} Q${(x1 + x2) / 2},${(y1 + y2) / 2 + Math.min(26, Math.abs(x2 - x1) * 0.05)} ${x2},${y2}`;
 const hilo = pts.slice(1).map((p, i) => tramo(pts[i], p)).join(" ");
 const iman = ([x, y]) => `<ellipse cx="${x + 4}" cy="${y + 8}" rx="14" ry="10" fill="#000" opacity=".25" filter="url(#b)"/><circle cx="${x}" cy="${y}" r="14" fill="url(#iman)"/><circle cx="${x - 5}" cy="${y - 5}" r="4" fill="#fff" opacity=".5"/>`;
-const LEO = { cx: 225, pies: 1262, alto: 540 };
+const SPRITE_ALTO = JSON.parse(fs.readFileSync(path.join(RAIZ, "public/personaje/sprites.json"), "utf8"))["v2/leo-habla"][1];
+const LEO = { cx: 225, pies: 1262, alto: SPRITE_ALTO * 2 }; // escala entera: cada píxel del dibujo = 2 x 2 en la lámina
 
 const html = `<!doctype html><html lang="es"><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Special+Elite&family=Permanent+Marker&family=Patrick+Hand&display=block" rel="stylesheet">
@@ -137,12 +138,23 @@ canvas{position:absolute;left:0;top:0;width:${W}px;height:${Math.ceil(H / PX) * 
 <div class="capa" style="background:radial-gradient(ellipse 80% 55% at 50% 45%, rgba(255,246,225,.16), transparent 70%),
   linear-gradient(to bottom, rgba(20,18,24,.18), transparent 18%, transparent 78%, rgba(20,18,24,.28))"></div>
 
-<!-- Profe Leo al frente: reflejo muy suave en la baldosa, sombra y borde de luz -->
+<!-- Profe Leo al frente. Sombra en tres capas, sin bordes claros alrededor del personaje:
+     1) oclusión ambiental: mancha amplia y muy suave; 2) sombra proyectada: la silueta de Leo aplastada sobre el piso
+     y tirada hacia la derecha (la luz de ventana viene de la izquierda); 3) sombra de contacto: oscura y pegada a las botas.
+     El sprite se muestra a escala entera (x2) para que el píxel quede nítido. -->
+<div style="position:absolute;left:${LEO.cx - 190}px;top:${LEO.pies - 30}px;width:380px;height:60px;border-radius:50%;
+  background:radial-gradient(closest-side, rgba(40,32,38,.22), transparent);mix-blend-mode:multiply"></div>
+<img src="${url("public/personaje/v2/leo-habla.png")}" style="position:absolute;left:${LEO.cx}px;top:${LEO.pies - LEO.alto}px;height:${LEO.alto}px;
+  transform:translateX(-50%) scaleY(.2) skewX(-52deg);transform-origin:50% 100%;filter:brightness(0) blur(5px);opacity:.20;mix-blend-mode:multiply;image-rendering:pixelated">
+<div style="position:absolute;left:${LEO.cx - 105}px;top:${LEO.pies - 12}px;width:210px;height:22px;border-radius:50%;
+  background:radial-gradient(closest-side, rgba(25,18,22,.55), rgba(25,18,22,.15) 70%, transparent);filter:blur(1.5px);mix-blend-mode:multiply"></div>
 <img src="${url("public/personaje/v2/leo-habla.png")}" style="position:absolute;left:${LEO.cx}px;top:${LEO.pies}px;height:${LEO.alto}px;transform:translateX(-50%) scaleY(-1);transform-origin:top;
-  image-rendering:pixelated;opacity:.10;-webkit-mask-image:linear-gradient(to bottom, #000, transparent 30%)">
-<div style="position:absolute;left:70px;top:${LEO.pies - 26}px;width:330px;height:50px;border-radius:50%;background:rgba(10,8,12,.35);filter:blur(3px)"></div>
-<img src="${url("public/personaje/v2/leo-habla.png")}" style="position:absolute;left:${LEO.cx}px;top:${LEO.pies - LEO.alto}px;height:${LEO.alto}px;transform:translateX(-50%);image-rendering:pixelated;
-  filter:drop-shadow(-3px -2px 0 rgba(255,244,214,.55)) drop-shadow(8px 14px 10px rgba(0,0,0,.25))">
+  image-rendering:pixelated;opacity:.08;-webkit-mask-image:linear-gradient(to bottom, #000, transparent 25%)">
+<img src="${url("public/personaje/v2/leo-habla.png")}" style="position:absolute;left:${LEO.cx}px;top:${LEO.pies - LEO.alto}px;height:${LEO.alto}px;transform:translateX(-50%);image-rendering:pixelated">
+<!-- luz de la escena sobre el personaje: un poco más cálido del lado de la ventana, sin contorno -->
+<div style="position:absolute;left:${LEO.cx - 160}px;top:${LEO.pies - LEO.alto}px;width:320px;height:${LEO.alto}px;pointer-events:none;
+  background:linear-gradient(90deg, rgba(255,236,200,.10), transparent 60%);mix-blend-mode:soft-light;
+  -webkit-mask-image:url('${url("public/personaje/v2/leo-habla.png")}');-webkit-mask-size:auto 100%;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat"></div>
 
 <!-- público en primer plano -->
 <canvas id="publico"></canvas><script>${publico}</script>

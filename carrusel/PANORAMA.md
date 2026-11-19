@@ -168,3 +168,5 @@ Reglas de detalle decididas por Leo:
 6. **Enchufe sí, reloj no** (satura y la hora es un problema).
 7. **El carrete de hilo rojo siempre abajo, en la bandeja**, como si Profe Leo lo hubiera dejado ahí.
 8. **Público en pixel art con detalle**: pelo, orejas, cuello, camisetas, gorra, cola de caballo, borde de luz.
+9. **Sombra profesional, sin bordes claros**: se quitó el borde de luz del personaje (dejaba un contorno blanco). La sombra va en tres capas: oclusión ambiental amplia y muy suave, sombra proyectada (la silueta aplastada sobre el piso y tirada hacia el lado contrario a la ventana) y sombra de contacto oscura pegada a las botas. Profe Leo se muestra a escala entera (x2) para que el píxel quede nítido.
+10. **Sprites del aula**: prompts en `personaje/PROMPTS-AULA.md` (objetos del aula, easter eggs, público quieto y público que reacciona). El hilo y el mapa los sigue dibujando la plantilla.
