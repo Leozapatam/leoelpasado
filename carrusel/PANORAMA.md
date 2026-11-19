@@ -92,3 +92,19 @@ Formas de conectarlos:
 3. **Fondo**: papel claro (propuesta) o tinta como los videos. Decide Leo.
 4. **Nombre del formato**: decide Leo.
 5. **Primer tema real**: pasarlo por la matriz y conseguir las fuentes antes de armar el `panorama.json`.
+
+---
+
+## 9. Versión sobre tablero de corcho (19/11/2026)
+
+Prototipo: `node carrusel/panorama/corcho.cjs` → `out/corcho-leticia/`.
+
+- **Fondo**: el corcho de los videos, puesto en baldosas espejadas para que no se note el corte entre láminas.
+- **Hilo realista**: va de pin en pin en tramos rectos que cuelgan un poco. Tiene sombra, borde oscuro y un brillo punteado que imita el torcido de la cuerda. Los pines de los nudos son rojos y los de las costuras son de latón.
+- **Recorrido en cada lámina**: entra abajo a la izquierda, sube por el margen, cruza por el borde de la tarjeta de título (entre sus dos pines), baja por el margen derecho y sale a la misma altura (1080 px). Así nunca pasa por encima de un párrafo.
+- **Texto**: cada lámina tiene una tarjeta de título y una tarjeta con un párrafo de 25 a 45 palabras, en frases cortas y palabras comunes. Las tarjetas van una debajo de la otra en flujo, así un párrafo más largo nunca se monta sobre el título.
+- **Letra del párrafo**: propuesta Source Serif 4 a 38 px (unos 13 px en un celular de 375 px), más fácil de leer que la máquina de escribir para personas mayores. Es una decisión de identidad: decide Leo.
+- **Decoraciones**: cinta de papel que sostiene las tarjetas, parches bordados redondos (año o lugar), stickers con borde blanco (íconos del modelo v2), chapas con las fichas de Profe Leo y el carrete de hilo donde termina el recorrido.
+- **Notas**: la última lámina ya usa la forma de nota de Chicago.
+
+Pendiente en esta versión: el trapecio de la lámina 1 se ve muy chico (falta un recuadro ampliado); los párrafos son texto de muestra escrito para el boceto, no la voz de Leo; los datos siguen por verificar en fuente primaria.
