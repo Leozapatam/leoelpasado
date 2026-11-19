@@ -108,3 +108,16 @@ Prototipo: `node carrusel/panorama/corcho.cjs` → `out/corcho-leticia/`.
 - **Notas**: la última lámina ya usa la forma de nota de Chicago.
 
 Pendiente en esta versión: el trapecio de la lámina 1 se ve muy chico (falta un recuadro ampliado); los párrafos son texto de muestra escrito para el boceto, no la voz de Leo; los datos siguen por verificar en fuente primaria.
+
+---
+
+## 10. Escenario 2.5D (19/11/2026)
+
+Leo descartó la versión de corcho. Prototipo nuevo: `node carrusel/panorama/escena.cjs` → `out/escena-leticia/`.
+
+- **Paisaje en capas**, en pixel art del mismo tamaño de píxel que Profe Leo v2: cielo con tramado, sol bajo, la cordillera lejana a la izquierda (los Andes) que baja hacia la selva, el río, la orilla, el camino y el pasto en primer plano. La neblina sobre lo lejano da profundidad. Se dibuja a 1/4 de resolución y se amplía sin suavizar.
+- **Profe Leo recorre el camino** de lámina en lámina, con sombra en el suelo. Los íconos v2 viven en el escenario: la mula, el mojón de frontera, el barco y la canoa en el río, el fuerte en la orilla.
+- **El texto va en carteles de madera** clavados en la orilla. Cada cartel toma la altura de su texto y sus patas bajan hasta el río.
+- **El hilo es una cuerda roja entre postes.** Hay dos postes junto a cada costura a la misma altura, y uno en el centro de cada lámina con una etiqueta de papel que lleva el número de la nota.
+
+Ideas para profundizar el 2.5D: cambiar la hora del día o la estación según la época del relato, poner objetos en primer plano que tapen parte de la escena (hojas, ramas), y repetir el mismo escenario en el video con movimiento de cámara (parallax), para que el carrusel y el video compartan mundo.
