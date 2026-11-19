@@ -6,6 +6,8 @@
 // Uso: node carrusel/panorama/muestra.cjs   → out/muestra/lamina.png
 const fs = require("fs");
 const path = require("path");
+const topo = require("topojson-client");
+const d3 = require("d3-geo");
 const { execFileSync } = require("child_process");
 
 const RAIZ = path.resolve(__dirname, "..", "..");
@@ -57,6 +59,11 @@ while(y<LH){for(let yy=y;yy<Math.min(LH,y+alto);yy++){
   g.fillStyle='rgba(255,255,255,.35)'; g.fillRect(0,y+1,LW,1);
   y+=alto; alto=Math.round(alto*1.32)+1; fila++;}
 g.fillStyle='rgba(0,0,0,.10)'; g.fillRect(0,P,LW,3);
+// enchufe de frente: placa, bisel y dos tomas
+{const ex=184, ey=P-25; g.fillStyle='rgba(20,20,25,.10)'; g.fillRect(ex+1,ey+1,13,18);
+  g.fillStyle='#bab5aa'; g.fillRect(ex,ey,13,18); g.fillStyle='#f2f0ea'; g.fillRect(ex+1,ey+1,11,16);
+  g.fillStyle='#ffffff'; g.fillRect(ex+1,ey+1,11,1); g.fillStyle='#d8d4cb'; g.fillRect(ex+1,ey+16,11,1);
+  for(const ty of [ey+3,ey+10]){g.fillStyle='#e3e0d8'; g.fillRect(ex+3,ty,7,5); g.fillStyle='#5c5952'; g.fillRect(ex+4,ty+1,1,2); g.fillRect(ex+8,ty+1,1,2); g.fillRect(ex+6,ty+3,1,1);}}
 `;
 
 // ---------- público en pixel art (de espaldas, en primer plano) ----------
@@ -89,6 +96,38 @@ const tramo = ([x1, y1], [x2, y2]) => `M${x1},${y1} Q${(x1 + x2) / 2},${(y1 + y2
 const hilo = pts.slice(1).map((p, i) => tramo(pts[i], p)).join(" ");
 const iman = ([x, y]) => `<ellipse cx="${x + 4}" cy="${y + 8}" rx="14" ry="10" fill="#000" opacity=".25" filter="url(#b)"/><circle cx="${x}" cy="${y}" r="14" fill="url(#iman)"/><circle cx="${x - 5}" cy="${y - 5}" r="4" fill="#fff" opacity=".5"/>`;
 const SPRITE_ALTO = JSON.parse(fs.readFileSync(path.join(RAIZ, "public/personaje/sprites.json"), "utf8"))["v2/leo-habla"][1];
+// ---------- sketchnote del tablero (jerarquía: 1 cinta-título, 2 palabra clave, 3 íconos, 4 frases, 5 flechas) ----------
+const wa = require("world-atlas/countries-50m.json");
+const colombia = topo.feature(wa, wa.objects.countries).features.find((f) => String(f.id).padStart(3, "0") === "170");
+const pj = d3.geoMercator().fitExtent([[800, 482], [955, 642]], colombia);
+const mini = d3.geoPath(pj)(colombia), [, yTrap] = pj([-70, -2.2]), punta = pj([-69.94, -4.21]);
+const flecha = (x1, y1, x2, y2) => `<path d="M${x1},${y1} Q${(x1 + x2) / 2},${y1 - 18} ${x2},${y2}" fill="none" stroke="${C.marcador}" stroke-width="4" stroke-linecap="round"/>
+  <path d="M${x2 - 14},${y2 - 10} L${x2},${y2} L${x2 - 15},${y2 + 8}" fill="none" stroke="${C.marcador}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+const persona = (cx, brazo) => `<circle cx="${cx}" cy="502" r="17" fill="none" stroke="${C.marcador}" stroke-width="4"/>
+  <path d="M${cx},519 L${cx},565 M${cx},565 L${cx - 16},600 M${cx},565 L${cx + 16},600 M${cx},535 L${brazo},540" fill="none" stroke="${C.marcador}" stroke-width="4" stroke-linecap="round"/>`;
+const sketch = `
+  <!-- 1. cinta con el año y el lugar -->
+  <path d="M40,352 L322,352 L306,376 L322,400 L40,400 L56,376 Z" fill="#dce7f7" stroke="${C.marcador}" stroke-width="4" stroke-linejoin="round"/>
+  ${mtx(78, 390, "1922 · LIMA", 36)}
+  <!-- A. los dos países firman -->
+  ${persona(110, 182)}${persona(258, 188)}
+  <ellipse cx="185" cy="540" rx="13" ry="9" fill="#dce7f7" stroke="${C.marcador}" stroke-width="4"/>
+  ${mtx(56, 630, "COLOMBIA", 22, C.azul)}${mtx(232, 630, "PERÚ", 22, C.azul)}
+  ${flecha(312, 540, 372, 540)}
+  <!-- B. el documento y la palabra clave -->
+  <path d="M388,482 L452,482 L472,502 L472,598 L388,598 Z M452,482 L452,502 L472,502" fill="#fbfaf6" stroke="${C.marcador}" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M400,520 L458,520 M400,536 L458,536 M400,552 L446,552 M402,582 q10,-12 18,0 t18,0" fill="none" stroke="${C.marcador}" stroke-width="3" stroke-linecap="round"/>
+  <rect x="488" y="500" width="196" height="40" fill="rgba(255,226,80,.6)" transform="rotate(-1.5 586 520)"/>
+  ${mtx(492, 532, "TRATADO", 40)}
+  ${mtx(494, 574, "= acuerdo escrito", 26, C.azul)}
+  ${flecha(706, 540, 784, 540)}
+  <!-- C. la frontera y la punta -->
+  <path d="${mini}" fill="none" stroke="${C.marcador}" stroke-width="3.5" stroke-linejoin="round"/>
+  <clipPath id="trapM"><rect x="0" y="${yTrap}" width="${W}" height="300"/></clipPath>
+  <path d="${mini}" fill="${C.azul}" opacity=".55" clip-path="url(#trapM)"/>
+  <ellipse cx="${punta[0] - 3}" cy="${punta[1] - 12}" rx="26" ry="22" fill="none" stroke="${C.azul}" stroke-width="4"/>
+  ${mtx(punta[0] + 30, punta[1] - 6, "la punta", 24, C.azul)}`;
+const frase = (x, y, w, t) => `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;color:${C.marcador};font:400 29px/1.16 'Patrick Hand',cursive">${t}</div>`;
 const LEO = { cx: 225, pies: 1262, alto: SPRITE_ALTO * 2 }; // escala entera: cada píxel del dibujo = 2 x 2 en la lámina
 
 const html = `<!doctype html><html lang="es"><head><meta charset="utf-8">
@@ -111,7 +150,7 @@ canvas{position:absolute;left:0;top:0;width:${W}px;height:${Math.ceil(H / PX) * 
   <defs><filter id="mano"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="9" result="r"/><feDisplacementMap in="SourceGraphic" in2="r" scale="3"/></filter>
     <filter id="b"><feGaussianBlur stdDeviation="3"/></filter>
     <radialGradient id="iman" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ff6b74"/><stop offset=".55" stop-color="${C.rojo}"/><stop offset="1" stop-color="#5e070e"/></radialGradient></defs>
-  <g filter="url(#mano)">${mtx(600, 543, "1922", 90)}${mtx(606, 583, "Lima · un tratado", 30, C.azul)}
+  <g filter="url(#mano)">${sketch}
     <circle cx="574" cy="${HILO_Y - 120}" r="21" fill="none" stroke="${C.marcador}" stroke-width="4"/></g>
   <text x="574" y="${HILO_Y - 110}" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="27" fill="${C.marcador}">1</text>
   <path d="${hilo}" stroke="#000" stroke-opacity=".22" stroke-width="6" fill="none" transform="translate(4,8)" filter="url(#b)"/>
@@ -119,13 +158,13 @@ canvas{position:absolute;left:0;top:0;width:${W}px;height:${Math.ceil(H / PX) * 
   <path d="${hilo}" stroke="#ff7a82" stroke-width="1.3" stroke-dasharray="2 5" fill="none"/>
   ${pts.slice(1, 4).map(iman).join("")}
 </svg>
-<div style="position:absolute;left:395px;top:604px;width:655px;color:${C.marcador};font:400 31px/1.18 'Patrick Hand',cursive">
-  En 1922, Colombia y Perú firmaron un tratado en Lima. Un tratado es un acuerdo escrito entre países. Allí dijeron por dónde pasaba la frontera. Perú le dejó a Colombia la punta que llega al Amazonas.</div>
+<!-- 4. las frases (el párrafo completo, repartido debajo de cada idea) -->
+${frase(40, 646, 300, "En 1922, Colombia y Perú firmaron un tratado en Lima.")}
+${frase(386, 612, 330, "Un tratado es un acuerdo escrito entre países. Allí dijeron por dónde pasaba la frontera.")}
+${frase(770, 660, 290, "Perú le dejó a Colombia la punta que llega al Amazonas.")}
 
-<!-- enchufe (sprite) -->
-<img src="${url("public/personaje/v2/obj-aula-enchufe.png")}" style="position:absolute;left:728px;top:${PISO - 96}px;height:64px;image-rendering:pixelated;filter:drop-shadow(2px 3px 1px rgba(0,0,0,.18))">
 <!-- carrete de hilo rojo sobre la bandeja: siempre abajo, como si Profe Leo lo hubiera dejado ahí -->
-<img src="${url("public/personaje/v2/obj-hilo.png")}" style="position:absolute;left:880px;top:${TAB.abajo - 62}px;height:78px;image-rendering:pixelated;filter:drop-shadow(3px 4px 2px rgba(0,0,0,.3))">
+<img src="${url("public/personaje/v2/obj-hilo.png")}" style="position:absolute;left:640px;top:${TAB.abajo - 62}px;height:78px;image-rendering:pixelated;filter:drop-shadow(3px 4px 2px rgba(0,0,0,.3))">
 
 <!-- easter egg del tema (1922, un tratado): el pergamino enrollado, recostado contra la pared -->
 <img src="${url("public/personaje/v2/obj-mapa-enrollado.png")}" style="position:absolute;left:880px;top:${PISO - 92}px;height:120px;transform:rotate(-14deg);image-rendering:pixelated;filter:drop-shadow(6px 6px 4px rgba(0,0,0,.25))">

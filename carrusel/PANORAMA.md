@@ -174,3 +174,24 @@ Reglas de detalle decididas por Leo:
 12. **`sprite.py` para hojas de fondo blanco puro**: público y objetos usan un umbral de fondo más alto, conservan los blancos rotos (enchufe, esmalte, camisas) y rellenan el busto de los alumnos para no perder una camisa blanca.
 13. **Perspectiva frontal coherente**: el piso deja la inclinación y usa juntas verticales paralelas, igual que la pared; la profundidad la dan las filas, que crecen hacia el frente. Así la pared, el tablero y el piso se ven desde el mismo punto y el piso empata entre láminas.
 14. **Televisor 16:9 de tamaño real** (520 × 292 px), centrado sobre el tablero. El tablero baja 8 px (2 píxeles del dibujo).
+15. **Enchufe de frente**, dibujado en el pixel art del salón, con la misma vista que el tablero (el sprite en tres cuartos se descartó).
+
+## 14. El tablero como sketchnote (jerarquía visual)
+
+Referencia de método: Mike Rohde, *The Sketchnote Handbook* (Peachpit, 2012). Leo vio un curso de sketchnotes en Domestika; si comparte sus apuntes, se ajusta esta guía.
+
+Cada lámina dibuja en el tablero una sola idea, con cinco niveles que nunca se mezclan:
+
+| Nivel | Qué es | Cómo se dibuja |
+|---|---|---|
+| 1. Cinta | Año y lugar | Banda con puntas recortadas, relleno azul pálido, marcador negro grande |
+| 2. Palabra clave | El concepto que hay que recordar (TRATADO, FRONTERA) | Marcador negro en mayúsculas sobre resaltador amarillo, con su definición corta en azul |
+| 3. Íconos | Dibujos básicos de tablero: personas de palito, documento, mapa, flecha, signo | Contorno negro de marcador, sin sombras, un solo relleno de acento azul |
+| 4. Frases | El párrafo completo en lenguaje sencillo, repartido debajo de cada idea | Letra de mano clara (Patrick Hand), 29 px |
+| 5. Conectores | Flechas que marcan el orden de lectura (izquierda a derecha) | Flecha curva de marcador negro |
+
+Reglas:
+- **De izquierda a derecha y de arriba abajo**, en tres bloques como máximo por lámina.
+- **El rojo es solo del hilo y de los números de nota.** El azul es el único acento del marcador; el amarillo solo resalta la palabra clave.
+- **Nada del sketchnote toca el hilo** ni queda detrás de la cabeza de Profe Leo.
+- **El párrafo no desaparece**: se reparte en frases cortas bajo cada ícono, para que cualquiera lo entienda aunque no lea los dibujos.
