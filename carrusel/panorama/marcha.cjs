@@ -85,7 +85,7 @@ const luz = `<div class="capa" style="background:radial-gradient(ellipse 80% 55%
   linear-gradient(to bottom, rgba(20,18,24,.18), transparent 18%, transparent 78%, rgba(20,18,24,.28))"></div>`;
 const filtro = `<defs><filter id="mano"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="9" result="r"/><feDisplacementMap in="SourceGraphic" in2="r" scale="3"/></filter></defs>`;
 
-const ETQ = "BOGOTÁ · 19 NOV 2026";
+const ETQ = "COLOMBIA · 19 NOV 2026";
 const TIT = "¿Por qué Colombia marcha el 19 de noviembre?";
 
 // ---------- objetos del tema en pixel art (se amplían x6) ----------
@@ -268,18 +268,18 @@ const L = [
       frase(760, 690, 280, "Un mes antes, un decreto cambió las reglas.") },
   { n: 10, k: 3, etq: "CADA DATO CON SU FUENTE", tit: "Notas", leo: "leo-saluda", egg: "obj-egg-maleta",
     tipo: "FUENTES", svg: ``,
-    frases: frase(40, 470, 300, "¿Quién paga la cuenta? ¿Y quién decide cuándo se protesta por ella?") +
+    frases: `<div style="position:absolute;left:40px;top:480px;width:330px;font:400 44px/1.15 'Permanent Marker',cursive;color:${M}"><span style="background:rgba(255,226,80,.6);padding:0 4px">Por eso salimos a marchar.</span></div>` +
       `<div style="position:absolute;left:40px;top:700px;color:${M}"><div style="font:900 36px 'Playfair Display'">Profe Leo</div>
         <div style="font:22px 'Special Elite';color:${C.gris}">@leoelpasado</div></div>
       <div style="position:absolute;left:420px;top:440px;width:640px;background:#ffffff;padding:18px 22px 14px;box-shadow:0 6px 12px rgba(0,0,0,.22);color:#111;transform:rotate(-.4deg)">
-        <ol style="padding-left:26px;font:18.5px/1.32 'Source Serif 4',serif">
-          <li style="margin-bottom:6px"><i>Portafolio</i>, 15 nov. 2026; <i>Cambio</i>, nov. 2026 (balance de 100 días).</li>
-          <li style="margin-bottom:6px">Proyecto de Ley 477 de 2026; <i>La Silla Vacía</i> y <i>El País</i>, «ley de rescate», nov. 2026.</li>
-          <li style="margin-bottom:6px">Indepaz, balance 7 ago.–15 nov. 2026, en <i>El País</i>, 15 nov. 2026; <i>El Universal</i>, 17 nov. 2026.</li>
-          <li style="margin-bottom:6px"><i>Semana</i>, oct. 2026; <i>Infobae</i>, 18 nov. 2026; ONU, Comisión de Investigación sobre el Territorio Palestino Ocupado, 16 sept. 2025.</li>
-          <li style="margin-bottom:6px"><i>Radio Nacional</i>, nov. 2020; <i>CNN Español</i>, 2 mayo 2021; 1977 y 2019 [pendiente].</li>
+        <ol style="padding-left:28px;font:20.5px/1.36 'Source Serif 4',serif">
+          <li style="margin-bottom:10px"><i>Portafolio</i>, 15 nov. 2026; <i>Cambio</i>, nov. 2026 (balance de 100 días).</li>
+          <li style="margin-bottom:10px">Proyecto de Ley 477 de 2026; <i>La Silla Vacía</i> y <i>El País</i>, «ley de rescate», nov. 2026.</li>
+          <li style="margin-bottom:10px">Indepaz, balance 7 ago.–15 nov. 2026, en <i>El País</i>, 15 nov. 2026; <i>El Universal</i>, 17 nov. 2026.</li>
+          <li style="margin-bottom:10px"><i>Semana</i>, oct. 2026; <i>Infobae</i>, 18 nov. 2026; ONU, Comisión de Investigación sobre el Territorio Palestino Ocupado, 16 sept. 2025.</li>
+          <li style="margin-bottom:10px"><i>Radio Nacional</i>, nov. 2020; <i>CNN Español</i>, 2 mayo 2021; 1977 y 2019 [pendiente].</li>
           <li>Constitución de 1991, art. 37; Decreto 1525 de 2026.</li></ol>
-        <div style="font:600 15px 'Source Serif 4',serif;color:#444;margin-top:8px;border-top:1px solid #ddd;padding:6px 0 0">Notas breves, estilo Chicago. Bibliografía completa con enlaces en la descripción.</div></div>` },
+        </div>` },
 ];
 
 const escena = (l) => `${HEAD}
@@ -290,10 +290,12 @@ const escena = (l) => `${HEAD}
   ${objetoEscena(l.egg)}
   ${luz}
 </div>
-<!-- rótulo centrado, a mano: etiqueta del tipo de sketch (verde) · contexto (gris) / título (negro) -->
-<div style="position:absolute;left:30px;right:30px;top:388px;text-align:center">
-  <div style="font:700 21px 'Kalam',cursive;letter-spacing:3px;text-transform:uppercase"><span style="color:${C.verde}">${l.tipo}</span><span style="color:#8a8f98"> · ${l.etq}</span></div>
-  <div style="font:700 44px/1.02 'Kalam',cursive;color:${M};margin-top:2px">${l.tit}</div></div>
+<!-- etiqueta del tipo de lámina: verde, a la izquierda, donde iba la cinta -->
+<div style="position:absolute;left:40px;top:392px;font:700 32px/1 'Kalam',cursive;letter-spacing:3px;text-transform:uppercase;color:${C.verde}">${l.tipo}</div>
+<!-- rótulo centrado, a mano: contexto (gris) / título (negro) -->
+<div style="position:absolute;left:30px;right:30px;top:390px;text-align:center">
+  <div style="font:700 20px 'Kalam',cursive;letter-spacing:3px;text-transform:uppercase;color:#8a8f98">${l.etq}</div>
+  <div style="font:700 44px/1.02 'Kalam',cursive;color:${M};margin-top:6px">${l.tit}</div></div>
 <svg class="capa" width="${W}" height="${H}">${filtro}<g filter="url(#mano)" transform="translate(0,${DY})">${l.svg}</g></svg>
 ${l.frases.replace(/(position:absolute;left:\d+px;top:)(\d+)px/g, (m, p, y) => `${p}${+y + DY}px`)}
 <div style="position:absolute;inset:0;transform:translateX(${LEO_DX}px) scale(${Z});transform-origin:540px 0">${leo(l.leo, 0)}</div>

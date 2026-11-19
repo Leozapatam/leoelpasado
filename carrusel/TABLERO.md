@@ -61,7 +61,7 @@ Límites que protegen la credibilidad:
 - **Hechos verificados** y con fuente. Lo que dice un actor se **atribuye**: «según quienes marchan…», «el Gobierno dice…».
 - La versión del poder aparece **con sus propias palabras**: se cita, no se caricaturiza.
 - Nada de insultos, apodos ni adjetivos de trinchera. La crítica está en el dato bien elegido y en la pregunta final.
-- El cierre es una **pregunta**, no una orden. El público concluye.
+- El cierre puede ser una **afirmación** que recoja todo el carrusel (ej.: «Por eso salimos a marchar.»), resaltada en la última lámina. Las preguntas van antes, en la lámina de la pregunta que queda.
 
 ## 5. Objetos de la escena
 
@@ -98,3 +98,12 @@ Colores del marcador, de mayor a menor peso:
 | Rojo | solo números de nota y el hilo, si vuelve |
 
 Las fuentes de la última lámina van en notas breves Chicago, con letra de libro (Source Serif 4, 18,5 px) sobre hoja blanca; la bibliografía completa va en la descripción.
+
+## 8. Copy de la publicación
+
+- Primera línea: la pregunta gancho o una afirmación fuerte con fuente nombrada.
+- Resumen en viñetas cortas: quien no llega al final igual se lleva lo esencial.
+- La misma afirmación de cierre del carrusel.
+- Invitación a deslizar hasta el final, guardar y compartir.
+- Fuentes completas con títulos (la lámina final lleva solo notas breves, sin mencionar la descripción).
+- Pocas etiquetas, sin etiquetas de IA.
