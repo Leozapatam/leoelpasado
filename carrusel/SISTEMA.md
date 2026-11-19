@@ -1,3 +1,5 @@
+> **PILOTO (noviembre 2026).** Todo en esta carpeta es prueba: formatos, textos y datos de muestra, sin verificar en fuentes primarias. No publicar tal cual.
+
 # Formato imagen · sistema de plantilla (ideas para aprobar)
 
 Fecha: 19/11/2026. Estado: **propuesta**. Nada de esto está construido. Cuando Leo apruebe, se construye igual que el video: **un carrusel es un archivo de datos** (`carrusel.json`), no un diseño nuevo.

@@ -1,3 +1,5 @@
+> **PILOTO (noviembre 2026).** Todo en esta carpeta es prueba: formatos, textos y datos de muestra, sin verificar en fuentes primarias. No publicar tal cual.
+
 # Sala de imágenes · exploración del formato carrusel
 
 Fecha: 19/11/2026. Estado: **exploración**. Hasta que Leo elija una dirección, nada aquí es plantilla. El orden de trabajo es el mismo de los videos: primero la dirección visual, luego el guion de láminas, la aprobación de Leo y al final la construcción.

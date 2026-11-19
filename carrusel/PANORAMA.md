@@ -1,3 +1,5 @@
+> **PILOTO (noviembre 2026).** Todo en esta carpeta es prueba: formatos, textos y datos de muestra, sin verificar en fuentes primarias. No publicar tal cual.
+
 # Carrusel panorámico · ideas para la rama de imágenes
 
 Fecha: 19/11/2026. Rama de git: `carrusel` (separada de `main`, donde viven los videos). Estado: **exploración**.
