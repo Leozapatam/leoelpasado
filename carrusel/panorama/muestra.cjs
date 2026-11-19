@@ -28,9 +28,6 @@ const banda=(y0,y1,c0,c1)=>{for(let y=y0;y<y1;y++){const t=(y-y0)/(y1-y0);for(le
 const P=${PISO / PX};
 banda(0,60,'#cfcdc5','#d9d7cf'); banda(60,P,'#d9d7cf','#e4e2da');
 g.fillStyle='#b4afa3'; g.fillRect(0,P-3,LW,3); g.fillStyle='#958f82'; g.fillRect(0,P-1,LW,1);
-// enchufe en la pared
-g.fillStyle='#bdb8ad'; g.fillRect(182,P-20,9,12); g.fillStyle='#f1efe9'; g.fillRect(183,P-19,7,10);
-g.fillStyle='#6d6a63'; g.fillRect(185,P-17,1,2); g.fillRect(187,P-17,1,2); g.fillRect(185,P-13,1,2); g.fillRect(187,P-13,1,2);
 // televisor colgado del techo
 {const x0=46, y0=10, w=178, h=52;
   for(let i=1;i<=6;i++){g.fillStyle='rgba(20,20,25,.05)'; g.fillRect(x0+2+i,y0+3+i,w,h);}
@@ -60,7 +57,7 @@ g.fillStyle='rgba(0,0,0,.10)'; g.fillRect(0,P,LW,3);
 `;
 
 // ---------- público en pixel art (de espaldas, en primer plano) ----------
-const publico = `
+const publico_viejo = `
 {const a=document.getElementById('aula'), b=document.getElementById('publico'); b.width=a.width; b.height=a.height;
  const q=b.getContext('2d'); const LH=a.height;
  const px=(x,y,w,h,c)=>{q.fillStyle=c; q.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));};
@@ -122,6 +119,8 @@ canvas{position:absolute;left:0;top:0;width:${W}px;height:${Math.ceil(H / PX) * 
 <div style="position:absolute;left:395px;top:596px;width:655px;color:${C.marcador};font:400 31px/1.18 'Patrick Hand',cursive">
   En 1922, Colombia y Perú firmaron un tratado en Lima. Un tratado es un acuerdo escrito entre países. Allí dijeron por dónde pasaba la frontera. Perú le dejó a Colombia la punta que llega al Amazonas.</div>
 
+<!-- enchufe (sprite) -->
+<img src="${url("public/personaje/v2/obj-aula-enchufe.png")}" style="position:absolute;left:728px;top:${PISO - 96}px;height:64px;image-rendering:pixelated;filter:drop-shadow(2px 3px 1px rgba(0,0,0,.18))">
 <!-- carrete de hilo rojo sobre la bandeja: siempre abajo, como si Profe Leo lo hubiera dejado ahí -->
 <img src="${url("public/personaje/v2/obj-hilo.png")}" style="position:absolute;left:880px;top:${TAB.abajo - 62}px;height:78px;image-rendering:pixelated;filter:drop-shadow(3px 4px 2px rgba(0,0,0,.3))">
 
@@ -156,8 +155,11 @@ canvas{position:absolute;left:0;top:0;width:${W}px;height:${Math.ceil(H / PX) * 
   background:linear-gradient(90deg, rgba(255,236,200,.10), transparent 60%);mix-blend-mode:soft-light;
   -webkit-mask-image:url('${url("public/personaje/v2/leo-habla.png")}');-webkit-mask-size:auto 100%;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat"></div>
 
-<!-- público en primer plano -->
-<canvas id="publico"></canvas><script>${publico}</script>
+<!-- público en primer plano: sprites v2 a escala x2, más oscuros por estar cerca de la cámara y fuera de la luz.
+     En esta lámina (el tratado) una alumna toma apuntes. -->
+${[["pub-rizos", 0, 1150], ["pub-apuntes", 610, 1110], ["pub-gorra", 1015, 1160]].map(([n, cx, top]) =>
+  `<img src="${url(`public/personaje/v2/${n}.png`)}" style="position:absolute;left:${cx}px;top:${top}px;height:${JSON.parse(fs.readFileSync(path.join(RAIZ, "public/personaje/sprites.json"), "utf8"))[`v2/${n}`][1] * 1.4}px;
+    transform:translateX(-50%);image-rendering:pixelated;filter:brightness(.72) saturate(.85) drop-shadow(0 -6px 14px rgba(0,0,0,.25))">`).join("")}
 <div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">MUESTRA · 2/6</div>
 </body></html>`;
 

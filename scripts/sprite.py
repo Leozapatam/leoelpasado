@@ -37,7 +37,7 @@ def rejilla(im, minimo=3.5, maximo=13.0):
     return mejor[1:]
 
 
-def limpiar(sprite, personaje=False, solo_cabeza=False):
+def limpiar(sprite, personaje=False, solo_cabeza=False, publico=False):
     """Para sprites recortados de hojas: quita blancos encerrados (entre brazo y cuerpo, junto al micrófono),
     el halo claro del borde y las motas sueltas que vienen de la pose vecina."""
     rgb = sprite[..., :3].astype(int)
@@ -57,12 +57,17 @@ def limpiar(sprite, personaje=False, solo_cabeza=False):
         en_cabeza = solo_cabeza or np.where(trozo)[0].mean() < 0.42 * alto_spr
         if en_cabeza and area <= 0.02 * total:
             continue
+        # objetos: un blanco roto (enchufe, esmalte, papel) es parte del dibujo; solo se quita el blanco puro del fondo
+        if (not personaje or publico) and lum[trozo].mean() < 250:
+            continue
         alfa[trozo] = False
     # 1b. personajes: puntos blancos o claros pegados al borde (restos del fondo entre rizos, dedos, contorno).
     #     Los ojos y los brillos de las gafas quedan lejos del borde y no se tocan.
     if personaje:
         dist = distance_transform_edt(alfa)
-        for umbral_lum, umbral_sat, tam_max, cerca in ((225, 25, None, 3), (190, 40, 60, 2)):
+        # en el público solo se quitan motas chicas: una camisa blanca grande toca el borde y debe quedarse
+        pasadas = ((190, 40, 60, 2),) if publico else ((225, 25, None, 3), (190, 40, 60, 2))
+        for umbral_lum, umbral_sat, tam_max, cerca in pasadas:
             claro = alfa & (lum > umbral_lum) & (sat < umbral_sat)
             lab, n = label(claro)
             for k in range(1, n + 1):
@@ -106,18 +111,31 @@ def extraer(ruta, nombre, nativo=False):
             y0, x0 = int(oy + r * g), int(ox + c * g)
             m = max(1, int(g * 0.22))
             px[r, c] = np.median(im[y0 + m:int(y0 + g) - m, x0 + m:int(x0 + g) - m].reshape(-1, 3), axis=0)
-    # fondo: celdas claras y sin color conectadas con el borde
-    claro = (px.mean(2) > 225) & ((px.max(2) - px.min(2)) < 25)
+    # fondo: celdas claras y sin color conectadas con el borde.
+    # En las hojas v2 de público y objetos el fondo es blanco puro: un umbral más alto evita borrar camisas o papeles claros.
+    base = os.path.basename(nombre)
+    umbral = 246 if base.startswith(("pub-", "obj-aula", "obj-egg")) else 225
+    claro = (px.mean(2) > umbral) & ((px.max(2) - px.min(2)) < 25)
     lab, _ = label(claro)
     borde = set(lab[0]) | set(lab[-1]) | set(lab[:, 0]) | set(lab[:, -1])
     fondo = np.isin(lab, [b for b in borde if b])
+    # público (bustos cortados abajo): una camisa blanca toca el borde inferior y se confunde con el fondo.
+    # En la mitad de abajo se rellena cada fila entre el primer y el último píxel del contorno.
+    if base.startswith("pub-"):
+        filas_dib = np.where((~fondo).any(1))[0]
+        if len(filas_dib):
+            y0 = filas_dib[0] + int(0.55 * (filas_dib[-1] - filas_dib[0]))
+            for yy in range(y0, fondo.shape[0]):
+                xs = np.where(~fondo[yy])[0]
+                if len(xs) > 1:
+                    fondo[yy, xs.min():xs.max() + 1] = False
     sprite = np.zeros((filas, cols, 4), np.uint8)
     sprite[..., :3] = np.nan_to_num(px).astype(np.uint8)
     sprite[..., 3] = np.where(fondo, 0, 255)
     if nativo:
         base = os.path.basename(nombre)  # admite modelos en subcarpeta: "v2/leo-normal"
         sprite = limpiar(sprite, personaje=base.startswith(("leo-", "ficha-")) or not base.startswith(("obj-", "ico-")),
-                         solo_cabeza=base.startswith("ficha-"))
+                         solo_cabeza=base.startswith("ficha-"), publico=base.startswith("pub-"))
     ys, xs = np.where(sprite[..., 3] > 0)
     sprite = sprite[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
     sprite[sprite[..., 3] == 0] = 0
