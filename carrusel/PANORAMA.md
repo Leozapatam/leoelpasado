@@ -145,3 +145,5 @@ Prototipo: `node carrusel/panorama/aula-blanca.cjs` → `out/aula-blanca-leticia
 - **Marcador**: textos y dibujos en marcador negro (fuente Permanent Marker, trazo con un leve temblor de mano). Las frases de apoyo van en marcador azul y la marca de la punta en rojo.
 - **Piso de baldosa** en una franja delgada, con juntas inclinadas para dar profundidad.
 - Se mantienen el hilo rojo entre imanes, los números de nota en círculo, la hoja con el párrafo y la hoja de notas Chicago en la última lámina.
+
+Ajuste del mismo día: el tablero blanco baja a la altura de Profe Leo (de 470 a 1240 px), y el párrafo se escribe en el tablero con letra de mano clara (Patrick Hand), como si Profe Leo lo hubiera copiado. Arriba, el televisor muestra el marco completo: canto, pantalla, soporte de pared, marca y luz de encendido.

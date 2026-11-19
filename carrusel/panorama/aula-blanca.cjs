@@ -14,9 +14,9 @@ const OUT = path.join(RAIZ, "out", "aula-blanca-leticia");
 fs.mkdirSync(OUT, { recursive: true });
 const url = (p) => "file:///" + path.join(RAIZ, p).replace(/\\/g, "/");
 const N = 6, W = 1080, H = 1350, ANCHO = N * W, PX = 4;
-const TAB = { arriba: 360, abajo: 860 }; // interior del tablero blanco
+const TAB = { arriba: 470, abajo: 1240 }; // interior del tablero blanco
 const PISO = 1272; // empieza el piso
-const COSTURA_Y = 600;
+const COSTURA_Y = 630;
 const C = { texto: "#1b1612", gris: "#6b5a45", rojo: "#c1121f", rojoOsc: "#7d0a13", rojoClaro: "#ff4d57", hueso: "#f4ead5", marcador: "#1d1d1f" };
 
 // ---------- aula en pixel art (a 1/4 de resolución) ----------
@@ -32,11 +32,16 @@ banda(0,P,'#dcdcd6','#e8e6df');
 // zócalo
 g.fillStyle='#b9b4a8'; g.fillRect(0,P-3,LW,3); g.fillStyle='#9d978a'; g.fillRect(0,P-1,LW,1);
 // televisores: uno por lámina
-for(let k=0;k<${N};k++){const x0=k*${W / PX}+30, y0=8, w=210, h=74;
-  g.fillStyle='rgba(0,0,0,.18)'; g.fillRect(x0+3,y0+4,w,h);
-  g.fillStyle='#17171a'; g.fillRect(x0,y0,w,h); g.fillStyle='#2a2a30'; g.fillRect(x0,y0,w,1); g.fillRect(x0,y0,1,h);
-  g.fillStyle='#0f1012'; g.fillRect(x0+5,y0+5,w-10,h-10);
-  g.fillStyle='#3a3a42'; g.fillRect(x0+w/2-2,y0+h-3,4,1);}
+for(let k=0;k<${N};k++){const x0=k*${W / PX}+26, y0=6, w=218, h=102;
+  g.fillStyle='#9a978f'; g.fillRect(x0+w/2-14,y0+8,28,h-16);                 // soporte de pared (se asoma)
+  g.fillStyle='rgba(0,0,0,.20)'; g.fillRect(x0+4,y0+5,w,h);                   // sombra en la pared
+  g.fillStyle='#4a4b52'; g.fillRect(x0,y0,w,h);                               // canto claro del marco
+  g.fillStyle='#1c1c21'; g.fillRect(x0+1,y0+1,w-2,h-2);                       // marco
+  g.fillStyle='#2b2c33'; g.fillRect(x0+1,y0+1,w-2,1);
+  g.fillStyle='#0b0c0f'; g.fillRect(x0+4,y0+4,w-8,h-11);                      // pantalla
+  g.fillStyle='rgba(255,255,255,.035)'; for(let i=0;i<40;i++){g.fillRect(x0+130+i,y0+4,1,Math.min(h-11,i*2+4));}
+  g.fillStyle='#c9cbd0'; g.fillRect(x0+w/2-6,y0+h-5,12,1);                    // marca
+  g.fillStyle='#e0303a'; g.fillRect(x0+w-10,y0+h-5,2,1);}                      // luz de encendido
 // tablero blanco continuo con marco de aluminio
 const T0=${TAB.arriba / PX}, T1=${TAB.abajo / PX};
 g.fillStyle='rgba(0,0,0,.15)'; g.fillRect(6,T0-1,LW-8,T1-T0+6);
@@ -61,28 +66,27 @@ g.fillStyle='rgba(0,0,0,.10)'; g.fillRect(0,P,LW,2);
 // ---------- marcador sobre el tablero ----------
 const w = require("world-atlas/countries-50m.json");
 const col = topo.feature(w, w.objects.countries).features.find((f) => String(f.id).padStart(3, "0") === "170");
-const proj = d3.geoMercator().fitExtent([[560, 378], [960, 842]], col);
+const proj = d3.geoMercator().fitExtent([[110, 488], [470, 800]], col);
 const mapa = d3.geoPath(proj)(col);
 const [, yCorte] = proj([-70, -2.2]);
 const leticia = proj([-69.94, -4.21]);
 const L = (k, x, y) => [k * W + x, y];
 const mtx = (x, y, t, tam, color = C.marcador) => `<text x="${x}" y="${y}" font-family="Permanent Marker" font-size="${tam}" fill="${color}">${t}</text>`;
 const num = ([x, y], n, dx = 36, dy = -32) => `<circle cx="${x + dx}" cy="${y + dy}" r="25" fill="none" stroke="${C.marcador}" stroke-width="4"/><text x="${x + dx}" y="${y + dy + 11}" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="32" fill="${C.marcador}">${n}</text>`;
-const NODO = [leticia, L(1, 540, 450), L(2, 540, 790), L(3, 540, 450), L(4, 540, 790), L(5, 170, 386)];
+const NODO = [leticia, L(1, 540, 500), L(2, 540, 770), L(3, 540, 500), L(4, 540, 770), L(5, 350, 498)];
 const trazos = [
   `<defs><clipPath id="trap"><rect x="0" y="${yCorte}" width="${W}" height="400"/></clipPath>
      <pattern id="rayado" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="5" height="10" fill="${C.rojo}"/></pattern></defs>
    <path d="${mapa}" fill="none" stroke="${C.marcador}" stroke-width="5" stroke-linejoin="round"/>
    <path d="${mapa}" fill="url(#rayado)" clip-path="url(#trap)"/>
    <ellipse cx="${leticia[0] - 6}" cy="${leticia[1] - 26}" rx="60" ry="46" fill="none" stroke="${C.rojo}" stroke-width="5" transform="rotate(-8 ${leticia[0]} ${leticia[1]})"/>
-   ${mtx(110, 800, "¿esta punta?", 56)}
-   <path d="M 460 782 Q 600 750 ${leticia[0] - 72} ${leticia[1] - 24}" fill="none" stroke="${C.marcador}" stroke-width="5" stroke-linecap="round"/>
-   <path d="M ${leticia[0] - 98} ${leticia[1] - 44} l 28 20 l -32 12" fill="none" stroke="${C.marcador}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`,
-  `${mtx(L(1, 320, 0)[0], 720, "1922", 130)}${mtx(L(1, 330, 0)[0], 810, "Lima · un tratado", 48, "#2456a6")}${num(NODO[1], "1")}`,
-  `${mtx(L(2, 320, 0)[0], 520, "1930", 130)}${mtx(L(2, 330, 0)[0], 600, "Leticia pasa a Colombia", 44, "#2456a6")}
-   <path d="M ${L(2, 700, 0)[0]} 740 q 30 -16 60 0 t 60 0 t 60 0" fill="none" stroke="#2456a6" stroke-width="5" stroke-linecap="round"/>${num(NODO[2], "2", 42, 8)}`,
-  `${mtx(L(3, 290, 0)[0], 720, "1932", 130)}${mtx(L(3, 300, 0)[0], 810, "guerra en la selva", 48, "#2456a6")}${num(NODO[3], "3")}`,
-  `${mtx(L(4, 640, 0)[0], 720, "?", 250, C.rojo)}${mtx(L(4, 130, 0)[0], 470, "¿quién decide?", 54)}`,
+   ${mtx(560, 590, "¿esta punta?", 58)}
+   <path d="M 640 610 Q 600 700 ${leticia[0] + 70} ${leticia[1] - 30}" fill="none" stroke="${C.marcador}" stroke-width="5" stroke-linecap="round"/>
+   <path d="M ${leticia[0] + 96} ${leticia[1] - 52} l -26 22 l 32 10" fill="none" stroke="${C.marcador}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`,
+  `${mtx(L(1, 580, 0)[0], 720, "1922", 120)}${mtx(L(1, 585, 0)[0], 790, "Lima · un tratado", 40, "#2456a6")}${num(NODO[1], "1")}`,
+  `${mtx(L(2, 580, 0)[0], 590, "1930", 120)}${mtx(L(2, 585, 0)[0], 645, "entrega de Leticia", 33, "#2456a6")}${num(NODO[2], "2", 42, 8)}`,
+  `${mtx(L(3, 580, 0)[0], 720, "1932", 120)}${mtx(L(3, 585, 0)[0], 790, "guerra en la selva", 40, "#2456a6")}${num(NODO[3], "3")}`,
+  `${mtx(L(4, 640, 0)[0], 650, "?", 160, C.rojo)}${mtx(L(4, 130, 0)[0], 570, "¿quién decide?", 54)}`,
   ``,
 ];
 
@@ -100,15 +104,14 @@ const iman = ([x, y]) => `<ellipse cx="${x + 5}" cy="${y + 9}" rx="17" ry="12" f
 
 // ---------- televisor (título), hoja (párrafo) y Profe Leo ----------
 const sup = (n) => `<sup style="font:700 .6em 'Playfair Display';color:${C.rojoClaro};margin-left:3px">${n}</sup>`;
-const tv = (etq, tit) => `<div style="position:absolute;left:140px;top:52px;width:800px;height:256px;display:flex;flex-direction:column;justify-content:center;padding:0 40px;
+const tv = (etq, tit) => `<div style="position:absolute;left:120px;top:40px;width:840px;height:364px;display:flex;flex-direction:column;justify-content:center;padding:0 40px;
   background:radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.07), transparent 60%)">
   <div style="font:24px 'Special Elite';color:${C.rojoClaro};letter-spacing:4px">${etq}</div>
-  <div style="font:900 64px 'Playfair Display';line-height:1.04;color:${C.hueso};margin-top:8px">${tit}</div></div>`;
-const hoja = (t, extra = "") => `<div style="position:absolute;left:340px;top:900px;width:690px;background:#fdfcf8;padding:26px 32px 28px;
-  box-shadow:0 10px 16px rgba(0,0,0,.22);color:${C.texto}">
-  <div style="position:absolute;left:315px;top:-14px;width:60px;height:26px;background:rgba(200,215,230,.75)"></div>
-  <div style="font:400 34px/1.36 'Source Serif 4',serif">${t}</div>${extra}</div>`;
-const leo = (n, cx = 185, pies = 1318, h = 300) => `<div style="position:absolute;left:${cx - h * 0.3}px;top:${pies - 14}px;width:${h * 0.6}px;height:26px;border-radius:50%;background:rgba(0,0,0,.22)"></div>
+  <div style="font:900 74px 'Playfair Display';line-height:1.04;color:${C.hueso};margin-top:10px">${tit}</div></div>`;
+// el párrafo va escrito en el tablero, con letra de mano clara, a la derecha de Profe Leo
+const hoja = (t, extra = "", top = 840) => `<div style="position:absolute;left:345px;top:${top}px;width:680px;color:${C.marcador}">
+  <div style="font:400 41px/1.22 'Patrick Hand',cursive">${t}</div>${extra}</div>`;
+const leo = (n, cx = 175, pies = 1322, h = 310) => `<div style="position:absolute;left:${cx - h * 0.3}px;top:${pies - 14}px;width:${h * 0.6}px;height:26px;border-radius:50%;background:rgba(0,0,0,.22)"></div>
   <img src="${url(`public/personaje/v2/${n}.png`)}" style="position:absolute;left:${cx}px;top:${pies - h}px;height:${h}px;transform:translateX(-50%);image-rendering:pixelated">`;
 
 const laminas = [
@@ -123,19 +126,19 @@ const laminas = [
   tv("LA PREGUNTA QUE QUEDA", "¿Quién decide dónde termina un país?") +
     hoja("Una frontera parece una línea quieta. Pero detrás hay acuerdos, peleas y personas. Los pueblos indígenas del Amazonas vivían en este río mucho antes de cualquier tratado.") + leo("leo-piensa"),
   tv("NINGÚN HILO SIN FUENTE", "Notas") +
-    `<div style="position:absolute;left:150px;top:374px;width:790px;height:470px;background:#fdfcf8;padding:24px 30px;box-shadow:0 6px 10px rgba(0,0,0,.25);color:${C.texto}">
+    `<div style="position:absolute;left:330px;top:486px;width:690px;height:560px;background:#fdfcf8;padding:24px 30px;box-shadow:0 6px 10px rgba(0,0,0,.25);color:${C.texto}">
       <ol style="padding-left:30px;font:22px/1.45 'Special Elite'">
        <li style="margin-bottom:12px">«Tratado de límites y navegación fluvial entre Colombia y Perú», Lima, [día] de [marzo o julio] de 1922, en [colección], [vol.], [p.].</li>
        <li style="margin-bottom:12px">[Nombre Apellido], <i>[Título del libro]</i> ([Ciudad]: [Editorial], [año]), [p.].</li>
        <li style="margin-bottom:12px">[Nombre Apellido], «[Título del artículo]», <i>[Revista]</i> [vol.], n.º [n] ([año]): [p.], https://doi.org/[…].</li>
        <li>Natural Earth, «Admin 0. Countries», escala 1:50m, consultado el 19 de noviembre de 2026, https://www.naturalearthdata.com/.</li></ol>
       <div style="font:18px 'Special Elite';color:${C.gris};margin-top:8px">Estilo Chicago, forma de nota. Bibliografía completa en la descripción.</div></div>` +
-    hoja("Cada número del tablero tiene aquí su fuente. Puedes revisarla tú mismo. Así trabaja la historia. Ningún hilo sin fuente.",
-      `<div style="font:900 34px 'Playfair Display';margin-top:14px">Profe Leo <span style="font:22px 'Special Elite';color:${C.gris}">@leoelpasado</span></div>`) + leo("leo-mapa-hilo"),
+    hoja("Cada número tiene aquí su fuente. Puedes revisarla tú mismo.",
+      `<div style="font:900 34px 'Playfair Display';margin-top:8px">Profe Leo <span style="font:22px 'Special Elite';color:${C.gris}">@leoelpasado</span></div>`, 1070) + leo("leo-mapa-hilo"),
 ];
 
 const pagina = (guias) => `<!doctype html><html lang="es"><head><meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Special+Elite&family=Source+Serif+4:opsz,wght@8..60,400&family=Permanent+Marker&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Special+Elite&family=Source+Serif+4:opsz,wght@8..60,400&family=Permanent+Marker&family=Patrick+Hand&display=block" rel="stylesheet">
 <style>*{margin:0;padding:0;box-sizing:border-box}body{width:${ANCHO}px;height:${H}px;overflow:hidden;position:relative;background:#000}
 #aula{position:absolute;left:0;top:0;width:${ANCHO}px;height:${Math.ceil(H / PX) * PX}px;image-rendering:pixelated}</style></head><body>
 <canvas id="aula"></canvas><script>${dibujo}</script>
