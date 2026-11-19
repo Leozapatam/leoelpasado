@@ -11,8 +11,8 @@ const OUT = path.join(RAIZ, "out", "muestra");
 fs.mkdirSync(OUT, { recursive: true });
 const url = (p) => "file:///" + path.join(RAIZ, p).replace(/\\/g, "/");
 const W = 1080, H = 1350, PX = 4;
-const TAB = { arriba: 300, abajo: 840 };
-const PISO = 905;
+const TAB = { arriba: 290, abajo: 770 }; // tablero de altura normal: queda pared libre debajo
+const PISO = 960; // el piso se recorta un poco: la pared baja y el camino hasta Profe Leo es más corto
 const C = { texto: "#1b1612", rojo: "#c1121f", rojoOsc: "#7d0a13", rojoClaro: "#ff4d57", hueso: "#f4ead5", marcador: "#1d1d1f", azul: "#2456a6" };
 
 const dibujo = `
@@ -56,7 +56,7 @@ g.fillStyle='rgba(0,0,0,.10)'; g.fillRect(0,P,LW,3);
 const sup = (n) => `<sup style="font:700 .6em 'Playfair Display';color:${C.rojoClaro};margin-left:3px">${n}</sup>`;
 const mtx = (x, y, t, tam, color = C.marcador) => `<text x="${x}" y="${y}" font-family="Permanent Marker" font-size="${tam}" fill="${color}">${t}</text>`;
 // hilo que entra y sale a la misma altura que en el carrusel completo
-const pts = [[0, 470], [90, 470], [540, 360], [990, 470], [1080, 470]];
+const pts = [[0, 430], [90, 430], [540, 340], [990, 430], [1080, 430]];
 const tramo = ([x1, y1], [x2, y2]) => `M${x1},${y1} Q${(x1 + x2) / 2},${(y1 + y2) / 2 + Math.min(26, Math.abs(x2 - x1) * 0.05)} ${x2},${y2}`;
 const hilo = pts.slice(1).map((p, i) => tramo(pts[i], p)).join(" ");
 const iman = ([x, y]) => `<ellipse cx="${x + 4}" cy="${y + 8}" rx="14" ry="10" fill="#000" opacity=".25" filter="url(#b)"/><circle cx="${x}" cy="${y}" r="14" fill="url(#iman)"/><circle cx="${x - 5}" cy="${y - 5}" r="4" fill="#fff" opacity=".5"/>`;
@@ -75,15 +75,15 @@ const html = `<!doctype html><html lang="es"><head><meta charset="utf-8">
   <defs><filter id="mano"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="9" result="r"/><feDisplacementMap in="SourceGraphic" in2="r" scale="3"/></filter>
     <filter id="b"><feGaussianBlur stdDeviation="3"/></filter>
     <radialGradient id="iman" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ff6b74"/><stop offset=".55" stop-color="${C.rojo}"/><stop offset="1" stop-color="#5e070e"/></radialGradient></defs>
-  <g filter="url(#mano)">${mtx(600, 540, "1922", 100)}${mtx(606, 590, "Lima · un tratado", 32, C.azul)}
-    <circle cx="574" cy="330" r="21" fill="none" stroke="${C.marcador}" stroke-width="4"/></g>
-  <text x="574" y="340" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="27" fill="${C.marcador}">1</text>
+  <g filter="url(#mano)">${mtx(600, 505, "1922", 90)}${mtx(606, 545, "Lima · un tratado", 30, C.azul)}
+    <circle cx="574" cy="310" r="21" fill="none" stroke="${C.marcador}" stroke-width="4"/></g>
+  <text x="574" y="320" text-anchor="middle" font-family="Playfair Display" font-weight="900" font-size="27" fill="${C.marcador}">1</text>
   <path d="${hilo}" stroke="#000" stroke-opacity=".22" stroke-width="6" fill="none" transform="translate(4,8)" filter="url(#b)"/>
   <path d="${hilo}" stroke="${C.rojoOsc}" stroke-width="6" fill="none"/><path d="${hilo}" stroke="${C.rojo}" stroke-width="3.5" fill="none"/>
   <path d="${hilo}" stroke="#ff7a82" stroke-width="1.3" stroke-dasharray="2 5" fill="none"/>
   ${pts.slice(1, 4).map(iman).join("")}
 </svg>
-<div style="position:absolute;left:400px;top:615px;width:630px;color:${C.marcador};font:400 34px/1.2 'Patrick Hand',cursive">
+<div style="position:absolute;left:395px;top:566px;width:655px;color:${C.marcador};font:400 31px/1.18 'Patrick Hand',cursive">
   En 1922, Colombia y Perú firmaron un tratado en Lima. Un tratado es un acuerdo escrito entre países. Allí dijeron por dónde pasaba la frontera. Perú le dejó a Colombia la punta que llega al Amazonas.</div>
 <!-- luz: más clara en el centro del salón, más oscura en los bordes de arriba y abajo -->
 <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 55% at 50% 45%, rgba(255,246,225,.16), transparent 70%),
