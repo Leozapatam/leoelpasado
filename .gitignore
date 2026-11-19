@@ -16,3 +16,6 @@ tmp/
 Thumbs.db
 desktop.ini
 .claude/
+
+# bocetos: el HTML se regenera con bocetos.cjs y lleva rutas locales del equipo
+carrusel/exploracion/*.html

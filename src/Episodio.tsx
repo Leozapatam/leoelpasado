@@ -3,7 +3,7 @@ import { AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideo
 import { C, NARRADOR, SEGURA, SERIF, T, TYPE, clamp } from "./marca";
 import { Grano, Sello, entrada } from "./componentes/Basicos";
 import { Subtitulos, agrupar } from "./componentes/Subtitulos";
-import { CENTRO_LEO, Personaje, poseEn, spriteLeo } from "./componentes/Personaje";
+import { CENTRO_LEO, Personaje, poseEn, spriteLeo, usarModelo } from "./componentes/Personaje";
 import { Tablero } from "./escenas/Tablero";
 import { Mapa } from "./escenas/Mapa";
 import { Documento } from "./escenas/Documento";
@@ -60,6 +60,7 @@ export const Episodio: React.FC<EpisodioProps> = ({ slug, ep, palabras, boca, gu
   if (!ep) return null;
 
   // la entrada va antes de la voz: todos los tiempos de episodio.json son relativos a la voz
+  usarModelo(ep.narrador?.modelo);
   const off = T(ep.intro?.duracion ?? 0);
   const frame = f - off;
   const cierre = ep.escenas.find((e) => e.tipo === "cierre");

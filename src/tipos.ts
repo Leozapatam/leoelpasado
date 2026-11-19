@@ -65,7 +65,8 @@ export type Episodio = {
   cierre: { titulo: string; subtitulo: string }; // eslogan: "Profe Leo" / "Leo el pasado"
   intro?: { duracion: number };
   // Profe Leo cambia de pose (no mueve la boca): normal, habla, senala, piensa, lupa, documento, libro, brazos, sorpresa, saluda…
-  narrador?: { poses: { t: number; pose: string }[] };
+  // modelo: "" o ausente = Profe Leo original; "v2" = public/personaje/v2/ (cara hecha desde fotos, 19/11/2026)
+  narrador?: { modelo?: string; poses: { t: number; pose: string }[] };
   // figuras históricas en pixel art (public/personaje/<sprite>.png), con placa de nombre
   personajes?: { sprite: string; nombre: string; desde: number; hasta: number; x?: number; y?: number; alto?: number }[]; // entrada (Profe Leo señala el marco y la cámara entra); va antes de la voz
   musica: { golpes: number[]; sellos?: number[]; subidas?: number[]; final: number };

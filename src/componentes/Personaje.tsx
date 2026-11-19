@@ -81,8 +81,17 @@ export const poseEn = (poses: { f: number; pose: string }[], frame: number, porD
   return p;
 };
 
+/** Modelo de Profe Leo: "" es el original (public/personaje/leo-*.png); "v2" usa public/personaje/v2/leo-*.png.
+ *  Se elige por episodio con "narrador": {"modelo": "v2"}. Si una pose no existe en el modelo, se usa la del original. */
+let MODELO = "";
+export const usarModelo = (m?: string) => {
+  MODELO = m ?? "";
+};
+
 /** Sprite de Profe Leo para una pose: usa leo-<pose>.png si existe; si no, los sprites actuales */
 export const spriteLeo = (pose: string) =>
-  existeSprite(`leo-${pose}`) ? `leo-${pose}` : pose === "senala" ? "cuerpo_senala" : "cuerpo";
+  MODELO && existeSprite(`${MODELO}/leo-${pose}`)
+    ? `${MODELO}/leo-${pose}`
+    : existeSprite(`leo-${pose}`) ? `leo-${pose}` : pose === "senala" ? "cuerpo_senala" : "cuerpo";
 // los sprites actuales tienen el lienzo más ancho que el cuerpo (espacio para el brazo): corrección del centro
 export const CENTRO_LEO = (sprite: string, px: number) => (sprite.startsWith("cuerpo") ? (20 - 13.5) * px : 0);

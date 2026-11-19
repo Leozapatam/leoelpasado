@@ -11,7 +11,7 @@ El estilo de la casa: chibi de cuerpo entero, contorno oscuro, fondo blanco, de 
 import json, os, sys
 import numpy as np
 from PIL import Image, ImageDraw
-from scipy.ndimage import label
+from scipy.ndimage import label, distance_transform_edt
 
 RAIZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
@@ -37,18 +37,38 @@ def rejilla(im, minimo=3.5, maximo=13.0):
     return mejor[1:]
 
 
-def limpiar(sprite, personaje=False):
+def limpiar(sprite, personaje=False, solo_cabeza=False):
     """Para sprites recortados de hojas: quita blancos encerrados (entre brazo y cuerpo, junto al micrófono),
     el halo claro del borde y las motas sueltas que vienen de la pose vecina."""
     rgb = sprite[..., :3].astype(int)
     alfa = sprite[..., 3] > 0
     lum, sat = rgb.mean(2), rgb.max(2) - rgb.min(2)
-    # 1. blancos encerrados grandes (los ojos y brillos son chicos y se respetan)
+    # 1. blancos encerrados grandes. Se respetan los ojos y los brillos de las gafas:
+    #    en hojas de alta resolución (v2) el blanco del ojo pasa de 40 px, así que en la zona de la cabeza
+    #    (el 42 % superior, o toda la imagen en las fichas redondas) solo se quitan blancos muy grandes.
+    alto_spr, total = alfa.shape[0], alfa.sum()
     blanco = alfa & (lum > 232) & (sat < 18)
     lab, n = label(blanco)
     for k in range(1, n + 1):
-        if (lab == k).sum() > 40:
-            alfa[lab == k] = False
+        trozo = lab == k
+        area = trozo.sum()
+        if area <= 40:
+            continue
+        en_cabeza = solo_cabeza or np.where(trozo)[0].mean() < 0.42 * alto_spr
+        if en_cabeza and area <= 0.02 * total:
+            continue
+        alfa[trozo] = False
+    # 1b. personajes: puntos blancos o claros pegados al borde (restos del fondo entre rizos, dedos, contorno).
+    #     Los ojos y los brillos de las gafas quedan lejos del borde y no se tocan.
+    if personaje:
+        dist = distance_transform_edt(alfa)
+        for umbral_lum, umbral_sat, tam_max, cerca in ((225, 25, None, 3), (190, 40, 60, 2)):
+            claro = alfa & (lum > umbral_lum) & (sat < umbral_sat)
+            lab, n = label(claro)
+            for k in range(1, n + 1):
+                trozo = lab == k
+                if (tam_max is None or trozo.sum() <= tam_max) and dist[trozo].min() <= cerca:
+                    alfa[trozo] = False
     # 2. halo: píxeles claros pegados al fondo (dos pasadas)
     for _ in range(2):
         borde = np.zeros_like(alfa)
@@ -95,12 +115,16 @@ def extraer(ruta, nombre, nativo=False):
     sprite[..., :3] = np.nan_to_num(px).astype(np.uint8)
     sprite[..., 3] = np.where(fondo, 0, 255)
     if nativo:
-        sprite = limpiar(sprite, personaje=not nombre.startswith("obj-"))
+        base = os.path.basename(nombre)  # admite modelos en subcarpeta: "v2/leo-normal"
+        sprite = limpiar(sprite, personaje=base.startswith(("leo-", "ficha-")) or not base.startswith(("obj-", "ico-")),
+                         solo_cabeza=base.startswith("ficha-"))
     ys, xs = np.where(sprite[..., 3] > 0)
     sprite = sprite[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
     sprite[sprite[..., 3] == 0] = 0
-    os.makedirs(os.path.join(RAIZ, "public", "personaje"), exist_ok=True)
-    Image.fromarray(sprite).save(os.path.join(RAIZ, "public", "personaje", f"{nombre}.png"))
+    salida = os.path.join(RAIZ, "public", "personaje", f"{nombre}.png")
+    os.makedirs(os.path.dirname(salida), exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.join(RAIZ, "personaje", f"vista-{nombre}.png")), exist_ok=True)
+    Image.fromarray(sprite).save(salida)
     S = 10
     big = Image.fromarray(sprite).resize((sprite.shape[1] * S, sprite.shape[0] * S), Image.NEAREST)
     vista = Image.new("RGBA", big.size, (60, 120, 60, 255))

@@ -61,7 +61,15 @@ Encima de todo van el **gancho** (pregunta tecleada al inicio), los **sellos** d
 - **Figuras históricas:** imagen pixel art de cuerpo entero sobre fondo blanco → `python scripts/sprite.py <imagen> <nombre>` → `"personajes": [{"sprite": "benjamin", "nombre": "Walter Benjamin", "desde": "@Benjamin", "hasta": "@Entonces"}]`. Salen con placa de nombre y la marca ILUSTRACIÓN.
 - **Prompts** para generar las poses de Profe Leo y nuevos personajes con el mismo estilo: `personaje/PROMPTS.md`.
 - **Hojas de 8 poses:** `python scripts/sprite.py <hoja.png> nombre1,…,nombre8 --hoja` las corta (4 × 2), limpia el fondo y registra cada pose con el centro de sus pies.
-- **Poses de Profe Leo disponibles:** normal, habla, senala, senala-izq, piensa, lupa, documento, saluda, brazos, sorpresa, libro, camina, mic-escucha, mic-mano, mic-rie, mic-perfil. **Objetos:** obj-microfono, obj-lupa, obj-maquina, obj-polaroid, obj-libro, obj-carta, obj-expediente, obj-lampara.
+- **Dos modelos de Profe Leo.** El original sigue en `public/personaje/leo-*.png` y es el que usan los episodios por defecto. El **modelo v2** (19/11/2026, cara hecha desde fotos de Leo) vive aparte en `public/personaje/v2/` y no reemplaza nada. Un episodio lo elige con `"narrador": {"modelo": "v2", "poses": [...]}`; si una pose no existe en v2, se usa la del original. Ficha: `personaje/originales/leo-v2-ficha.png`. Prompts: `personaje/PROMPTS-V2.md`. Vista de todo: `personaje/vista-v2/todo.png`. Para recortar al modelo v2, los nombres llevan la carpeta: `v2/leo-normal,v2/leo-habla,…`.
+- **Limpieza de `sprite.py`:** respeta el blanco de los ojos y de las gafas en la zona de la cabeza, y quita los puntos blancos pegados al borde (restos del fondo entre rizos y dedos).
+- **Poses de Profe Leo disponibles** (original y v2): normal, habla, senala, senala-izq, piensa, lupa, documento, saluda, brazos, sorpresa, libro, camina, mic-escucha, mic-mano, mic-rie, mic-perfil. **Solo en v2:**
+  - **Mapa:** mapa-puntero, mapa-pin, mapa-despliega, mapa-catalejo, mapa-brujula, mapa-camina, mapa-hilo, mapa-mira-arriba.
+  - **Gancho:** gancho-manos-cabeza, gancho-hombros, gancho-tijeras, gancho-pregunta, gancho-cara, gancho-tu, gancho-grande, gancho-pequeno.
+  - **Movimiento:** camina-der-1, camina-der-2, camina-izq-1, camina-izq-2, espalda-mapa, sentado-caja, sobre-libros, salta.
+- **Objetos:** obj-microfono, obj-lupa, obj-maquina, obj-polaroid, obj-libro, obj-carta, obj-expediente, obj-lampara. **En `v2/`:** obj-mapa-enrollado, obj-pergamino, obj-rosa-vientos, obj-pin, obj-catalejo, obj-brujula, obj-tijeras, obj-hilo.
+- **Íconos de mapa (en `v2/`):** ico-montanas, ico-rio, ico-barco, ico-tren, ico-mula, ico-canoa, ico-fuerte, ico-mojon.
+- **Fichas redondas con la cara v2 (en `v2/`):** ficha-normal, ficha-sorpresa, ficha-piensa, ficha-piensa-2, ficha-rie, ficha-serio, ficha-duda, ficha-guina.
 
 ### El narrador: Profe Leo en pixel art (versión anterior, referencia)
 - **Cuerpo entero** (40×63 píxeles: camiseta negra, jean, botas), con expresión seria (cejas rectas). Dos poses: `normal` y `senala` (brazo extendido con el láser, usada en la entrada).
