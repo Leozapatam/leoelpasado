@@ -115,7 +115,7 @@ const portada = `${HEAD}
 ${luz}
 <!-- en el tablero, que asoma abajo: una sola línea que invita a deslizar -->
 <svg class="capa" width="${W}" height="${H}">${filtro}<g filter="url(#mano)">
-  ${mtx(60, 760, "No es la primera vez.", 58)}
+  ${mtx(60, 760, "104 días de gobierno.", 58)}
   ${mtx(60, 836, "Hoy te cuento por qué", 44, C.azul)}${mtx(60, 890, "se sale a la calle.", 44, C.azul)}
   ${flecha(60, 960, 200, 960)}</g></svg>
 <!-- firma como rótulo de televisión -->
@@ -134,79 +134,151 @@ ${luz}
 <div style="position:absolute;left:${830 - 165 * 1.5}px;top:740px;width:${165 * 3}px;height:${266 * 3}px;transform:scaleX(-1);background:linear-gradient(90deg, rgba(255,200,150,.16), transparent 55%);mix-blend-mode:soft-light;
   -webkit-mask-image:url('${spr("leo-habla")}');-webkit-mask-size:100% 100%"></div>
 <div class="capa" style="background:linear-gradient(to bottom, transparent 85%, rgba(20,18,24,.22))"></div>
-<div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">PILOTO · BOCETO 1/6</div>
+<div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">PILOTO · BOCETO 1/10</div>
 </body></html>`;
 
-// ---------- piezas propias del tema ----------
+
+// ---------- objetos del tema para la escena (pixel art en código, x5) ----------
+// cada lámina tiene un objeto asociado a su contenido (TABLERO.md, punto 5)
+const O = "#1d1d1f";
+const PIX = {
+  megafono: [26, 16, `r(1,5,5,6,O); r(2,6,3,4,'#e8e2d0');
+    for(let x=6;x<24;x++){const a=Math.round((x-6)*0.33); r(x,5-a,1,6+2*a,O); r(x,6-a,1,4+2*a,x>18&&x<21?'#c1121f':'#f2eee4'); r(x,6-a,1,1,'#fff');}
+    r(24,0,2,16,O); r(24,1,1,14,'#9aa0a6'); r(10,10,3,6,O); r(11,11,1,4,'#55565c');`],
+  calculadora: [16, 22, `r(0,0,16,22,O); r(1,1,14,20,'#4a4a52'); r(1,1,14,1,'#6a6a74'); r(2,2,12,5,O); r(3,3,10,3,'#b9d3a6'); r(5,4,2,1,'#3d5a34'); r(8,4,1,1,'#3d5a34'); r(10,4,2,1,'#3d5a34');
+    for(let j=0;j<4;j++)for(let i=0;i<3;i++){r(2+i*4,9+j*3,3,2,(i===2&&j===3)?'#e07a2a':'#d6d2c8');}`],
+  alcancia: [26, 18, `r(2,9,2,3,O); r(4,4,18,12,O); r(5,5,16,10,'#e89aa8'); r(6,5,14,2,'#f6c2cb'); r(21,7,4,5,O); r(22,8,2,3,'#d77f8f'); r(22,9,1,1,O);
+    r(11,4,6,1,'#7a3442'); r(17,7,1,1,O); r(6,15,3,3,O); r(16,15,3,3,O); r(7,15,1,2,'#d77f8f'); r(17,15,1,2,'#d77f8f');
+    r(12,0,4,3,O); r(13,0,2,2,'#f2c230');`],
+  vela: [12, 28, `r(5,0,2,2,'#ffe28a'); r(4,2,4,4,'#f6a23a'); r(5,3,2,2,'#ffe28a'); r(5,6,1,2,O);
+    r(2,8,8,16,O); r(3,9,6,15,'#f2eadb'); r(3,9,2,15,'#fffaf0'); r(7,10,1,4,'#e2d6bf'); r(0,24,12,4,O); r(1,25,10,2,'#9aa0a6');`],
+  pasaporte: [18, 24, `r(0,0,18,24,O); r(1,1,16,22,'#6b1f2a'); r(1,1,16,1,'#8a2c3a'); r(6,6,6,6,'#c9a24a'); r(7,7,4,4,'#6b1f2a'); r(8,8,2,2,'#c9a24a');
+    r(4,15,10,1,'#c9a24a'); r(5,17,8,1,'#c9a24a'); r(10,16,8,7,'#2456a6'); r(11,17,6,5,'#dce7f7'); r(12,19,4,1,'#2456a6');`],
+  olla: [32, 24, `r(14,0,1,3,'#b0b4ba'); r(18,1,1,3,'#b0b4ba'); r(22,0,1,3,'#b0b4ba');
+    r(20,0,2,9,O); r(21,1,1,7,'#b07a46');
+    r(0,9,4,3,O); r(28,9,4,3,O); r(3,7,26,17,O); r(4,8,24,15,'#8e949b'); r(4,8,24,2,'#c9ced3'); r(6,11,3,10,'#b9bec4'); r(23,11,3,11,'#6e737a'); r(2,6,28,2,O);`],
+  constitucion: [22, 28, `r(0,0,22,28,O); r(1,1,19,26,'#1f3a6b'); r(20,2,1,25,'#f2eadb'); r(1,1,19,1,'#2f4f86');
+    r(4,5,13,1,'#c9a24a'); r(5,7,11,1,'#c9a24a'); r(6,12,9,7,'#c9a24a'); r(7,13,7,5,'#1f3a6b'); r(9,14,3,3,'#c9a24a'); r(4,22,13,1,'#c9a24a');`],
+};
+const objetoEscena = (egg) => {
+  if (!egg.startsWith("px:")) return `<img src="${spr(egg)}" style="position:absolute;left:880px;top:${K.PISO - 92}px;height:120px;transform:rotate(-8deg);image-rendering:pixelated;filter:drop-shadow(6px 6px 4px rgba(0,0,0,.25))">`;
+  const [w, h, cod] = PIX[egg.slice(3)], E = 5;
+  return `<canvas id="egg" style="position:absolute;left:880px;top:${K.PISO + 28 - h * E}px;width:${w * E}px;height:${h * E}px;image-rendering:pixelated;filter:drop-shadow(6px 6px 4px rgba(0,0,0,.25))"></canvas>
+  <script>(()=>{const c=document.getElementById('egg'); c.width=${w}; c.height=${h}; const g=c.getContext('2d'); const O='${O}'; const r=(x,y,a,b,col)=>{g.fillStyle=col; g.fillRect(x,y,a,b);}; ${cod}})();</script>`;
+};
+
+// ---------- piezas de sketch propias del tema ----------
 const doc = (x, y, t = "") => `<path d="M${x},${y} L${x + 64},${y} L${x + 84},${y + 20} L${x + 84},${y + 116} L${x},${y + 116} Z M${x + 64},${y} L${x + 64},${y + 20} L${x + 84},${y + 20}" fill="#fbfaf6" ${trazo}/>
-  <path d="M${x + 12},${y + 38} L${x + 70},${y + 38} M${x + 12},${y + 54} L${x + 70},${y + 54}" ${trazo} stroke-width="3"/>${t ? mtx(x + 42, y + 98, t, 30, M, 'text-anchor="middle"') : ""}`;
-const pancarta = (x, y) => `<path d="M${x},${y} L${x},${y + 70} M${x + 90},${y} L${x + 90},${y + 70}" ${trazo}/><rect x="${x - 6}" y="${y - 30}" width="102" height="44" fill="#fbfaf6" stroke="${M}" stroke-width="4"/>
-  <path d="M${x + 8},${y - 14} L${x + 80},${y - 14} M${x + 8},${y - 2} L${x + 60},${y - 2}" ${trazo} stroke-width="3"/>`;
-const balanza = (cx, y) => `<path d="M${cx},${y} L${cx},${y + 96} M${cx - 30},${y + 96} L${cx + 30},${y + 96} M${cx - 70},${y + 14} L${cx + 70},${y + 4}
-  M${cx - 70},${y + 14} L${cx - 90},${y + 54} M${cx - 70},${y + 14} L${cx - 50},${y + 54} M${cx + 70},${y + 4} L${cx + 50},${y + 44} M${cx + 70},${y + 4} L${cx + 90},${y + 44}" ${trazo}/>
-  <path d="M${cx - 94},${y + 54} Q${cx - 70},${y + 72} ${cx - 46},${y + 54} Z M${cx + 46},${y + 44} Q${cx + 70},${y + 62} ${cx + 94},${y + 44} Z" fill="#dce7f7" ${trazo}/>`;
-const escudo = (x, y) => `<path d="M${x},${y} L${x + 40},${y - 10} L${x + 80},${y} L${x + 80},${y + 50} Q${x + 40},${y + 96} ${x},${y + 50} Z" fill="#dce7f7" ${trazo}/>
-  ${[1, 2, 3, 4, 5].map((n, i) => `<rect x="${x + 100}" y="${y + 70 - i * 18}" width="${30 + i * 16}" height="12" fill="${i === 0 ? C.azul : "#fbfaf6"}" stroke="${M}" stroke-width="3"/>`).join("")}`;
+  <path d="M${x + 12},${y + 38} L${x + 70},${y + 38} M${x + 12},${y + 54} L${x + 70},${y + 54}" ${trazo} stroke-width="3"/>${t ? mtx(x + 42, y + 100, t, 28, M, 'text-anchor="middle"') : ""}`;
 const libro = (x, y) => `<path d="M${x},${y + 10} Q${x + 45},${y - 8} ${x + 90},${y + 10} Q${x + 135},${y - 8} ${x + 180},${y + 10} L${x + 180},${y + 110} Q${x + 135},${y + 92} ${x + 90},${y + 110} Q${x + 45},${y + 92} ${x},${y + 110} Z M${x + 90},${y + 10} L${x + 90},${y + 110}" fill="#fbfaf6" ${trazo}/>
   ${mtx(x + 45, y + 70, "art.", 26, M, 'text-anchor="middle"')}${mtx(x + 135, y + 74, "37", 40, C.azul, 'text-anchor="middle"')}`;
-const banda = cinta; // el grupo del tablero ya baja DY
+const capitolio = (x, y, bandera = true) => `<path d="M${x},${y + 90} L${x + 260},${y + 90} M${x + 10},${y + 20} L${x + 250},${y + 20} L${x + 250},${y + 90} M${x + 10},${y + 20} L${x + 10},${y + 90} M${x + 4},${y + 12} L${x + 256},${y + 12}" ${trazo}/>
+  ${Array.from({ length: 11 }, (_, i) => `<path d="M${x + 30 + i * 20},${y + 30} L${x + 30 + i * 20},${y + 84}" ${trazo} stroke-width="3"/>`).join("")}
+  <path d="M${x + 130},${y + 12} L${x + 130},${y - 30}" ${trazo}/>${bandera ? `<path d="M${x + 130},${y - 30} L${x + 170},${y - 30} L${x + 170},${y - 6} L${x + 130},${y - 6}" fill="#f2c230" ${trazo} stroke-width="3"/>
+  <path d="M${x + 132},${y - 18} L${x + 168},${y - 18}" stroke="${C.azul}" stroke-width="5"/><path d="M${x + 132},${y - 11} L${x + 168},${y - 11}" stroke="#c1121f" stroke-width="5"/>` : `<path d="M${x + 130},${y - 30} L${x + 170},${y - 30} L${x + 170},${y - 6} L${x + 130},${y - 6}" fill="#fbfaf6" ${trazo} stroke-width="3"/>`}`;
+const txt = (x, y, t, tam = 30, color = M, extra = "") => `<text x="${x}" y="${y}" font-family="Patrick Hand" font-size="${tam}" fill="${color}" ${extra}>${t}</text>`;
+const sube = (x, y) => `<path d="M${x},${y} L${x + 10},${y - 16} L${x + 20},${y}" ${trazoAzul} stroke-width="5"/>`;
+const baja = (x, y) => `<path d="M${x},${y - 16} L${x + 10},${y} L${x + 20},${y - 16}" ${trazoAzul} stroke-width="5"/>`;
+const eslabon = (x, y, rot) => `<rect x="${x}" y="${y}" width="70" height="40" rx="20" fill="none" ${trazo} stroke-width="6" transform="rotate(${rot} ${x + 35} ${y + 20})"/>`;
 const frase = (x, y, w, ...t) => `<div class="frase" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;color:${M};font:400 35px/1.1 'Patrick Hand',cursive">${t.map((p) => `<p style="margin-bottom:10px">${p}</p>`).join("")}</div>`;
 const sup = (n) => `<sup style="font:700 .6em 'Playfair Display';color:${C.rojoClaro};margin-left:2px">${n}</sup>`;
 
-// coordenadas finales de la lámina: tablero de y 377 a 929; la cabeza de Profe Leo ocupa x < 440 desde y 840
+// mapa de Colombia con indicativos (lámina 6)
+const topo = require("topojson-client"), d3 = require("d3-geo");
+const wa = require("world-atlas/countries-50m.json");
+const colombia = topo.feature(wa, wa.objects.countries).features.find((f) => String(f.id).padStart(3, "0") === "170");
+const pjM = d3.geoMercator().fitExtent([[50, 478], [320, 770]], colombia);
+const mapaCol = d3.geoPath(pjM)(colombia);
+const marca = (lonlat, t, dx, dy) => { const [x, y] = pjM(lonlat); return `<circle cx="${x}" cy="${y}" r="16" fill="${C.azul}" opacity=".55"/><circle cx="${x}" cy="${y}" r="16" ${trazo} stroke-width="3"/>${mtx(x + dx, y + dy, t, 20)}`; };
+const cifra = (x, y, n, t) => `${mtx(x, y, n, 64)}${txt(x, y + 34, t, 28, C.azul)}`;
+
+// ---------- láminas 2 a 10 (coordenadas del tablero antes de bajar DY; la cabeza de Leo ocupa x < 440 desde y 795) ----------
 const L = [
-  { k: 1, etq: "HOY · QUIÉN Y POR QUÉ", tit: `¿Quién marcha y contra qué?${sup(1)}`, leo: "leo-habla", egg: "obj-egg-bandera", n: 1,
-    svg: `${banda("HOY")}
-      ${personita(60, 500)}${personita(96, 494)}${personita(132, 500)}${pancarta(170, 520)}
+  { n: 2, k: 1, etq: "HOY · 104 DÍAS DE GOBIERNO", tit: `¿Quién marcha?${sup(1)}`, leo: "leo-habla", egg: "px:megafono",
+    svg: `${cinta("ACTORES")}
+      ${[["CUT", 60], ["Fecode", 180], ["estudiantes", 300], ["indígenas", 420], ["oposición", 540]].map(([t, x]) => `${personita(x + 10, 494)}${personita(x + 44, 500)}${txt(x + 27, 590, t, 24, C.azul, 'text-anchor="middle"')}`).join("")}
+      ${flecha(626, 530, 690, 530)}
+      ${capitolio(730, 490)}`,
+    frases: frase(40, 620, 330, "Marchan sindicatos, maestros, estudiantes y pueblos indígenas.") +
+      frase(400, 620, 330, "El Gobierno cumplió 100 días y los celebró como «100 días, más de 100 milagros».") +
+      frase(760, 620, 290, "En la calle, la lista de razones es otra.") },
+  { n: 3, k: 2, etq: "PROYECTO DE LEY 477 DE 2026", tit: `La ley de rescate: ¿a quién rescata?${sup(2)}`, leo: "leo-documento", egg: "px:calculadora",
+    svg: `${cinta("CAMBIOS")}
+      <path d="M300,488 L300,734 M600,488 L600,734 M40,528 L1040,528" ${trazo} stroke-width="3"/>
+      ${mtx(330, 518, "ANTES", 30)}${mtx(630, 518, "DESPUÉS", 30)}
+      <rect x="640" y="550" width="44" height="34" fill="rgba(255,226,80,.6)"/>
+      ${[["Asalariados", "—", "9 % desde $3,3 M al mes", "s"], ["Empresas", "35 %", "31 % desde 2028", "b"], ["Bancos", "40 %", "36 %", "b"], ["Patrimonio", "desde $3.771 M", "desde $5.000 M, hasta 2030", "b"]]
+        .map(([a, b, c, d], i) => { const y = 576 + i * 52; return `${txt(48, y, a, 32)}${txt(330, y, b, 32)}${d === "s" ? sube(612, y) : baja(612, y)}${txt(644, y, c, 30)}`; }).join("")}`,
+    frases: frase(440, 742, 600, "Al que gana más de $3,3 millones al mes le sube el impuesto. A empresas y bancos les baja.") },
+  { n: 4, k: 3, etq: "QUIÉN GANA · QUIÉN PIERDE", tit: `¿Quién carga la cuenta?${sup(2)}`, leo: "leo-gancho-pregunta", egg: "px:alcancia",
+    svg: `${cinta("BALANZA")}
+      <path d="M620,500 L620,700 M570,700 L670,700 M400,560 L840,500" ${trazo} stroke-width="5"/><circle cx="620" cy="530" r="9" fill="${M}"/>
+      <path d="M400,560 L360,640 M400,560 L440,640 M840,500 L800,570 M840,500 L880,570" ${trazo} stroke-width="3"/>
+      <path d="M346,640 Q400,676 454,640 Z M786,570 Q840,600 894,570 Z" fill="#dce7f7" ${trazo}/>
+      ${[0, 1, 2, 3].map((i) => personita(355 + i * 30, 590 - (i % 2) * 4)).join("")}
+      ${txt(400, 706, "asalariados · maestros", 24, C.azul, 'text-anchor="middle"')}${txt(400, 734, "militares · Ecopetrol", 24, C.azul, 'text-anchor="middle"')}
+      <rect x="800" y="548" width="34" height="22" fill="#fbfaf6" ${trazo} stroke-width="3"/><rect x="842" y="540" width="34" height="30" fill="#fbfaf6" ${trazo} stroke-width="3"/>
+      ${txt(840, 630, "bancos · empresas", 24, C.azul, 'text-anchor="middle"')}${txt(840, 658, "grandes patrimonios", 24, C.azul, 'text-anchor="middle"')}
+      ${resaltado(706, 708, "salud: 1,5 % → 4 %", 30)}`,
+    frases: frase(40, 600, 290, "Quitaron el IVA a la canasta. El resto sigue igual.") +
+      frase(700, 724, 340, "Maestros, militares y gente de Ecopetrol pagarían más.") },
+  { n: 5, k: 4, etq: "ARTÍCULO 7 · FACULTADES EXTRAORDINARIAS", tit: `Seis meses con tijeras${sup(2)}`, leo: "leo-gancho-tijeras", egg: "obj-tijeras",
+    svg: `${cinta("CIFRA")}
+      ${resaltado(50, 600, "6 MESES", 96)}
+      ${[["ministerio", 560, 490], ["superintendencia", 760, 490], ["agencia", 640, 576]].map(([t, x, y]) => `<rect x="${x}" y="${y}" width="${t.length * 13 + 30}" height="54" fill="#fbfaf6" ${trazo}/>${txt(x + 15, y + 36, t, 28)}`).join("")}
+      <path d="M540,562 L1040,562" stroke="${M}" stroke-width="3" stroke-dasharray="12 8"/>
+      <circle cx="960" cy="610" r="14" ${trazo}/><circle cx="960" cy="650" r="14" ${trazo}/><path d="M972,602 L1030,560 M972,658 L1030,566" ${trazo}/>`,
+    frases: frase(40, 630, 360, "El artículo 7 le da al presidente seis meses para suprimir o fusionar ministerios y entidades.") +
+      frase(560, 680, 470, "Sin volver al Congreso. Quienes marchan temen que lo público termine en manos privadas.") },
+  { n: 6, k: 5, etq: "7 AGO – 15 NOV 2026 · INDEPAZ", tit: `100 días, 26 masacres${sup(3)}`, leo: "leo-piensa", egg: "px:vela",
+    svg: `${cinta("MAPA")}
+      <path d="${mapaCol}" fill="#fbfaf6" ${trazo} stroke-width="3.5"/>
+      ${marca([-76.6, 2.44], "Cauca", 22, 6)}${marca([-75.57, 6.25], "Antioquia", 22, -6)}
+      <circle cx="70" cy="790" r="12" fill="${C.azul}" opacity=".55"/>${txt(92, 798, "más líderes asesinados", 22, C.azul)}
+      ${cifra(400, 540, "26", "masacres")}${cifra(580, 540, "87", "víctimas")}${cifra(760, 540, "45", "líderes sociales")}${cifra(400, 650, "8", "firmantes de paz")}
+      ${resaltado(620, 650, "paz: suspendida", 36)}`,
+    frases: frase(400, 720, 330, "Indepaz: un líder social asesinado cada dos días.") +
+      frase(760, 700, 290, "El Gobierno responde con 51.000 capturas.") },
+  { n: 7, k: 0, etq: "COLOMBIA · ISRAEL · 2024 → 2026", tit: `¿Con quién se alía Colombia?${sup(4)}`, leo: "leo-senala", egg: "px:pasaporte",
+    svg: `${cinta("CADENA")}
+      ${eslabon(70, 500, -20)}${eslabon(170, 520, -20)}${txt(60, 600, "2024: relaciones rotas", 26, C.azul)}
       ${flecha(320, 540, 380, 540)}
-      ${doc(400, 478, "$")}
-      ${resaltado(508, 518, "AJUSTE", 38)}${resaltado(508, 562, "FISCAL", 38)}
-      ${flecha(712, 540, 770, 540)}
-      ${balanza(900, 470)}${mtx(800, 600, "Gobierno", 22, C.azul)}${mtx(930, 590, "marcha", 22, C.azul)}`,
-    frases: frase(40, 600, 330, "Marchan la CUT, los maestros de Fecode, estudiantes y la oposición.") +
-      frase(400, 620, 320, "Rechazan un proyecto de ley del Gobierno de Abelardo de la Espriella que cambia impuestos y gastos.") +
-      frase(760, 630, 290, "El Gobierno lo llama «rescate económico». Ya quitó el IVA a la canasta, pero la marcha siguió.") },
-  { k: 2, etq: "13 DE OCTUBRE DE 2026", tit: `Una regla nueva para la calle${sup(2)}`, leo: "leo-documento", egg: "obj-egg-telegrama", n: 2,
-    svg: `${banda("DECRETO")}
-      ${doc(50, 478, "1525")}${resaltado(150, 530, "1525", 40)}
-      ${flecha(330, 540, 384, 540)}
-      ${escudo(404, 490)}${mtx(404, 640, "5 niveles", 24, C.azul)}
-      ${flecha(712, 540, 770, 540)}
-      ${balanza(900, 470)}${mtx(808, 600, "demanda", 22, C.azul)}`,
-    frases: frase(40, 600, 330, "El Gobierno firmó el Decreto 1525. Dice cómo actúa la Policía en una protesta.") +
-      frase(400, 660, 320, "Tiene cinco niveles. El diálogo va primero, pero deja de ser obligatorio si hay violencia.") +
-      frase(760, 630, 290, "La oposición lo demandó: dice que solo el Congreso puede limitar la protesta.") },
-  { k: 3, etq: "PARO · 1977 · 2019 · 2021", tit: `No es la primera vez${sup(3)}`, leo: "leo-senala", egg: "obj-egg-radio", n: 3,
-    svg: `${banda("PAROS")}
+      ${capitolio(400, 500, false)}${txt(400, 620, "14 oct 2026: embajada", 26, C.azul)}
+      ${flecha(690, 540, 750, 540)}
+      <circle cx="850" cy="540" r="40" fill="#f6dd8a" ${trazo}/><path d="M830,578 L816,630 L850,612 L884,630 L870,578" fill="#dce7f7" ${trazo}/>${txt(780, 660, "18 nov: premio", 26, C.azul)}`,
+    frases: frase(40, 640, 320, "En 2024 Colombia rompió relaciones con Israel por la guerra en Gaza.") +
+      frase(400, 650, 320, "En 2025, una comisión de la ONU concluyó que Israel cometía genocidio en Gaza.") +
+      frase(760, 690, 290, "Este Gobierno abrió embajada en Jerusalén y recibió un premio de ese Estado.") },
+  { n: 8, k: 1, etq: "1977 · 2019 · 2020 · 2021 · 2026", tit: `El 19 de noviembre ya tiene historia${sup(5)}`, leo: "leo-mapa-puntero", egg: "px:olla",
+    svg: `${cinta("LÍNEA")}
       <path d="M40,560 L1030,560" ${trazo} stroke-width="5"/><path d="M1012,546 L1034,560 L1012,574" ${trazo} stroke-width="5"/>
-      ${[[80, "1977"], [400, "2019"], [690, "2021"]].map(([x, a]) => `<circle cx="${x + 40}" cy="560" r="11" fill="${C.azul}" stroke="${M}" stroke-width="4"/>${mtx(x, 530, a, 40)}`).join("")}
-      ${resaltado(900, 530, "2026", 40)}<circle cx="940" cy="560" r="11" fill="#fbfaf6" stroke="${M}" stroke-width="4"/>`,
-    frases: frase(40, 590, 330, "1977: paro cívico nacional por el costo de la vida.") +
-      frase(400, 590, 262, "2019: el 21 de noviembre empezó un paro que duró semanas.") +
-      frase(690, 590, 210, "2021: tras cuatro días de paro, el Gobierno retiró su reforma tributaria.") +
-      frase(900, 590, 150, "¿Y esta vez?") },
-  { k: 4, etq: "LA PREGUNTA QUE QUEDA", tit: "¿Quién pone las reglas de la calle?", leo: "leo-piensa", egg: "obj-egg-libros",
-    svg: `${banda("1991")}
+      ${[[40, "1977"], [240, "2019"], [440, "2020"], [640, "2021"], [840, "2026"]].map(([x, a], i) => `${i === 2 || i === 4 ? `<rect x="${x - 4}" y="502" width="118" height="40" fill="rgba(255,226,80,.6)"/>` : ""}${mtx(x, 534, a, 40)}<circle cx="${x + 50}" cy="560" r="11" fill="${i === 4 ? "#fbfaf6" : C.azul}" stroke="${M}" stroke-width="4"/>`).join("")}`,
+    frases: frase(40, 590, 185, "Paro cívico por el costo de la vida.") + frase(240, 590, 185, "21N: paro y cacerolazos.") +
+      frase(440, 590, 185, "19N: otro paro nacional.") + frase(640, 590, 185, "El paro tumba una reforma tributaria.") + frase(840, 590, 200, "19N: ¿y ahora?") },
+  { n: 9, k: 2, etq: "LA PREGUNTA QUE QUEDA", tit: `¿Quién pone las reglas de la calle?${sup(6)}`, leo: "leo-piensa", egg: "px:constitucion",
+    svg: `${cinta("CITA")}
       ${libro(46, 482)}
       ${flecha(250, 540, 320, 540)}
-      ${resaltado(340, 530, "DERECHO", 40)}${mtx(342, 574, "a reunirse y marchar", 26, C.azul)}
-      ${flecha(712, 540, 770, 540)}
-      ${mtx(860, 610, "?", 150)}`,
-    frases: frase(40, 620, 290, "El artículo 37 dice que toda parte del pueblo puede reunirse y manifestarse en paz.") +
-      frase(400, 610, 320, "Es un derecho. Pero un derecho también tiene reglas.") +
-      frase(760, 660, 290, "¿Las pone el Gobierno con un decreto o el Congreso con una ley?") },
-  { k: 5, etq: "CADA DATO CON SU FUENTE", tit: "Notas", leo: "leo-saluda", egg: "obj-egg-maleta",
-    svg: `${banda("FUENTES")}`,
-    frases: frase(40, 470, 300, "Cada número tiene aquí su fuente. Puedes revisarla tú mismo.") +
-      `<div style="position:absolute;left:40px;top:640px;color:${M}"><div style="font:900 36px 'Playfair Display'">Profe Leo</div>
+      ${doc(340, 478, "1525")}${[0, 1, 2, 3, 4].map((i) => `<rect x="${450 + i * 26}" y="${580 - i * 18}" width="24" height="${18 + i * 18}" fill="${i === 4 ? C.azul : "#fbfaf6"}" stroke="${M}" stroke-width="3"/>`).join("")}
+      ${flecha(600, 540, 660, 540)}
+      ${mtx(880, 640, "?", 170)}`,
+    frases: frase(40, 620, 290, "Artículo 37 de la Constitución:") +
+      frase(400, 630, 340, "«Toda parte del pueblo puede reunirse y manifestarse pública y pacíficamente».") +
+      frase(760, 690, 280, "Un mes antes, un decreto cambió las reglas.") },
+  { n: 10, k: 3, etq: "CADA DATO CON SU FUENTE", tit: "Notas", leo: "leo-saluda", egg: "obj-egg-maleta",
+    svg: `${cinta("FUENTES")}`,
+    frases: frase(40, 470, 300, "¿Quién paga la cuenta? ¿Y quién decide cuándo se protesta por ella?") +
+      `<div style="position:absolute;left:40px;top:700px;color:${M}"><div style="font:900 36px 'Playfair Display'">Profe Leo</div>
         <div style="font:22px 'Special Elite';color:${C.gris}">@leoelpasado</div></div>
-      <div style="position:absolute;left:370px;top:400px;width:684px;background:#fdfcf8;padding:18px 22px 12px;box-shadow:0 5px 9px rgba(0,0,0,.22);color:${C.texto};transform:rotate(-.5deg)">
-        <ol style="padding-left:24px;font:16px/1.3 'Special Elite'">
-          <li style="margin-bottom:7px">Publimetro, «Marchas en Colombia hoy, 19 de noviembre: estos son los puntos de encuentro, horarios y recorridos», 19 de noviembre de 2026; El Espectador, «Marchas hoy 19 de noviembre EN VIVO», 19 de noviembre de 2026.</li>
-          <li style="margin-bottom:7px">Forbes Colombia, «Decreto 1525 de 2026: qué cambia en la protesta en Colombia», 14 de octubre de 2026; Cambio, «Demanda al decreto de protesta social llega al Consejo de Estado», octubre de 2026.</li>
-          <li style="margin-bottom:7px">Semana, «Pese al retiro de la reforma y de la renuncia de Carrasquilla, el paro se mantiene», 3 de mayo de 2021. Para 1977 y 2019: [PENDIENTE, fuente académica].</li>
-          <li>Constitución Política de Colombia (1991), art. 37.</li></ol>
-        <div style="font:14px 'Special Elite';color:${C.gris};margin-top:4px">Estilo Chicago, forma de nota. Enlaces completos en la descripción.</div></div>` },
+      <div style="position:absolute;left:370px;top:396px;width:690px;background:#fdfcf8;padding:14px 18px 10px;box-shadow:0 5px 9px rgba(0,0,0,.22);color:${C.texto};transform:rotate(-.5deg)">
+        <ol style="padding-left:22px;font:13.5px/1.28 'Special Elite'">
+          <li style="margin-bottom:5px">Gobierno de Colombia, «100 días, más de 100 milagros», en Portafolio, 15 de noviembre de 2026; Cambio, «Los 100 días de Abelardo de la Espriella», noviembre de 2026.</li>
+          <li style="margin-bottom:5px">Proyecto de Ley 477 de 2026, «Ley de Rescate Económico» [Gaceta del Congreso, pendiente]; La Silla Vacía, «Más tributaria que recorte: claves de la Ley de Rescate de Abelardo»; El País (Cali), «Los cambios en impuestos de renta, IVA y patrimonio que trae la ley de rescate».</li>
+          <li style="margin-bottom:5px">Indepaz, balance de los primeros 100 días (7 de agosto a 15 de noviembre de 2026), en El País, 15 de noviembre de 2026; El Universal, 17 de noviembre de 2026.</li>
+          <li style="margin-bottom:5px">Semana, restablecimiento de relaciones con Israel, octubre de 2026; Infobae, 18 de noviembre de 2026; ONU, Comisión Internacional Independiente de Investigación sobre el Territorio Palestino Ocupado, informe del 16 de septiembre de 2025 [signatura por verificar].</li>
+          <li style="margin-bottom:5px">Radio Nacional y Portafolio, 19 de noviembre de 2020; Semana y CNN Español, 2 y 3 de mayo de 2021; [1977 y 2019: fuente académica pendiente].</li>
+          <li>Constitución Política de Colombia (1991), art. 37; Decreto 1525 de 2026 [Diario Oficial, pendiente].</li></ol>
+        <div style="font:12px 'Special Elite';color:${C.gris};margin-top:4px">Estilo Chicago, forma de nota. Enlaces en la descripción.</div></div>` },
 ];
 
 const escena = (l) => `${HEAD}
@@ -214,20 +286,20 @@ const escena = (l) => `${HEAD}
   ${sala(l.k)}
   <div class="capa" style="background:radial-gradient(ellipse 260px 60px at 540px 322px, rgba(240,160,100,.18), transparent 75%)"></div>
   ${pantalla(ETQ, TIT)}
-  <img src="${spr(l.egg)}" style="position:absolute;left:880px;top:${K.PISO - 92}px;height:120px;transform:rotate(-8deg);image-rendering:pixelated;filter:drop-shadow(6px 6px 4px rgba(0,0,0,.25))">
+  ${objetoEscena(l.egg)}
   ${luz}
 </div>
-<!-- rótulo de la lámina: va en el tablero, arriba a la derecha de la cinta -->
-<div style="position:absolute;left:350px;top:392px;color:${M}"><span style="font:15px 'Special Elite';letter-spacing:2px;color:${C.gris}">${l.etq}</span>
+<div style="position:absolute;left:350px;top:392px;width:700px;color:${M}"><span style="font:15px 'Special Elite';letter-spacing:2px;color:${C.gris}">${l.etq}</span>
   <div style="font:900 34px 'Playfair Display';line-height:1">${l.tit}</div></div>
 <svg class="capa" width="${W}" height="${H}">${filtro}<g filter="url(#mano)" transform="translate(0,${DY})">${l.svg}</g></svg>
 ${l.frases.replace(/top:(\d+)px/g, (m, y) => `top:${+y + DY}px`)}
 <div style="position:absolute;inset:0;transform:translateX(${LEO_DX}px) scale(${Z});transform-origin:540px 0">${leo(l.leo, 0)}</div>
 ${CLASE.map(([n, cx]) => `<img src="${spr(n)}" style="position:absolute;left:${zx(cx)}px;top:1218px;height:${REG[`v2/${n}`][1] * 1.4 * Z}px;transform:translateX(-50%);image-rendering:pixelated;filter:brightness(.72) saturate(.85) drop-shadow(0 -6px 14px rgba(0,0,0,.25))">`).join("")}
-<div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">PILOTO · BOCETO ${l.k + 1}/6</div>
+<div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">PILOTO · BOCETO ${l.n}/10</div>
 </body></html>`;
 
-const paginas = [["lamina-1", portada], ...L.map((l) => [`lamina-${l.k + 1}`, escena(l)])];
+const solo = process.argv[2] ? process.argv[2].split(",").map(Number) : null; // node marcha.cjs 3,5 → solo esas láminas
+const paginas = [["lamina-1", portada, 1], ...L.map((l) => [`lamina-${l.n}`, escena(l), l.n])].filter(([, , n]) => !solo || solo.includes(n));
 for (const [nombre, html] of paginas) {
   const f = path.join(OUT, `${nombre}.html`);
   fs.writeFileSync(f, html);
@@ -236,7 +308,7 @@ for (const [nombre, html] of paginas) {
 }
 execFileSync("python", ["-c", `
 from PIL import Image
-S=Image.new('RGB',(3*${W}+40,2*${H}+20),(30,30,30))
-for k in range(6): S.paste(Image.open(r'${OUT}'+f'/lamina-{k+1}.png').convert('RGB'),((k%3)*(${W}+20),(k//3)*(${H}+20)))
-S.resize((S.width//2,S.height//2)).save(r'${OUT}/contacto.png')`]);
+S=Image.new('RGB',(5*${W}+80,2*${H}+20),(30,30,30))
+for k in range(10): S.paste(Image.open(r'${OUT}'+f'/lamina-{k+1}.png').convert('RGB'),((k%5)*(${W}+20),(k//5)*(${H}+20)))
+S.resize((S.width//3,S.height//3)).save(r'${OUT}/contacto.png')`]);
 console.log("listo:", OUT);
