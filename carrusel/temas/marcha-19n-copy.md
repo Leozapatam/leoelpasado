@@ -1,4 +1,4 @@
-> **PILOTO · COPY BORRADOR.** Para la publicación del carrusel del 19N en Instagram. Leo lo ajusta a su voz.
+> **PUBLICADO el 19 nov. 2026** (Instagram). Primer carrusel con el método `carrusel/METODO.md`.
 
 ## Por qué así (según el informe de difusión)
 

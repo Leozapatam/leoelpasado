@@ -1,4 +1,4 @@
-> **PILOTO (noviembre 2026).** Sistema en prueba para el formato «Una clase».
+> **PILOTO (noviembre 2026).** Sistema en prueba para el formato «Una clase». Receta paso a paso para repetirlo: `METODO.md`.
 
 # Sistema del tablero
 

@@ -300,7 +300,7 @@ const escena = (l) => `${HEAD}
 ${l.frases.replace(/(position:absolute;left:\d+px;top:)(\d+)px/g, (m, p, y) => `${p}${+y + DY}px`)}
 <div style="position:absolute;inset:0;transform:translateX(${LEO_DX}px) scale(${Z});transform-origin:540px 0">${leo(l.leo, 0)}</div>
 ${CLASE.map(([n, cx]) => `<img src="${spr(n)}" style="position:absolute;left:${zx(cx)}px;top:1218px;height:${REG[`v2/${n}`][1] * 1.4 * Z}px;transform:translateX(-50%);image-rendering:pixelated;filter:brightness(.72) saturate(.85) drop-shadow(0 -6px 14px rgba(0,0,0,.25))">`).join("")}
-<div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">PILOTO · BOCETO ${l.n}/10</div>
+${process.env.FINAL ? "" : `<div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">PILOTO · BOCETO ${l.n}/10</div>`}
 </body></html>`;
 
 const solo = process.argv[2] ? process.argv[2].split(",").map(Number) : null; // node marcha.cjs 3,5 → solo esas láminas
