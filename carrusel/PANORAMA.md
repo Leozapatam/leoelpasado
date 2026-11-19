@@ -121,3 +121,15 @@ Leo descartó la versión de corcho. Prototipo nuevo: `node carrusel/panorama/es
 - **El hilo es una cuerda roja entre postes.** Hay dos postes junto a cada costura a la misma altura, y uno en el centro de cada lámina con una etiqueta de papel que lleva el número de la nota.
 
 Ideas para profundizar el 2.5D: cambiar la hora del día o la estación según la época del relato, poner objetos en primer plano que tapen parte de la escena (hojas, ramas), y repetir el mismo escenario en el video con movimiento de cámara (parallax), para que el carrusel y el video compartan mundo.
+
+---
+
+## 11. Aula 2.5D con tablero continuo (19/11/2026)
+
+Prototipo: `node carrusel/panorama/aula.cjs` → `out/aula-leticia/`. Pedido de Leo: el escenario es un aula y el hilo rojo conecta puntos en el tablero.
+
+- **Tres franjas por lámina**: arriba, el título en una cartulina pegada con cinta a la pared; en medio, el **tablero de tiza continuo** que se alarga por todas las láminas; abajo, Profe Leo v2 en el piso de madera y el párrafo en una hoja.
+- **El hilo une imanes rojos** sobre el tablero. Los nudos alternan arriba y abajo (el ojo baja y sube), y el hilo cruza todas las costuras a la misma altura (580 px). Junto a cada nudo hay un número de tiza en un círculo, que remite a las notas.
+- **Tiza**: fechas grandes, frases cortas y dibujos simples (el mapa de Colombia con la punta marcada, olas del río, el signo de pregunta). El efecto de tiza es un filtro de ruido sobre el trazo.
+- **El aula** (pared, zócalo, tablero con manchas de borrador, bandeja con tizas y borradores, piso de tablas) se dibuja en pixel art a 1/4 de resolución, del mismo tamaño de píxel que Profe Leo.
+- **Notas**: la última lámina pega la hoja de notas Chicago sobre el tablero y el hilo termina en ella. Profe Leo sostiene el hilo.
