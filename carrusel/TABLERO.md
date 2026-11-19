@@ -78,3 +78,23 @@ Cada objeto dice algo del tema. Si no se relaciona, no va.
 - **Profe Leo cortado abajo** (busto grande, a la derecha), con sombra suave sobre el tablero.
 - Firma: **Profe Leo · @leoelpasado**, como rótulo de televisión.
 - Dos objetos del tema en la bandeja del tablero.
+
+## 7. Rótulo y jerarquía de color
+
+El rótulo de cada lámina va **centrado** arriba del tablero, con letra a mano (Kalam):
+
+1. Línea pequeña en mayúsculas: **tipo de sketch en verde** · contexto en gris (fecha, fuente, número de ley).
+2. Título en negro, Kalam bold.
+
+Colores del marcador, de mayor a menor peso:
+
+| Color | Uso |
+|---|---|
+| Negro | títulos, frases, trazos |
+| Amarillo (resaltador) | una sola palabra clave por lámina |
+| Azul | rótulos de íconos, definiciones, cifras secundarias |
+| Verde | tipo de lámina (ACTORES, CAMBIOS, BALANZA…) |
+| Gris | contexto: fechas, fuentes, números de ley |
+| Rojo | solo números de nota y el hilo, si vuelve |
+
+Las fuentes de la última lámina van en notas breves Chicago, con letra de libro (Source Serif 4, 18,5 px) sobre hoja blanca; la bibliografía completa va en la descripción.

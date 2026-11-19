@@ -12,68 +12,69 @@ const { W, H, N, PX, C, REG, spr, dibujo, leo, CLASE, trazo, trazoAzul, mtx, cin
 const OUT = path.join(K.RAIZ, "out", "marcha");
 fs.mkdirSync(OUT, { recursive: true });
 const M = C.marcador;
+C.verde = "#2e7d4a"; // jerarquía de color: verde = tipo de lámina
 const Z = 1.15, DY = 45, LEO_DX = 70;
 const zx = (x) => 540 + (x - 540) * Z;
 
 // ---------- imagen épica para la pantalla (pixel art 160 x 84, se amplía sin suavizar) ----------
 const epica = `
 (()=>{const cv=document.getElementById('epica'); const w=160,h=84; cv.width=w; cv.height=h; const g=cv.getContext('2d');
-let s=7; const r=()=>((s=(s*16807)%2147483647)/2147483647);
+let s=11; const r=()=>((s=(s*16807)%2147483647)/2147483647);
 const B=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
 const px=(x,y,c)=>{g.fillStyle=c; g.fillRect(x|0,y|0,1,1);};
-const rect=(x,y,a,b,c)=>{g.fillStyle=c; g.fillRect(x|0,y|0,a|0,b|0);};
-// cielo de amanecer con tramado: violeta arriba, naranja en el horizonte
-const cielo=['#1d1838','#2c2150','#4a2c62','#7a3a63','#b44f55','#e0743f','#f3a04a'];
-for(let y=0;y<56;y++){const t=y/56*(cielo.length-1), i=Math.floor(t), f=(t-i)*16;
+const rect=(x,y,a,b,c)=>{g.fillStyle=c; g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(a)),Math.max(1,Math.round(b)));};
+// cielo de tarde, claro: azul arriba, dorado sobre los cerros
+const cielo=['#5f8fcf','#79a3d8','#9dbce2','#c4d3e2','#efd8b0','#f6c98a'];
+for(let y=0;y<40;y++){const t=y/40*(cielo.length-1), i=Math.floor(t), f=(t-i)*16;
   for(let x=0;x<w;x++) px(x,y,(f>B[y%4][x%4])?cielo[Math.min(i+1,cielo.length-1)]:cielo[i]);}
-// sol detrás del Capitolio y nubes largas
-for(let y=0;y<56;y++)for(let x=0;x<w;x++){const d=Math.hypot(x-80,(y-44)*1.4); if(d<30&&(30-d)>B[y%4][x%4]*1.8) px(x,y,d<9?'#ffe2a0':'#f8b45c');}
-for(const [cx,cy,l] of [[30,14,34],[118,10,40],[64,22,26],[140,26,22]]){rect(cx-l/2,cy,l,1,'#c86a6a'); rect(cx-l/2+4,cy+1,l-8,1,'#8e4a68');}
-// montañas de Bogotá al fondo
-for(let x=0;x<w;x++){const m=46-Math.round(6*Math.sin(x/17)+4*Math.sin(x/7+1)); for(let y=m;y<60;y++) px(x,y,(y-m)>2?'#3b2a4e':'#5a3a5c');}
-// Capitolio: base, columnata, cornisa y banderas
-const X0=30, X1=130, TOP=40, BASE=60;
-rect(X0,TOP,X1-X0,BASE-TOP,'#cdbfa6'); rect(X0,TOP,X1-X0,2,'#e8dcc4'); rect(X0-2,TOP-2,X1-X0+4,2,'#b3a48a');
-rect(X0+18,TOP-4,X1-X0-36,2,'#cdbfa6'); rect(X0+18,TOP-5,X1-X0-36,1,'#e8dcc4');
-for(let x=X0+4;x<X1-3;x+=6){rect(x,TOP+4,3,BASE-TOP-8,'#efe5cf'); rect(x+2,TOP+4,1,BASE-TOP-8,'#b9aa8e'); rect(x+3,TOP+4,3,BASE-TOP-8,'#6e5d52');}
-rect(X0,BASE-4,X1-X0,4,'#a8987c'); rect(X0-6,BASE,X1-X0+12,2,'#8e7f68');
-// luz del sol que roza la fachada (borde cálido)
-for(let x=X0;x<X1;x++) if((x+TOP)%2) px(x,TOP+2,'#ffd79a');
-const bandera=(x,y)=>{rect(x,y,1,12,'#3a3036'); rect(x+1,y,7,2,'#f2c230'); rect(x+1,y+2,7,1,'#2456a6'); rect(x+1,y+3,7,1,'#c1121f');};
-bandera(X0+20,TOP-17); bandera(X1-28,TOP-17); bandera(79,TOP-19);
-// plaza de piedra
-for(let y=62;y<h;y++)for(let x=0;x<w;x++) px(x,y,((x+(y>>1))%9===0||y%5===0)?'#5b4c4e':'#6e5c58');
-// palomas de la Plaza de Bolívar (huevo de pascua)
-for(const [x,y] of [[12,30],[17,27],[146,36],[151,33],[103,18]]){px(x,y,'#2a2030'); px(x-1,y-1,'#2a2030'); px(x+1,y-1,'#2a2030');}
-// multitud: filas de cabezas que crecen hacia el frente, con borde de luz naranja arriba
-const ropa=['#2456a6','#c1121f','#f2c230','#3d6b4f','#e8e2d0','#5a3e72','#2a2a32','#d06a2a'];
-const piel=['#8d5f3f','#c8946a','#a5764f','#6b4430','#e0b48a'];
-let fila=0;
-for(let y=63;y<h+8;y+=3+Math.floor(fila/2)){const t=fila++, rr=1+Math.floor(t/2);
-  for(let x=-4+(t%2)*3;x<w+4;x+=2*rr+2+Math.floor(r()*2)){
-    const c=ropa[(r()*ropa.length)|0]; rect(x-rr-1,y+rr,2*rr+3,rr*2+3,c);
-    rect(x-rr,y-rr,2*rr+1,2*rr+1,r()<.5?'#1a1418':'#2d2018'); rect(x-rr+1,y,2*rr-1,rr,piel[(r()*piel.length)|0]);
-    rect(x-rr,y-rr-1,2*rr+1,1,'#f8a858');}}
-// pancartas en blanco (sin consignas) y banderas en alto
-for(const [x,y,a] of [[22,50,18],[60,47,22],[104,49,20],[138,52,16]]){rect(x,y+8,1,14,'#3a3036'); rect(x+a-1,y+8,1,14,'#3a3036');
-  rect(x,y,a,9,'#f4ead5'); rect(x,y+8,a,1,'#c9bda4'); for(let k=2;k<a-2;k+=3) rect(x+k,y+3,2,1,'#c9bda4'); for(let k=1;k<a-4;k+=4) rect(x+k,y+5,3,1,'#c9bda4');}
-for(const [x,y] of [[44,48],[86,45],[124,47],[10,52]]){rect(x,y,1,20,'#3a3036'); rect(x+1,y,10,3,'#f2c230'); rect(x+1,y+3,10,2,'#2456a6'); rect(x+1,y+5,10,2,'#c1121f'); px(x+11,y+1,'#f2c230');}
-// bruma de luz sobre la multitud
-for(let y=56;y<68;y++)for(let x=0;x<w;x++) if(B[y%4][x%4]<(64-y)/1.5) px(x,y,'rgba(255,190,120,.18)');
+for(const [cx,cy,l] of [[26,10,30],[120,7,36],[78,16,22]]){rect(cx-l/2,cy,l,2,'#f4f1ea'); rect(cx-l/2+4,cy-1,l-10,1,'#ffffff'); rect(cx-l/2+3,cy+2,l-6,1,'#d9dfe8');}
+// cerros orientales
+for(let x=0;x<w;x++){const m=30-Math.round(5*Math.sin(x/19)+3*Math.sin(x/7+2)); for(let y=m;y<42;y++) px(x,y,(y-m)<2?'#7f9a86':((x+y)%3?'#5f7d6c':'#6a8877'));}
+// Capitolio al fondo, iluminado
+const X0=46, X1=114, TOP=31, BASE=43;
+rect(X0,TOP,X1-X0,BASE-TOP,'#efe6d2'); rect(X0-1,TOP-1,X1-X0+2,1,'#c9bda4'); rect(X0+12,TOP-3,X1-X0-24,2,'#efe6d2');
+for(let x=X0+3;x<X1-2;x+=4){rect(x,TOP+2,2,BASE-TOP-4,'#fffaf0'); rect(x+2,TOP+2,1,BASE-TOP-4,'#a89b82');}
+rect(X0,BASE-2,X1-X0,2,'#c9bda4');
+const bandera=(x,y,l=6)=>{rect(x,y,1,l+4,'#3a3036'); rect(x+1,y,l,2,'#f2c230'); rect(x+1,y+2,l,1,'#2456a6'); rect(x+1,y+3,l,1,'#c1121f');};
+bandera(79,TOP-12,7);
+// la calle: piso claro con líneas que se van al Capitolio
+for(let y=43;y<h;y++)for(let x=0;x<w;x++){const lin=Math.abs((x-80)-(y-43)*((x<80)?-2.2:2.2))<1; px(x,y,lin?'#b9b1a4':((x+y)%2?'#a59d90':'#aaa295'));}
+// personas caminando hacia el Capitolio (de espaldas y de lado), de atrás hacia adelante
+const piel=['#8d5f3f','#c8946a','#a5764f','#6b4430','#e0b48a'], pelo=['#1a1418','#2d2018','#4a3020','#111'];
+const ropa=['#2456a6','#c1121f','#f2c230','#3d8b5f','#f4f1ea','#7a4fa0','#e07a2a','#2a2a32','#d64f7a'];
+const persona=(x,yb,hh,paso)=>{const cab=Math.max(1,Math.round(hh*.2)), tw=Math.max(2,Math.round(hh*.34)), tr=Math.round(hh*.4), pi=hh-cab-tr;
+  const c=ropa[(r()*ropa.length)|0];
+  rect(x-tw/2-1,yb,tw+2,Math.max(1,hh*.06),'rgba(60,50,40,.35)');                          // sombra
+  rect(x-tw/2+(paso?0:1),yb-pi,Math.max(1,tw/2-0.5),pi,'#2b2b38'); rect(x+(paso?1:0),yb-pi,Math.max(1,tw/2-0.5),pi,'#383848');
+  rect(x-tw/2,yb-pi-tr,tw,tr,c); if(hh>9) rect(x-tw/2,yb-pi-tr,1,tr,'rgba(0,0,0,.25)');
+  rect(x-cab/2,yb-pi-tr-cab,cab,cab,piel[(r()*piel.length)|0]); rect(x-cab/2,yb-pi-tr-cab,cab,Math.max(1,cab/2),pelo[(r()*pelo.length)|0]);
+  return [x,yb-pi-tr-cab];};
+const filas=[[47,4,3],[51,5,4],[56,7,5],[62,9,6],[70,12,8],[80,17,11]];
+const altos=[];
+for(const [yb,hh,paso] of filas){for(let x=-6+((r()*paso)|0);x<w+8;x+=paso+((r()*3)|0)){
+  const lado=Math.abs(x-80); if(yb<56&&lado>36+yb) continue;
+  altos.push(persona(x,yb+((r()*2)|0),hh,r()<.5).concat([hh]));}}
+// pancartas en blanco y banderas en alto, sostenidas por la gente de las filas de adelante
+for(const [x,y,a] of [[18,52,22],[66,48,26],[118,54,24]]){rect(x,y+8,1,12,'#3a3036'); rect(x+a-1,y+8,1,12,'#3a3036');
+  rect(x-1,y-1,a+2,11,'#3a3036'); rect(x,y,a,9,'#fbf8ef'); rect(x,y,a,2,'#c1121f'); for(let k=3;k<a-3;k+=4) rect(x+k,y+4,3,1,'#9a9488'); for(let k=2;k<a-5;k+=5) rect(x+k,y+6,4,1,'#9a9488');}
+for(const [x,y] of [[44,40],[96,38],[140,44],[8,46]]) bandera(x,y,10);
+for(const [x,y] of [[96,38],[140,44]]){rect(x+1,y+4,10,1,'#c1121f');}
+// luz de tarde sobre la marcha
+for(let y=40;y<h;y++)for(let x=0;x<w;x++) if(B[y%4][x%4]<2) px(x,y,'rgba(255,220,160,.10)');
 })();`;
 
 // pantalla del televisor en coordenadas de la escena (la misma en todas las láminas)
 const pantalla = (etq, tit) => `<div style="position:absolute;left:292px;top:36px;width:496px;height:260px;overflow:hidden">
   <canvas id="epica" style="position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated"></canvas><script>${epica}</script>
-  <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(8,8,14,.80) 0%, rgba(8,8,14,.45) 30%, transparent 50%)"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(8,10,20,.72) 0%, rgba(8,10,20,.38) 26%, transparent 42%)"></div>
   <div style="position:absolute;left:20px;right:20px;top:12px">
     <div style="font:13px 'Special Elite';color:${C.rojoClaro};letter-spacing:3px">${etq}</div>
     <div style="font:900 ${tit.length > 34 ? 27 : 31}px/1.05 'Playfair Display';color:${C.hueso};margin-top:3px;text-shadow:0 2px 4px #000">${tit}</div></div>
-  <div style="position:absolute;inset:0;background:repeating-linear-gradient(to bottom, rgba(0,0,0,.12) 0 1px, transparent 1px 3px)"></div>
+  <div style="position:absolute;inset:0;background:repeating-linear-gradient(to bottom, rgba(0,0,0,.05) 0 1px, transparent 1px 3px)"></div>
   <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 15%, rgba(255,255,255,.08), transparent 55%)"></div></div>`;
 
 const HEAD = `<!doctype html><html lang="es"><head><meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Special+Elite&family=Permanent+Marker&family=Patrick+Hand&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Special+Elite&family=Permanent+Marker&family=Patrick+Hand&family=Kalam:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=block" rel="stylesheet">
 <style>*{margin:0;padding:0;box-sizing:border-box}body{width:${W}px;height:${H}px;overflow:hidden;position:relative;background:#000}
 #aula{display:none}.capa{position:absolute;inset:0;pointer-events:none}
 .frase{font-size:35px!important;line-height:1.1!important}</style></head><body>
@@ -195,7 +196,7 @@ const cifra = (x, y, n, t) => `${mtx(x, y, n, 64)}${txt(x, y + 34, t, 28, C.azul
 // ---------- láminas 2 a 10 (coordenadas del tablero antes de bajar DY; la cabeza de Leo ocupa x < 440 desde y 795) ----------
 const L = [
   { n: 2, k: 1, etq: "HOY · 104 DÍAS DE GOBIERNO", tit: `¿Quién marcha?${sup(1)}`, leo: "leo-habla", egg: "px:megafono",
-    svg: `${cinta("ACTORES")}
+    tipo: "ACTORES", svg: `
       ${[["CUT", 60], ["Fecode", 180], ["estudiantes", 300], ["indígenas", 420], ["oposición", 540]].map(([t, x]) => `${personita(x + 10, 494)}${personita(x + 44, 500)}${txt(x + 27, 590, t, 24, C.azul, 'text-anchor="middle"')}`).join("")}
       ${flecha(626, 530, 690, 530)}
       ${capitolio(730, 490)}`,
@@ -203,7 +204,7 @@ const L = [
       frase(400, 620, 330, "El Gobierno cumplió 100 días y los celebró como «100 días, más de 100 milagros».") +
       frase(760, 620, 290, "En la calle, la lista de razones es otra.") },
   { n: 3, k: 2, etq: "PROYECTO DE LEY 477 DE 2026", tit: `La ley de rescate: ¿a quién rescata?${sup(2)}`, leo: "leo-documento", egg: "px:calculadora",
-    svg: `${cinta("CAMBIOS")}
+    tipo: "CAMBIOS", svg: `
       <path d="M300,488 L300,734 M600,488 L600,734 M40,528 L1040,528" ${trazo} stroke-width="3"/>
       ${mtx(330, 518, "ANTES", 30)}${mtx(630, 518, "DESPUÉS", 30)}
       <rect x="640" y="550" width="44" height="34" fill="rgba(255,226,80,.6)"/>
@@ -211,7 +212,7 @@ const L = [
         .map(([a, b, c, d], i) => { const y = 576 + i * 52; return `${txt(48, y, a, 32)}${txt(330, y, b, 32)}${d === "s" ? sube(612, y) : baja(612, y)}${txt(644, y, c, 30)}`; }).join("")}`,
     frases: frase(440, 742, 600, "Al que gana más de $3,3 millones al mes le sube el impuesto. A empresas y bancos les baja.") },
   { n: 4, k: 3, etq: "QUIÉN GANA · QUIÉN PIERDE", tit: `¿Quién carga la cuenta?${sup(2)}`, leo: "leo-gancho-pregunta", egg: "px:alcancia",
-    svg: `${cinta("BALANZA")}
+    tipo: "BALANZA", svg: `
       <path d="M620,500 L620,700 M570,700 L670,700 M400,560 L840,500" ${trazo} stroke-width="5"/><circle cx="620" cy="530" r="9" fill="${M}"/>
       <path d="M400,560 L360,640 M400,560 L440,640 M840,500 L800,570 M840,500 L880,570" ${trazo} stroke-width="3"/>
       <path d="M346,640 Q400,676 454,640 Z M786,570 Q840,600 894,570 Z" fill="#dce7f7" ${trazo}/>
@@ -223,7 +224,7 @@ const L = [
     frases: frase(40, 600, 290, "Quitaron el IVA a la canasta. El resto sigue igual.") +
       frase(700, 724, 340, "Maestros, militares y gente de Ecopetrol pagarían más.") },
   { n: 5, k: 4, etq: "ARTÍCULO 7 · FACULTADES EXTRAORDINARIAS", tit: `Seis meses con tijeras${sup(2)}`, leo: "leo-gancho-tijeras", egg: "obj-tijeras",
-    svg: `${cinta("CIFRA")}
+    tipo: "CIFRA", svg: `
       ${resaltado(50, 600, "6 MESES", 96)}
       ${[["ministerio", 560, 490], ["superintendencia", 760, 490], ["agencia", 640, 576]].map(([t, x, y]) => `<rect x="${x}" y="${y}" width="${t.length * 13 + 30}" height="54" fill="#fbfaf6" ${trazo}/>${txt(x + 15, y + 36, t, 28)}`).join("")}
       <path d="M540,562 L1040,562" stroke="${M}" stroke-width="3" stroke-dasharray="12 8"/>
@@ -231,7 +232,7 @@ const L = [
     frases: frase(40, 630, 360, "El artículo 7 le da al presidente seis meses para suprimir o fusionar ministerios y entidades.") +
       frase(560, 680, 470, "Sin volver al Congreso. Quienes marchan temen que lo público termine en manos privadas.") },
   { n: 6, k: 5, etq: "7 AGO – 15 NOV 2026 · INDEPAZ", tit: `100 días, 26 masacres${sup(3)}`, leo: "leo-piensa", egg: "px:vela",
-    svg: `${cinta("MAPA")}
+    tipo: "MAPA", svg: `
       <path d="${mapaCol}" fill="#fbfaf6" ${trazo} stroke-width="3.5"/>
       ${marca([-76.6, 2.44], "Cauca", 22, 6)}${marca([-75.57, 6.25], "Antioquia", 22, -6)}
       <circle cx="70" cy="790" r="12" fill="${C.azul}" opacity=".55"/>${txt(92, 798, "más líderes asesinados", 22, C.azul)}
@@ -240,7 +241,7 @@ const L = [
     frases: frase(400, 720, 330, "Indepaz: un líder social asesinado cada dos días.") +
       frase(760, 700, 290, "El Gobierno responde con 51.000 capturas.") },
   { n: 7, k: 0, etq: "COLOMBIA · ISRAEL · 2024 → 2026", tit: `¿Con quién se alía Colombia?${sup(4)}`, leo: "leo-senala", egg: "px:pasaporte",
-    svg: `${cinta("CADENA")}
+    tipo: "CADENA", svg: `
       ${eslabon(70, 500, -20)}${eslabon(170, 520, -20)}${txt(60, 600, "2024: relaciones rotas", 26, C.azul)}
       ${flecha(320, 540, 380, 540)}
       ${capitolio(400, 500, false)}${txt(400, 620, "14 oct 2026: embajada", 26, C.azul)}
@@ -250,13 +251,13 @@ const L = [
       frase(400, 650, 320, "En 2025, una comisión de la ONU concluyó que Israel cometía genocidio en Gaza.") +
       frase(760, 690, 290, "Este Gobierno abrió embajada en Jerusalén y recibió un premio de ese Estado.") },
   { n: 8, k: 1, etq: "1977 · 2019 · 2020 · 2021 · 2026", tit: `El 19 de noviembre ya tiene historia${sup(5)}`, leo: "leo-mapa-puntero", egg: "px:olla",
-    svg: `${cinta("LÍNEA")}
+    tipo: "LÍNEA", svg: `
       <path d="M40,560 L1030,560" ${trazo} stroke-width="5"/><path d="M1012,546 L1034,560 L1012,574" ${trazo} stroke-width="5"/>
       ${[[40, "1977"], [240, "2019"], [440, "2020"], [640, "2021"], [840, "2026"]].map(([x, a], i) => `${i === 2 || i === 4 ? `<rect x="${x - 4}" y="502" width="118" height="40" fill="rgba(255,226,80,.6)"/>` : ""}${mtx(x, 534, a, 40)}<circle cx="${x + 50}" cy="560" r="11" fill="${i === 4 ? "#fbfaf6" : C.azul}" stroke="${M}" stroke-width="4"/>`).join("")}`,
     frases: frase(40, 590, 185, "Paro cívico por el costo de la vida.") + frase(240, 590, 185, "21N: paro y cacerolazos.") +
       frase(440, 590, 185, "19N: otro paro nacional.") + frase(640, 590, 185, "El paro tumba una reforma tributaria.") + frase(840, 590, 200, "19N: ¿y ahora?") },
   { n: 9, k: 2, etq: "LA PREGUNTA QUE QUEDA", tit: `¿Quién pone las reglas de la calle?${sup(6)}`, leo: "leo-piensa", egg: "px:constitucion",
-    svg: `${cinta("CITA")}
+    tipo: "CITA", svg: `
       ${libro(46, 482)}
       ${flecha(250, 540, 320, 540)}
       ${doc(340, 478, "1525")}${[0, 1, 2, 3, 4].map((i) => `<rect x="${450 + i * 26}" y="${580 - i * 18}" width="24" height="${18 + i * 18}" fill="${i === 4 ? C.azul : "#fbfaf6"}" stroke="${M}" stroke-width="3"/>`).join("")}
@@ -266,19 +267,19 @@ const L = [
       frase(400, 630, 340, "«Toda parte del pueblo puede reunirse y manifestarse pública y pacíficamente».") +
       frase(760, 690, 280, "Un mes antes, un decreto cambió las reglas.") },
   { n: 10, k: 3, etq: "CADA DATO CON SU FUENTE", tit: "Notas", leo: "leo-saluda", egg: "obj-egg-maleta",
-    svg: `${cinta("FUENTES")}`,
+    tipo: "FUENTES", svg: ``,
     frases: frase(40, 470, 300, "¿Quién paga la cuenta? ¿Y quién decide cuándo se protesta por ella?") +
       `<div style="position:absolute;left:40px;top:700px;color:${M}"><div style="font:900 36px 'Playfair Display'">Profe Leo</div>
         <div style="font:22px 'Special Elite';color:${C.gris}">@leoelpasado</div></div>
-      <div style="position:absolute;left:370px;top:396px;width:690px;background:#fdfcf8;padding:14px 18px 10px;box-shadow:0 5px 9px rgba(0,0,0,.22);color:${C.texto};transform:rotate(-.5deg)">
-        <ol style="padding-left:22px;font:13.5px/1.28 'Special Elite'">
-          <li style="margin-bottom:5px">Gobierno de Colombia, «100 días, más de 100 milagros», en Portafolio, 15 de noviembre de 2026; Cambio, «Los 100 días de Abelardo de la Espriella», noviembre de 2026.</li>
-          <li style="margin-bottom:5px">Proyecto de Ley 477 de 2026, «Ley de Rescate Económico» [Gaceta del Congreso, pendiente]; La Silla Vacía, «Más tributaria que recorte: claves de la Ley de Rescate de Abelardo»; El País (Cali), «Los cambios en impuestos de renta, IVA y patrimonio que trae la ley de rescate».</li>
-          <li style="margin-bottom:5px">Indepaz, balance de los primeros 100 días (7 de agosto a 15 de noviembre de 2026), en El País, 15 de noviembre de 2026; El Universal, 17 de noviembre de 2026.</li>
-          <li style="margin-bottom:5px">Semana, restablecimiento de relaciones con Israel, octubre de 2026; Infobae, 18 de noviembre de 2026; ONU, Comisión Internacional Independiente de Investigación sobre el Territorio Palestino Ocupado, informe del 16 de septiembre de 2025 [signatura por verificar].</li>
-          <li style="margin-bottom:5px">Radio Nacional y Portafolio, 19 de noviembre de 2020; Semana y CNN Español, 2 y 3 de mayo de 2021; [1977 y 2019: fuente académica pendiente].</li>
-          <li>Constitución Política de Colombia (1991), art. 37; Decreto 1525 de 2026 [Diario Oficial, pendiente].</li></ol>
-        <div style="font:12px 'Special Elite';color:${C.gris};margin-top:4px">Estilo Chicago, forma de nota. Enlaces en la descripción.</div></div>` },
+      <div style="position:absolute;left:420px;top:440px;width:640px;background:#ffffff;padding:18px 22px 14px;box-shadow:0 6px 12px rgba(0,0,0,.22);color:#111;transform:rotate(-.4deg)">
+        <ol style="padding-left:26px;font:18.5px/1.32 'Source Serif 4',serif">
+          <li style="margin-bottom:6px"><i>Portafolio</i>, 15 nov. 2026; <i>Cambio</i>, nov. 2026 (balance de 100 días).</li>
+          <li style="margin-bottom:6px">Proyecto de Ley 477 de 2026; <i>La Silla Vacía</i> y <i>El País</i>, «ley de rescate», nov. 2026.</li>
+          <li style="margin-bottom:6px">Indepaz, balance 7 ago.–15 nov. 2026, en <i>El País</i>, 15 nov. 2026; <i>El Universal</i>, 17 nov. 2026.</li>
+          <li style="margin-bottom:6px"><i>Semana</i>, oct. 2026; <i>Infobae</i>, 18 nov. 2026; ONU, Comisión de Investigación sobre el Territorio Palestino Ocupado, 16 sept. 2025.</li>
+          <li style="margin-bottom:6px"><i>Radio Nacional</i>, nov. 2020; <i>CNN Español</i>, 2 mayo 2021; 1977 y 2019 [pendiente].</li>
+          <li>Constitución de 1991, art. 37; Decreto 1525 de 2026.</li></ol>
+        <div style="font:600 15px 'Source Serif 4',serif;color:#444;margin-top:8px;border-top:1px solid #ddd;padding:6px 0 0">Notas breves, estilo Chicago. Bibliografía completa con enlaces en la descripción.</div></div>` },
 ];
 
 const escena = (l) => `${HEAD}
@@ -289,10 +290,12 @@ const escena = (l) => `${HEAD}
   ${objetoEscena(l.egg)}
   ${luz}
 </div>
-<div style="position:absolute;left:350px;top:392px;width:700px;color:${M}"><span style="font:15px 'Special Elite';letter-spacing:2px;color:${C.gris}">${l.etq}</span>
-  <div style="font:900 34px 'Playfair Display';line-height:1">${l.tit}</div></div>
+<!-- rótulo centrado, a mano: etiqueta del tipo de sketch (verde) · contexto (gris) / título (negro) -->
+<div style="position:absolute;left:30px;right:30px;top:388px;text-align:center">
+  <div style="font:700 21px 'Kalam',cursive;letter-spacing:3px;text-transform:uppercase"><span style="color:${C.verde}">${l.tipo}</span><span style="color:#8a8f98"> · ${l.etq}</span></div>
+  <div style="font:700 44px/1.02 'Kalam',cursive;color:${M};margin-top:2px">${l.tit}</div></div>
 <svg class="capa" width="${W}" height="${H}">${filtro}<g filter="url(#mano)" transform="translate(0,${DY})">${l.svg}</g></svg>
-${l.frases.replace(/top:(\d+)px/g, (m, y) => `top:${+y + DY}px`)}
+${l.frases.replace(/(position:absolute;left:\d+px;top:)(\d+)px/g, (m, p, y) => `${p}${+y + DY}px`)}
 <div style="position:absolute;inset:0;transform:translateX(${LEO_DX}px) scale(${Z});transform-origin:540px 0">${leo(l.leo, 0)}</div>
 ${CLASE.map(([n, cx]) => `<img src="${spr(n)}" style="position:absolute;left:${zx(cx)}px;top:1218px;height:${REG[`v2/${n}`][1] * 1.4 * Z}px;transform:translateX(-50%);image-rendering:pixelated;filter:brightness(.72) saturate(.85) drop-shadow(0 -6px 14px rgba(0,0,0,.25))">`).join("")}
 <div style="position:absolute;right:20px;top:8px;font:16px 'Special Elite';color:#8a857a">PILOTO · BOCETO ${l.n}/10</div>
